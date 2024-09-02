@@ -245,17 +245,19 @@
     transform: translateY(0) rotate(0deg);
     opacity: 1;
     border-radius: 0;
+    transition: 1ms;
   }
   100% {
     transform: translateY(-1000px) rotate(750deg);
     opacity: 0;
-    border-radius: 70%;
+    transition: 1ms;
   }
 }
 
 .animate {
   position: absolute;
   color: #FFFF;
+  transition: 1ms;
   animation: animate 3s ease-in-out infinite; /* Animação infinita */
   position: absolute;
   top: 0;
@@ -266,4 +268,10 @@
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+}
+
+.dragging{
+  opacity: 0.5;
+  transition: 0.2s ease;
+  background-color: red;
 }
