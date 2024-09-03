@@ -11,32 +11,16 @@ import { useEffect, useState } from "react";
 
 
 export default function Home() {
-  const [ file, setFile ] = useState('');
-  let dragged;
-  useEffect(() =>{
-    setFile(document.getElementsByClassName("upload-container"));
-    
-    if(file[0] !== undefined){
-      file[0].addEventListener('dragenter', (event) =>{
-        file[0].style.backgroundColor = '#130f4030';
-      });
+  const [ file, setFile ] = useState([]);
 
-      file[0].addEventListener('dragstart', (event) =>{
-        file[0].style.backgroundColor = '#130f4030';
-      });
+  function handleFile(event){
+    const fileValue = event.target.files
+    setFile(fileValue);
+  }
 
-      file[0].addEventListener('dragleave', (event) =>{
-        file[0].style.backgroundColor = '#efefef';
-      });
+  let result = Object.entries(file);
 
-      file[0].addEventListener('dragend', (event) =>{
-        file[0].style.backgroundColor = '#efefef';
-      });
-    }
-
-  })
-
- 
+  console.log(result);
 
 
   // const []
@@ -73,10 +57,24 @@ export default function Home() {
               style={{margin: '15px'}}
               size={120} />
               </div>
-              <input style={{display:'none'}} type="file" id="file-upload" multiple/>
-              <p>Arraste sua imagem aqui, ou 
-                <a href="#" id="file-browser"> <label style={{cursor:'pointer'}} for="file-upload"> clique aqui</label> </a> para adicionar uma imagem.</p>
+              <input  action={'/myImageRoute'}
+                      accept='.png,.jpg,.jpeg,.webp'
+                      withCredentials={true} 
+                      style={{display:'none'}} 
+                      onChange={handleFile} 
+                      type="file" 
+                      id="file-upload" 
+                      multiple/>
+              <p>
+                <a href="#" id="file-browser"> <label style={{cursor:'pointer'}} for="file-upload"> Clique aqui</label> </a> para adicionar uma imagem.</p>
             </div>
+          </div>
+          <div class="upload-container" id="images_container" style={{marginTop:'10px', justifyContent:'start', display:'flex', flexWrap:'wrap', overflowY:'scroll', height:'120px', overflowX:'none'}}>
+            {
+              result.map((item, index) => (
+                <img style={{border:'3px solid #007BFF',margin:'5px'}} src={URL.createObjectURL(item[1])} width="100" height="100"></img>
+              ))
+            }
           </div>
         </div>
       </div>
