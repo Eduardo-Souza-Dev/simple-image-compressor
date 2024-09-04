@@ -3,6 +3,7 @@
 import styles from "./page.module.css";
 import { IoImages } from "react-icons/io5";
 import { FaFileImage } from "react-icons/fa";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 import { useEffect, useState } from "react";
 
 
@@ -12,6 +13,8 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const [ file, setFile ] = useState([]);
+  const [ image, setImage ] = useState('');
+  const [isHovered, setIsHovered] = useState(false);
 
   function handleFile(event){
     const fileValue = event.target.files
@@ -20,29 +23,8 @@ export default function Home() {
 
   let result = Object.entries(file);
 
-  console.log(result);
+    
 
-
-  // const []
-  // if (typeof window !== 'undefined') {
-
-  // const file_container = document.getElementsByClassName("container");
-
-  // function preventDefaults(e) {
-  //   e.preventDefault();
-  //   e.stopPropagation();
-  //   console.log("Imagem pega")
-  // }
-
-  // file_container.addEventListener('drag', (e) =>{
-  //   preventDefaults(e);
-  //   console.log("Imagem dragged");
-  // });
-
-  // preventDefaults()
-  // // file_container.addEventListener('dragenter', preventDefaults);
-  // // file_container.addEventListener('dragleave', preventDefaults);
-  // }
   return (
     <main className={styles.main}>
       <div className={styles.body_file}>    
@@ -72,7 +54,34 @@ export default function Home() {
           <div class="upload-container" id="images_container" style={{marginTop:'10px', justifyContent:'start', display:'flex', flexWrap:'wrap', overflowY:'scroll', height:'120px', overflowX:'none'}}>
             {
               result.map((item, index) => (
-                <img style={{border:'3px solid #007BFF',margin:'5px'}} src={URL.createObjectURL(item[1])} width="100" height="100"></img>
+                <div key={index}>
+                  <span id={`id_span_${index}`} onClick={function deleteImage(){  
+                      document.getElementById(`image_${index}`).remove();
+                      document.getElementById(`id_span_${index}`).remove();
+                      }
+                    } 
+                    onMouseEnter={function(){
+                    let image = document.getElementById(`image_${index}`);
+                    image.style.borderColor = ' red';
+                    image.style.borderWidth = '5px';
+                    image.style.transition = 'border-color 0.5s ease';
+                    } }
+                    onMouseLeave={function(){
+                      let image = document.getElementById(`image_${index}`);
+                      image.style.borderColor = '#007BFF';
+                      image.style.borderWidth = '3px';
+                      image.style.transition = 'border-color 0.5s ease';
+                    }}
+                    style={{position:'relative',
+                     bottom:'86px', 
+                     left:'15px',
+                     cursor: 'pointer',
+                     transition: '0.5s ease',
+                    }}
+                     >
+                      <AiOutlineCloseCircle size={30} color="red" /></span>
+                <img className="image-compress" id={`image_${index}`} style={{border:'3px solid #007BFF',margin:'5px'}} src={URL.createObjectURL(item[1])} width="100" height="100"></img>
+                </div>               
               ))
             }
           </div>
