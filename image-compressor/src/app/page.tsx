@@ -4,6 +4,8 @@ import styles from "./page.module.css";
 import { IoImages } from "react-icons/io5";
 import { FaFileImage } from "react-icons/fa";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import { IoUnlinkSharp } from "react-icons/io5";
+import { MdLink } from "react-icons/md";
 import { useEffect, useState } from "react";
 
 
@@ -14,7 +16,39 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [ file, setFile ] = useState([]);
   const [ image, setImage ] = useState('');
-  const [isHovered, setIsHovered] = useState(false);
+  const [isLinked, setIsLinked] = useState(false);
+
+  useEffect(() =>{
+    let teste = document.getElementById('not_linked');
+    if(teste)
+      setIsLinked(true);
+    else
+      setIsLinked(false);
+  })
+
+  function changedNotLinkedIcon(){
+    let not_linked = document.getElementById('not_linked');
+    let linked = document.getElementById('linked');
+    if(not_linked){
+      not_linked.style.display = 'none';
+      linked.style.display = 'block';
+    }
+    else{
+      linked.style.display = 'none';
+      not_linked.style.display = 'block';
+    }
+  }
+
+  function changedLinkedIcon(){
+    let not_linked = document.getElementById('not_linked');
+    let linked = document.getElementById('linked');
+    if(linked){
+      not_linked.style.display = 'block';
+      linked.style.display = 'none';
+    }
+  }
+
+  console.log(isLinked)
 
   function handleFile(event){
     const fileValue = event.target.files
@@ -29,12 +63,12 @@ export default function Home() {
     <main className={styles.main}>
       <div className={styles.body_file}>    
 
-        <div class="wrapper"> 
-        <div class="container">
+        <div className="wrapper"> 
+        <div className="container">
           <h1>Envie uma imagem para comprimi-la.</h1>
-          <div id="upload-container" class="upload-container">
-            <div class="border-container">
-              <div class="icons fa-4x">
+          <div id="upload-container" className="upload-container">
+            <div className="border-container">
+              <div className="icons fa-4x">
               <FaFileImage
               style={{margin: '15px'}}
               size={120} />
@@ -51,7 +85,22 @@ export default function Home() {
                 <a href="#" id="file-browser"> <label style={{cursor:'pointer'}} for="file-upload"> Clique aqui</label> </a> para adicionar uma imagem.</p>
             </div>
           </div>
-          <div class="upload-container" id="images_container" style={{marginTop:'10px', justifyContent:'start', display:'flex', flexWrap:'wrap', overflowY:'scroll', height:'120px', overflowX:'none'}}>
+          <div style={{margin:'13px 0px 13px 0px'}} className="container-pixel">
+            <div className="choose-container">
+              Choose
+            </div>
+            <div className="escale-container">
+                <div className="pixel-value">40</div>
+                <div className="middle-pixel-value">
+                <p style={{fontWeight:'bolder'}}>X</p>                    
+                </div>
+                <div className="pixel-value">90</div>
+                <IoUnlinkSharp onClick={changedNotLinkedIcon} id="not_linked"  size={20} style={{rotate:'90deg', marginLeft:'5px'}} />
+                <MdLink id="linked" onClick={changedLinkedIcon}  display={'none'} size={23} style={{rotate:'90deg', marginLeft:'5px'}} />
+
+            </div>
+          </div>
+          <div className="upload-container" id="images_container" style={{marginTop:'10px', justifyContent:'start', display:'flex', flexWrap:'wrap', overflowY:'scroll', height:'120px', overflowX:'none'}}>
             {
               result.map((item, index) => (
                 <div key={index}>
