@@ -159,12 +159,41 @@ h1 {
   border-radius: 10px;
   margin: 3px;
   background-color: white;
+  color: black;
+  padding: 20px;
+  font-weight: 400;
+  outline: none;
+  border: none;
 }
 
 
 .middle-pixel-value{
   display: block;
   width: 20px;
+}
+
+.choose-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 100%;
+}
+
+.kindFile{
+  background-color: #f9f9f9;
+  padding: 5px;
+  border-radius: 6px;
+  margin: 10px;
+  height: 33px;
+  width: 62px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 1px 1px 0px rgb(107, 107, 107);
+  cursor: pointer;
+  text-decoration: none;
+
 }
 
 

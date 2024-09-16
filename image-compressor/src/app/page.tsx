@@ -4,8 +4,8 @@ import styles from "./page.module.css";
 import { IoImages } from "react-icons/io5";
 import { FaFileImage } from "react-icons/fa";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import { IoUnlinkSharp } from "react-icons/io5";
-import { MdLink } from "react-icons/md";
+import { LuLink2Off } from "react-icons/lu";
+import { LuLink2 } from "react-icons/lu";
 import { useEffect, useState } from "react";
 
 
@@ -15,16 +15,8 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const [ file, setFile ] = useState([]);
-  const [ image, setImage ] = useState('');
+  const [ valuePixel, setValuePixel ] = useState(0);
   const [isLinked, setIsLinked] = useState(false);
-
-  useEffect(() =>{
-    let teste = document.getElementById('not_linked');
-    if(teste)
-      setIsLinked(true);
-    else
-      setIsLinked(false);
-  })
 
   function changedNotLinkedIcon(){
     let not_linked = document.getElementById('not_linked');
@@ -32,11 +24,48 @@ export default function Home() {
     if(not_linked){
       not_linked.style.display = 'none';
       linked.style.display = 'block';
+      setIsLinked(true);
     }
-    else{
-      linked.style.display = 'none';
-      not_linked.style.display = 'block';
+    
+  }
+
+  function changeColor(value){
+    console.log(value)
+    let svg = document.getElementById('svg');
+    let png = document.getElementById('png');
+    let jpeg = document.getElementById('jpeg');
+
+    if(value == 'svg'){
+      //Muda a cor do background
+      svg.style.backgroundColor = '#007BFF';
+      png.style.background = '#f9f9f9';
+      jpeg.style.background = '#f9f9f9';
+
+      //Muda a cor da fonte
+      svg.style.color = 'white';
+      jpeg.style.color = 'black';
+      png.style.color = 'black';
     }
+    else if(value == 'jpeg'){
+      svg.style.background = '#f9f9f9';
+      png.style.background = '#f9f9f9';
+      jpeg.style.backgroundColor = '#007BFF';
+
+      jpeg.style.color = 'white';
+      png.style.color = 'black';
+      svg.style.color = 'black';
+    }
+    else if(value == 'png'){
+
+      svg.style.background = '#f9f9f9';
+      jpeg.style.background = '#f9f9f9';
+      png.style.backgroundColor = '#007BFF';
+      
+      png.style.color = 'white';
+      jpeg.style.color = 'black';
+      svg.style.color = 'black';
+    }
+
   }
 
   function changedLinkedIcon(){
@@ -45,10 +74,35 @@ export default function Home() {
     if(linked){
       not_linked.style.display = 'block';
       linked.style.display = 'none';
+      setIsLinked(false);
     }
+    
   }
 
-  console.log(isLinked)
+  function captureValue1(){
+    if(isLinked == true){
+      let pixel_1 = document.getElementById('pixel_1');
+      let pixel_2 = document.getElementById('pixel_2');
+
+      if(pixel_1){
+        pixel_2.value = pixel_1.value;
+      }
+      
+  }
+}
+
+function captureValue2(){
+  if(isLinked == true){
+    let pixel_1 = document.getElementById('pixel_1');
+    let pixel_2 = document.getElementById('pixel_2');
+    
+    if(pixel_2){
+      pixel_1.value = pixel_2.value;
+    }
+    
+}
+}
+
 
   function handleFile(event){
     const fileValue = event.target.files
@@ -87,19 +141,31 @@ export default function Home() {
           </div>
           <div style={{margin:'13px 0px 13px 0px'}} className="container-pixel">
             <div className="choose-container">
-              Choose
+              <span onClick={() =>{
+                // convertSVG();
+                changeColor('svg');
+              }} className="kindFile" id="svg">.svg</span> 
+              <span onClick={() =>{
+                // convertSVG();
+                changeColor('png');
+              }} className="kindFile" id="png">.png</span> 
+              <span onClick={() =>{
+                // convertSVG();
+                changeColor('jpeg');
+              }} className="kindFile" id="jpeg">.jpeg</span>
             </div>
             <div className="escale-container">
-                <div className="pixel-value">40</div>
+                <input id = 'pixel_1' className="pixel-value" onChange={captureValue1}/>
                 <div className="middle-pixel-value">
                 <p style={{fontWeight:'bolder'}}>X</p>                    
                 </div>
-                <div className="pixel-value">90</div>
-                <IoUnlinkSharp onClick={changedNotLinkedIcon} id="not_linked"  size={20} style={{rotate:'90deg', marginLeft:'5px'}} />
-                <MdLink id="linked" onClick={changedLinkedIcon}  display={'none'} size={23} style={{rotate:'90deg', marginLeft:'5px'}} />
-
+                <input id = 'pixel_2' className="pixel-value" onChange={captureValue2}/>
+                <LuLink2Off onClick={changedNotLinkedIcon}  id="not_linked"  size={23} style={{rotate:'90deg', marginLeft:'5px'}} />
+                <LuLink2 id="linked" onClick={changedLinkedIcon} display={'none'} size={23} style={{rotate:'90deg', marginLeft:'5px'}} />
             </div>
+           
           </div>
+          
           <div className="upload-container" id="images_container" style={{marginTop:'10px', justifyContent:'start', display:'flex', flexWrap:'wrap', overflowY:'scroll', height:'120px', overflowX:'none'}}>
             {
               result.map((item, index) => (
@@ -111,7 +177,7 @@ export default function Home() {
                     } 
                     onMouseEnter={function(){
                     let image = document.getElementById(`image_${index}`);
-                    image.style.borderColor = ' red';
+                    image.style.borderColor = 'red';
                     image.style.borderWidth = '5px';
                     image.style.transition = 'border-color 0.5s ease';
                     } }
