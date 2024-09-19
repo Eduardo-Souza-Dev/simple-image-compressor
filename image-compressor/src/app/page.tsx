@@ -7,6 +7,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import { LuLink2Off } from "react-icons/lu";
 import { LuLink2 } from "react-icons/lu";
 import { useEffect, useState } from "react";
+import FileUploadMQ from "./backend/FileUploadMQ.js";
 
 
 
@@ -14,13 +15,12 @@ import { useEffect, useState } from "react";
 
 
 export default function Home() {
-  const [ file, setFile ] = useState([]);
   const [ valuePixel, setValuePixel ] = useState(0);
   const [isLinked, setIsLinked] = useState(false);
 
   function changedNotLinkedIcon(){
-    let not_linked = document.getElementById('not_linked');
-    let linked = document.getElementById('linked');
+    let not_linked: HTMLElement = document.getElementById('not_linked');
+    let linked: HTMLElement = document.getElementById('linked');
     if(not_linked){
       not_linked.style.display = 'none';
       linked.style.display = 'block';
@@ -29,11 +29,13 @@ export default function Home() {
     
   }
 
-  function changeColor(value){
+  console.log(file)
+
+  function changeColor(value:any){
     console.log(value)
-    let svg = document.getElementById('svg');
-    let png = document.getElementById('png');
-    let jpeg = document.getElementById('jpeg');
+    let svg: HTMLElement = document.getElementById('svg');
+    let png: HTMLElement = document.getElementById('png');
+    let jpeg: HTMLElement = document.getElementById('jpeg');
 
     if(value == 'svg'){
       //Muda a cor do background
@@ -69,8 +71,8 @@ export default function Home() {
   }
 
   function changedLinkedIcon(){
-    let not_linked = document.getElementById('not_linked');
-    let linked = document.getElementById('linked');
+    let not_linked: HTMLElement = document.getElementById('not_linked');
+    let linked: HTMLElement = document.getElementById('linked');
     if(linked){
       not_linked.style.display = 'block';
       linked.style.display = 'none';
@@ -81,8 +83,8 @@ export default function Home() {
 
   function captureValue1(){
     if(isLinked == true){
-      let pixel_1 = document.getElementById('pixel_1');
-      let pixel_2 = document.getElementById('pixel_2');
+      let pixel_1: HTMLElement = document.getElementById('pixel_1');
+      let pixel_2: HTMLElement = document.getElementById('pixel_2');
 
       if(pixel_1){
         pixel_2.value = pixel_1.value;
@@ -93,8 +95,8 @@ export default function Home() {
 
 function captureValue2(){
   if(isLinked == true){
-    let pixel_1 = document.getElementById('pixel_1');
-    let pixel_2 = document.getElementById('pixel_2');
+    let pixel_1: HTMLElement = document.getElementById('pixel_1');
+    let pixel_2: HTMLElement = document.getElementById('pixel_2');
     
     if(pixel_2){
       pixel_1.value = pixel_2.value;
@@ -104,12 +106,13 @@ function captureValue2(){
 }
 
 
-  function handleFile(event){
+  function handleFile(event:any){
     const fileValue = event.target.files
-    setFile(fileValue);
+    const RabbitSend = new FileUploadMQ;
+    RabbitSend.uploadFile(fileValue);
   }
 
-  let result = Object.entries(file);
+  // let result = Object.entries(file);
 
     
 
@@ -176,13 +179,13 @@ function captureValue2(){
                       }
                     } 
                     onMouseEnter={function(){
-                    let image = document.getElementById(`image_${index}`);
+                    let image: HTMLElement = document.getElementById(`image_${index}`);
                     image.style.borderColor = 'red';
                     image.style.borderWidth = '5px';
                     image.style.transition = 'border-color 0.5s ease';
                     } }
                     onMouseLeave={function(){
-                      let image = document.getElementById(`image_${index}`);
+                      let image: HTMLElement = document.getElementById(`image_${index}`);
                       image.style.borderColor = '#007BFF';
                       image.style.borderWidth = '3px';
                       image.style.transition = 'border-color 0.5s ease';
