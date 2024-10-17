@@ -1,0 +1,1 @@
+//Manda a mensagem para o aqruivo FileUploadMQ.ts

@@ -7,7 +7,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import { LuLink2Off } from "react-icons/lu";
 import { LuLink2 } from "react-icons/lu";
 import { useEffect, useState } from "react";
-import FileUploadMQ from "./backend/FileUploadMQ.js";
+// import FileUploadMQ from "../../../backend/FileUploadMQ"
 
 
 
@@ -17,6 +17,10 @@ import FileUploadMQ from "./backend/FileUploadMQ.js";
 export default function Home() {
   const [ valuePixel, setValuePixel ] = useState(0);
   const [isLinked, setIsLinked] = useState(false);
+  const [file, setFile ] =  useState([]);
+  //Tentar usar o usestate para guardar o valor de file
+  // let file: = [];
+
 
   function changedNotLinkedIcon(){
     let not_linked: HTMLElement = document.getElementById('not_linked');
@@ -29,7 +33,6 @@ export default function Home() {
     
   }
 
-  console.log(file)
 
   function changeColor(value:any){
     console.log(value)
@@ -106,15 +109,17 @@ function captureValue2(){
 }
 
 
-  function handleFile(event:any){
+  async function handleFile(event:any){
     const fileValue = event.target.files
-    const RabbitSend = new FileUploadMQ;
-    RabbitSend.uploadFile(fileValue);
+    setFile(Array.from(fileValue))
+
+    // fetch('../../../backend/FileUploadMQ',{
+    //   method: 'POST',
+    //   body: JSON.stringify(Array.from(fileValue))
+    // })
+  
   }
-
-  // let result = Object.entries(file);
-
-    
+ 
 
   return (
     <main className={styles.main}>
@@ -171,7 +176,7 @@ function captureValue2(){
           
           <div className="upload-container" id="images_container" style={{marginTop:'10px', justifyContent:'start', display:'flex', flexWrap:'wrap', overflowY:'scroll', height:'120px', overflowX:'none'}}>
             {
-              result.map((item, index) => (
+              file.map((item, index) => (
                 <div key={index}>
                   <span id={`id_span_${index}`} onClick={function deleteImage(){  
                       document.getElementById(`image_${index}`).remove();
@@ -198,7 +203,7 @@ function captureValue2(){
                     }}
                      >
                       <AiOutlineCloseCircle size={30} color="red" /></span>
-                <img className="image-compress" id={`image_${index}`} style={{border:'3px solid #007BFF',margin:'5px'}} src={URL.createObjectURL(item[1])} width="100" height="100"></img>
+                <img className="image-compress" id={`image_${index}`} style={{border:'3px solid #007BFF',margin:'5px'}} src={URL.createObjectURL(item)} width="100" height="100"></img>
                 </div>               
               ))
             }
