@@ -86,8 +86,8 @@ export default function Home() {
 
   function captureValue1(){
     if(isLinked == true){
-      let pixel_1: HTMLElement = document.getElementById('pixel_1');
-      let pixel_2: HTMLElement = document.getElementById('pixel_2');
+      let pixel_1 = document.getElementById('pixel_1') as HTMLInputElement;
+      let pixel_2 = document.getElementById('pixel_2') as HTMLInputElement;
 
       if(pixel_1){
         pixel_2.value = pixel_1.value;
@@ -98,8 +98,8 @@ export default function Home() {
 
 function captureValue2(){
   if(isLinked == true){
-    let pixel_1: HTMLElement = document.getElementById('pixel_1');
-    let pixel_2: HTMLElement = document.getElementById('pixel_2');
+    let pixel_1 = document.getElementById('pixel_1') as HTMLInputElement;
+    let pixel_2 = document.getElementById('pixel_2') as HTMLInputElement;
     
     if(pixel_2){
       pixel_1.value = pixel_2.value;
@@ -112,11 +112,17 @@ function captureValue2(){
   async function handleFile(event:any){
     const fileValue = event.target.files
     setFile(Array.from(fileValue))
+    console.log(fileValue)
 
-    // fetch('../../../backend/FileUploadMQ',{
-    //   method: 'POST',
-    //   body: JSON.stringify(Array.from(fileValue))
-    // })
+   fetch('https:localhost:3333/files',{
+      method: 'POST',
+      body: JSON.stringify(Array.from(fileValue)),
+      headers: { "Content-Type": "application/json" },
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error))
+
   
   }
  
@@ -135,16 +141,15 @@ function captureValue2(){
               style={{margin: '15px'}}
               size={120} />
               </div>
-              <input  action={'/myImageRoute'}
-                      accept='.png,.jpg,.jpeg,.webp'
-                      withCredentials={true} 
+              <input  
+                      accept='.png,.jpg,.jpeg,.webp' 
                       style={{display:'none'}} 
                       onChange={handleFile} 
                       type="file" 
                       id="file-upload" 
                       multiple/>
               <p>
-                <a href="#" id="file-browser"> <label style={{cursor:'pointer'}} for="file-upload"> Clique aqui</label> </a> para adicionar uma imagem.</p>
+                <a href="#" id="file-browser"> <label style={{cursor:'pointer'}} htmlFor="file-upload"> Clique aqui</label> </a> para adicionar uma imagem.</p>
             </div>
           </div>
           <div style={{margin:'13px 0px 13px 0px'}} className="container-pixel">
@@ -174,7 +179,7 @@ function captureValue2(){
            
           </div>
           
-          <div className="upload-container" id="images_container" style={{marginTop:'10px', justifyContent:'start', display:'flex', flexWrap:'wrap', overflowY:'scroll', height:'120px', overflowX:'none'}}>
+          <div className="upload-container" id="images_container" style={{marginTop:'10px', justifyContent:'start', display:'flex', flexWrap:'wrap', overflowY:'scroll', height:'120px', overflowX:'hidden'}}>
             {
               file.map((item, index) => (
                 <div key={index}>
@@ -210,92 +215,167 @@ function captureValue2(){
           </div>
         </div>
       </div>
-        <IoImages 
-          className={styles.animate}
-          size={170} 
-          w = "fit-content"
-          p = {6}
-          rounded = "3xl"
-          boxShadow = "md"
-          style={{ left: '40%',top:'116%', animationDelay: '0s' }} />
+          <IoImages className={styles.animate}
+              size={170} 
+              style={{ 
+                  left: '40%', 
+                  top: '116%', 
+                  animationDelay: '0s', 
+                  width: 'fit-content', 
+                  padding: '6px', 
+                  borderRadius: '3xl', 
+                  boxShadow: 'md' 
+              }} 
+          />
    
       </div>
 
 {/* Provavelmente tem forma mais inteligente de fazer isso aqui abaixo kk, um for etc */}
         
-      <IoImages  className={styles.animate}
-          size={150} 
-          w = "fit-content"
-          p = {6}
-          rounded = "3xl"
-          boxShadow = "md"  style={{ left: '10%',top:'110%', animationDelay: '0s' }}/>
-      <IoImages  className={styles.animate}
-          size={100} 
-          w = "fit-content"
-          p = {6}
-          rounded = "3xl"
-          boxShadow = "md" style={{ left: '30%', top:'110%', animationDelay: '0.5s' }}/>
-      <IoImages  className={styles.animate}
-          size={170} 
-          w = "fit-content"
-          p = {6}
-          rounded = "3xl"
-          boxShadow = "md"  style={{ left: '10%',top:'110%', animationDelay: '1s' }}/>
-      <IoImages  className={styles.animate}
-          size={20} 
-          w = "fit-content"
-          p = {6}
-          rounded = "3xl"
-          boxShadow = "md"  style={{ right: '70%',top:'140%', animationDelay: '1.5s' }}/>
-      <IoImages  className={styles.animate}
-          size={80} 
-          w = "fit-content"
-          p = {6}
-          rounded = "3xl"
-          boxShadow = "md"  style={{ left: '20%',top:'120%', animationDelay: '2s' }}/>
-      <IoImages  className={styles.animate}
-        size={50} 
-        w = "fit-content"
-        p = {6}
-        rounded = "3xl"
-        boxShadow = "md"  style={{ left: '90%',top:'130%', animationDelay: '2s' }}/>
-        <IoImages  className={styles.animate}
-        size={190} 
-        w = "fit-content"
-        p = {6}
-        rounded = "3xl"
-        boxShadow = "md"  style={{ left: '80%',top:'115%', animationDelay: '2s' }}/>
-        <IoImages  className={styles.animate}
-        size={70} 
-        w = "fit-content"
-        p = {6}
-        rounded = "3xl"
-        boxShadow = "md"  style={{ left: '50%',top:'125%', animationDelay: '2s' }}/>
-        <IoImages  className={styles.animate}
-        size={55} 
-        w = "fit-content"
-        p = {6}
-        rounded = "3xl"
-        boxShadow = "md"  style={{ left: '55%',top:'117%', animationDelay: '2s' }}/>
-        <IoImages  className={styles.animate}
-        size={80} 
-        w = "fit-content"
-        p = {6}
-        rounded = "3xl"
-        boxShadow = "md"  style={{ left: '77%',top:'105%', animationDelay: '2s' }}/>
-        <IoImages  className={styles.animate}
-        size={20} 
-        w = "fit-content"
-        p = {6}
-        rounded = "3xl"
-        boxShadow = "md"  style={{ left: '70%',top:'120%', animationDelay: '2s' }}/>
-
-      <IoImages  className={styles.animate}
-          size={50} 
-          w = "fit-content"
-          p = {6}
-          rounded = "3xl"
-          boxShadow = "md"  style={{ left: '0%',top:'135%', animationDelay: '2s' }}/>
+<IoImages className={styles.animate}
+    size={150} 
+    style={{ 
+        left: '10%', 
+        top: '110%', 
+        animationDelay: '0s', 
+        width: 'fit-content', 
+        padding: '6px', 
+        borderRadius: '3xl', 
+        boxShadow: 'md' 
+    }} 
+/>
+<IoImages className={styles.animate}
+    size={100} 
+    style={{ 
+        left: '30%', 
+        top: '110%', 
+        animationDelay: '0.5s', 
+        width: 'fit-content', 
+        padding: '6px', 
+        borderRadius: '3xl', 
+        boxShadow: 'md' 
+    }} 
+/>
+<IoImages className={styles.animate}
+    size={170} 
+    style={{ 
+        left: '10%', 
+        top: '110%', 
+        animationDelay: '1s', 
+        width: 'fit-content', 
+        padding: '6px', 
+        borderRadius: '3xl', 
+        boxShadow: 'md' 
+    }} 
+/>
+<IoImages className={styles.animate}
+    size={20} 
+    style={{ 
+        right: '70%', 
+        top: '140%', 
+        animationDelay: '1.5s', 
+        width: 'fit-content', 
+        padding: '6px', 
+        borderRadius: '3xl', 
+        boxShadow: 'md' 
+    }} 
+/>
+<IoImages className={styles.animate}
+    size={80} 
+    style={{ 
+        left: '20%', 
+        top: '120%', 
+        animationDelay: '2s', 
+        width: 'fit-content', 
+        padding: '6px', 
+        borderRadius: '3xl', 
+        boxShadow: 'md' 
+    }} 
+/>
+<IoImages className={styles.animate}
+    size={50} 
+    style={{ 
+        left: '90%', 
+        top: '130%', 
+        animationDelay: '2s', 
+        width: 'fit-content', 
+        padding: '6px', 
+        borderRadius: '3xl', 
+        boxShadow: 'md' 
+    }} 
+/>
+<IoImages className={styles.animate}
+    size={190} 
+    style={{ 
+        left: '80%', 
+        top: '115%', 
+        animationDelay: '2s', 
+        width: 'fit-content', 
+        padding: '6px', 
+        borderRadius: '3xl', 
+        boxShadow: 'md' 
+    }} 
+/>
+<IoImages className={styles.animate}
+    size={70} 
+    style={{ 
+        left: '50%', 
+        top: '125%', 
+        animationDelay: '2s', 
+        width: 'fit-content', 
+        padding: '6px', 
+        borderRadius: '3xl', 
+        boxShadow: 'md' 
+    }} 
+/>
+<IoImages className={styles.animate}
+    size={55} 
+    style={{ 
+        left: '55%', 
+        top: '117%', 
+        animationDelay: '2s', 
+        width: 'fit-content', 
+        padding: '6px', 
+        borderRadius: '3xl', 
+        boxShadow: 'md' 
+    }} 
+/>
+<IoImages className={styles.animate}
+    size={80} 
+    style={{ 
+        left: '77%', 
+        top: '105%', 
+        animationDelay: '2s', 
+        width: 'fit-content', 
+        padding: '6px', 
+        borderRadius: '3xl', 
+        boxShadow: 'md' 
+    }} 
+/>
+<IoImages className={styles.animate}
+    size={20} 
+    style={{ 
+        left: '70%', 
+        top: '120%', 
+        animationDelay: '2s', 
+        width: 'fit-content', 
+        padding: '6px', 
+        borderRadius: '3xl', 
+        boxShadow: 'md' 
+    }} 
+/>
+<IoImages className={styles.animate}
+    size={50} 
+    style={{ 
+        left: '0%', 
+        top: '135%', 
+        animationDelay: '2s', 
+        width: 'fit-content', 
+        padding: '6px', 
+        borderRadius: '3xl', 
+        boxShadow: 'md' 
+    }} 
+/>
     
     </main>
   );
