@@ -105,18 +105,26 @@ function captureValue2(){
       pixel_1.value = pixel_2.value;
     }
     
-}
+  }
 }
 
 
   async function handleFile(event:any){
     const fileValue = event.target.files
-    setFile(Array.from(fileValue))
-    console.log(fileValue)
+    setFile(Array.from(fileValue));
+    console.log(fileValue);
+    let arrayFiles = [];
 
-   fetch('https:localhost:3333/files',{
+      if(fileValue.length > 0) {
+
+        Array.from(fileValue).map((value) => arrayFiles.push(value.name));
+      
+      } 
+    
+
+   fetch('http://localhost:3333/files',{
       method: 'POST',
-      body: JSON.stringify(Array.from(fileValue)),
+      body: JSON.stringify(arrayFiles),
       headers: { "Content-Type": "application/json" },
     })
     .then(response => response.json())

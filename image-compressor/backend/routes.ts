@@ -17,11 +17,12 @@ app.use(cors());
 
 //Aqui chama o arquivo do RabbitMQ
 
-app.get('/files',async (req,res) =>{
+app.post('/files',async (req,res) =>{
     //Aqui você faria uma chamada ao RabbitMQ para buscar os arquivos compactados
     //E retornaria esses dados para a API
-    await UploadMq.uploadFile(res,req);
-    console.log("Uploaded file")
+    const file = req.body;
+    await UploadMq.uploadFile(file,res);
+    console.log(file)
 })
 
 
