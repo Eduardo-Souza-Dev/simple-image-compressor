@@ -4,7 +4,7 @@ import express from 'express';
 
 
 //Imports archives
-import FileUploadMQ from './src/Consumer/FileUploadMQ';
+import FileUploadMQ from './src/RabbitMQ/Publisher/FileUploadMQ';
 
 const UploadMq = new FileUploadMQ;
 
@@ -22,7 +22,6 @@ app.post('/files',async (req,res) =>{
     //E retornaria esses dados para a API
     const file = req.body;
     await UploadMq.uploadFile(file,res);
-    console.log(file)
 })
 
 

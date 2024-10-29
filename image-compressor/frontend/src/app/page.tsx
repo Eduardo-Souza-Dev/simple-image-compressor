@@ -18,9 +18,7 @@ export default function Home() {
   const [ valuePixel, setValuePixel ] = useState(0);
   const [isLinked, setIsLinked] = useState(false);
   const [file, setFile ] =  useState([]);
-  //Tentar usar o usestate para guardar o valor de file
-  // let file: = [];
-
+  const [typeFile, setTypeFile] = useState('');
 
   function changedNotLinkedIcon(){
     let not_linked: HTMLElement = document.getElementById('not_linked');
@@ -35,7 +33,7 @@ export default function Home() {
 
 
   function changeColor(value:any){
-    console.log(value)
+    setTypeFile(value);
     let svg: HTMLElement = document.getElementById('svg');
     let png: HTMLElement = document.getElementById('png');
     let jpeg: HTMLElement = document.getElementById('jpeg');
@@ -112,8 +110,8 @@ function captureValue2(){
   async function handleFile(event:any){
     const fileValue = event.target.files
     setFile(Array.from(fileValue));
-    console.log(fileValue);
     let arrayFiles = [];
+    console.log(fileValue)
 
       if(fileValue.length > 0) {
 
@@ -121,7 +119,6 @@ function captureValue2(){
       
       } 
     
-
    fetch('http://localhost:3333/files',{
       method: 'POST',
       body: JSON.stringify(arrayFiles),
@@ -141,7 +138,7 @@ function captureValue2(){
 
         <div className="wrapper"> 
         <div className="container">
-          <h1>Envie uma imagem para comprimi-la.</h1>
+          <h2 style={{fontSize:'22px'}}>Envie uma imagem para comprimi-la ou converte-la.</h2>
           <div id="upload-container" className="upload-container">
             <div className="border-container">
               <div className="icons fa-4x">
@@ -222,6 +219,14 @@ function captureValue2(){
             }
           </div>
         </div>
+      </div>
+
+      <div className="container-buttons">
+          <button className="button-mq" >Comprimir Imagens</button>
+          <button className="button-mq" >Converter para: 
+            {` ${typeFile}`}
+          </button>
+  
       </div>
           <IoImages className={styles.animate}
               size={170} 
