@@ -7,7 +7,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import { LuLink2Off } from "react-icons/lu";
 import { LuLink2 } from "react-icons/lu";
 import { useEffect, useState } from "react";
-// import FileUploadMQ from "../../../backend/FileUploadMQ"
+import { Toaster, toast } from 'sonner'
 
 
 
@@ -106,6 +106,14 @@ function captureValue2(){
   }
 }
 
+  function sendToRabbit(value){
+    console.log('sendToRabbit');
+    if(file.length == 0){
+      console.log("Please select");
+      toast.warning('Event start time cannot be earlier than 8am');
+    }
+  }
+
 
   async function handleFile(event:any){
     const fileValue = event.target.files
@@ -119,7 +127,7 @@ function captureValue2(){
       
       } 
     
-   fetch('http://localhost:3333/files',{
+   await fetch('http://localhost:3333/files',{
       method: 'POST',
       body: JSON.stringify(arrayFiles),
       headers: { "Content-Type": "application/json" },
@@ -135,6 +143,7 @@ function captureValue2(){
   return (
     <main className={styles.main}>
       <div className={styles.body_file}>    
+      <Toaster />
 
         <div className="wrapper"> 
         <div className="container">
@@ -222,8 +231,8 @@ function captureValue2(){
       </div>
 
       <div className="container-buttons">
-          <button className="button-mq" >Comprimir Imagens</button>
-          <button className="button-mq" >Converter para: 
+          <button className="button-mq" onClick={sendToRabbit('compress')} >Comprimir Imagens</button>
+          <button className="button-mq" onClick={sendToRabbit('convert')} >Converter para: 
             {` ${typeFile}`}
           </button>
   

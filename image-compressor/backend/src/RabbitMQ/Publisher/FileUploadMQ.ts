@@ -7,6 +7,10 @@ class FileUploadMQ{
 
      async uploadFile(file:any,res:any): Promise<void> {
         //Pegar o valor de file e definir como um array de strings, que por sua vez seria as URLs das imagens
+
+        //Fazer verificação de cada file para saber se não esta corrompido, vazio ou inválido
+        //if....
+        
         amqp.connect('amqp://localhost', function(error0: Error | null, connection: amqp.Connection): void{
             if(error0){
                 throw error0;
@@ -17,11 +21,20 @@ class FileUploadMQ{
                     throw erro1;
                 }
         
-                let queue = 'files';
+                let resize_queue = 'resize';
+                let compress_queue = 'compress';
+                let exchange = 'image_processing';
         
-                channel.assertQueue(queue, {
+                channel.assertQueue(resize_queue, {
                     durable: true
                 });
+
+                channel.assertQueue(compress_queue, {
+                    durable: true
+                });
+
+                //Criação de Direct Exchange com routing key para cada queue
+                channel.assertExchange(exchange, 'direct', { durable:false })
 
                 // channe.prefetch para não pesar o envio de arquivo para um worker
                 channel.prefetch(1);
