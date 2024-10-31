@@ -24,9 +24,9 @@ export default function Home() {
     let not_linked: HTMLElement = document.getElementById('not_linked');
     let linked: HTMLElement = document.getElementById('linked');
     if(not_linked){
-      not_linked.style.display = 'none';
-      linked.style.display = 'block';
-      setIsLinked(true);
+        not_linked.style.display = 'none';
+        linked.style.display = 'block';
+        setIsLinked(true);
     }
     
   }
@@ -75,75 +75,79 @@ export default function Home() {
     let not_linked: HTMLElement = document.getElementById('not_linked');
     let linked: HTMLElement = document.getElementById('linked');
     if(linked){
-      not_linked.style.display = 'block';
-      linked.style.display = 'none';
-      setIsLinked(false);
+        not_linked.style.display = 'block';
+        linked.style.display = 'none';
+        setIsLinked(false);
     }
     
   }
 
   function captureValue1(){
+      if(isLinked == true){
+          let pixel_1 = document.getElementById('pixel_1') as HTMLInputElement;
+          let pixel_2 = document.getElementById('pixel_2') as HTMLInputElement;
+
+          if(pixel_1){
+            pixel_2.value = pixel_1.value;
+          }
+        
+      }
+  }
+
+  function captureValue2(){
     if(isLinked == true){
       let pixel_1 = document.getElementById('pixel_1') as HTMLInputElement;
       let pixel_2 = document.getElementById('pixel_2') as HTMLInputElement;
-
-      if(pixel_1){
-        pixel_2.value = pixel_1.value;
+      
+      if(pixel_2){
+        pixel_1.value = pixel_2.value;
       }
       
-  }
-}
-
-function captureValue2(){
-  if(isLinked == true){
-    let pixel_1 = document.getElementById('pixel_1') as HTMLInputElement;
-    let pixel_2 = document.getElementById('pixel_2') as HTMLInputElement;
-    
-    if(pixel_2){
-      pixel_1.value = pixel_2.value;
-    }
-    
-  }
-}
-
-  function sendToRabbit(value){
-    console.log('sendToRabbit');
-    if(file.length == 0){
-      console.log("Please select");
-      toast.warning('Event start time cannot be earlier than 8am');
     }
   }
-
 
   async function handleFile(event:any){
     const fileValue = event.target.files
     setFile(Array.from(fileValue));
-    let arrayFiles = [];
-    console.log(fileValue)
-
-      if(fileValue.length > 0) {
-
-        Array.from(fileValue).map((value) => arrayFiles.push(value.name));
-      
-      } 
-    
-   await fetch('http://localhost:3333/files',{
-      method: 'POST',
-      body: JSON.stringify(arrayFiles),
-      headers: { "Content-Type": "application/json" },
-    })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error))
-
-  
   }
+
+  async function sendToRabbit(key:string){
+    
+  
+    if(file.length == 0){
+      toast.warning('Adicione alguma imagem antes de continuar!');
+    }else{
+      let arrayFiles = [];
+      console.log(file)
+  
+        if(file.length > 0) {
+  
+          Array.from(file).map((value) => arrayFiles.push((value as File).name));
+        
+        } 
+
+        console.log(arrayFiles)
+      
+     await fetch(`http://localhost:3333/files?key=${key}`,{
+        method: 'POST',
+        body: JSON.stringify(arrayFiles),
+        headers: { "Content-Type": "application/json" },
+      })
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error('Error:', error))
+  
+    }
+  }
+
+
+
  
 
   return (
     <main className={styles.main}>
       <div className={styles.body_file}>    
-      <Toaster />
+      <Toaster richColors position="top-right" />
 
         <div className="wrapper"> 
         <div className="container">
@@ -231,8 +235,8 @@ function captureValue2(){
       </div>
 
       <div className="container-buttons">
-          <button className="button-mq" onClick={sendToRabbit('compress')} >Comprimir Imagens</button>
-          <button className="button-mq" onClick={sendToRabbit('convert')} >Converter para: 
+          <button className="button-mq" onClick={() => sendToRabbit('compress')} >Comprimir Imagens</button>
+          <button className="button-mq" onClick={() => sendToRabbit('convert')} >Converter para: 
             {` ${typeFile}`}
           </button>
   
