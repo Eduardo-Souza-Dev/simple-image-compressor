@@ -21,8 +21,8 @@ app.post('/files/:key',async (req,res) =>{
     //Aqui você faz uma chamada ao RabbitMQ para buscar os arquivos compactados
     //E retorna esses dados para o publisher
     const file = req.body;
-    // const key = req.params.key;
-    await UploadMq.uploadFile(file,res);
+    const key = req.params.key;
+    await UploadMq.uploadFile(file,res,key);
 })
 
 

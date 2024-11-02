@@ -118,17 +118,14 @@ export default function Home() {
       toast.warning('Adicione alguma imagem antes de continuar!');
     }else{
       let arrayFiles = [];
-      console.log(file)
   
         if(file.length > 0) {
   
           Array.from(file).map((value) => arrayFiles.push((value as File).name));
         
         } 
-
-        console.log(arrayFiles)
       
-     await fetch(`http://localhost:3333/files?key=${key}`,{
+     await fetch(`http://localhost:3333/files/${key}`,{
         method: 'POST',
         body: JSON.stringify(arrayFiles),
         headers: { "Content-Type": "application/json" },

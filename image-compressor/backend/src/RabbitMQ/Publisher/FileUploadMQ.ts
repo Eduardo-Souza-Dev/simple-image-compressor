@@ -5,7 +5,7 @@ import { Buffer } from 'buffer';
 
 class FileUploadMQ{
 
-     async uploadFile(file:any,res:any): Promise<void> {
+     async uploadFile(file:any,res:any,key:string): Promise<void> {
         //Pegar o valor de file e definir como um array de strings, que por sua vez seria as URLs das imagens
 
         //Fazer verificação de cada file para saber se não esta corrompido, vazio ou inválido
