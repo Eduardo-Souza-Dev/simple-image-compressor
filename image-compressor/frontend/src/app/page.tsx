@@ -121,10 +121,11 @@ export default function Home() {
   
         if(file.length > 0) {
   
-          Array.from(file).map((value) => arrayFiles.push((value as File).name));
+          Array.from(file).map((value) => arrayFiles.push((value as File)));
         
         } 
       
+        console.log(arrayFiles);
      await fetch(`http://localhost:3333/files/${key}`,{
         method: 'POST',
         body: JSON.stringify(arrayFiles),

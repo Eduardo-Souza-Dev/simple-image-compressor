@@ -25,6 +25,7 @@ class FileUploadMQ{
         
                 let resize_queue = 'resize';
                 let compress_queue = 'compress';
+                let convert_queue = 'convert';
         
                 channel.assertQueue(resize_queue, {
                     durable: true
@@ -62,7 +63,19 @@ class FileUploadMQ{
                         })
                         
                     }
+                } else if(key === 'convert'){
+                    if(file.length > 0){// Verfica se recebeu um file
+
+                        file.map((value:string) =>{// Manda eles para a queue como buffer de string
+                            channel.sendToQueue(convert_queue, Buffer.from(value), {
+                                persistent: true
+                            });
+                            console.log(" [x] Sent '%s'", value);
+                        })
+                        
+                    }
                 }
+
 
 
     
