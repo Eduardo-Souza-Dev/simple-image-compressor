@@ -124,14 +124,24 @@ export default function Home() {
           Array.from(file).map((value) => arrayFiles.push((value as File)));
         
         } 
+
+        // Cria o FormData e adiciona os arquivos
+      const formData = new FormData();
+      arrayFiles.forEach((file, index) => {
+          formData.append(`file${index}`, file); // Adiciona cada arquivo com uma chave única
+      });
+
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ', ' + pair[1].name); // Isso exibirá o nome de cada arquivo adicionado ao FormData
+    }
       
         console.log(arrayFiles);
      await fetch(`http://localhost:3333/files/${key}`,{
         method: 'POST',
-        body: JSON.stringify(arrayFiles),
-        headers: { "Content-Type": "application/json" },
+        body: formData,
+        headers: { "Content-Type": "multipart/form-data"},
       })
-      .then(response => response.json())
+      .then(response => response.text())
       .then(data => console.log(data))
       .catch(error => console.error('Error:', error))
   

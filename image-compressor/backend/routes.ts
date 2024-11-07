@@ -1,6 +1,10 @@
 //Dependecies
 import cors from "cors";
 import express from 'express';
+import multer from "multer"
+
+const storage = multer.memoryStorage();
+const upload  = multer({storage: storage});
 
 
 //Imports archives
@@ -17,12 +21,20 @@ app.use(cors());
 
 //Aqui chama o arquivo do RabbitMQ
 
-app.post('/files/:key',async (req,res) =>{
+app.post('/files/:key',upload.array('file'),async (req,res) =>{
     //Aqui você faz uma chamada ao RabbitMQ para buscar os arquivos compactados
     //E retorna esses dados para o publisher
-    const file = req.body;
+    const files = req.files as Express.Multer.File[];
+    if (files) {
+        files.forEach(file => {
+            console.log(`Nome do arquivo: ${file.originalname}`);
+            console.log(`Tipo MIME: ${file.mimetype}`);
+            console.log(`Tamanho: ${file.size}`);
+            console.log(`Buffer:`, file.buffer); // Buffer contendo os dados do arquivo
+        });
+    }
     const key = req.params.key;
-    await UploadMq.uploadFile(file,res,key);
+    await UploadMq.uploadFile(files,res,key);
 })
 
 
