@@ -18,7 +18,6 @@ app.use(cors());
 app.post('/files/:key',upload.array('files'), async(req,res) =>{
     const files = req.files;
     const key = req.params.key;
-    console.log(files);
     await UploadMq.uploadFile(files,res,key);
 })
 

@@ -12,9 +12,11 @@ amqp.connect('amqp://localhost',function(error0: Error | null, connection: amqp.
             durable: true
         });
 
-        console.log("[*] Waiting for messages in %s. To exit press CTRL + C", queue)
+
         channel.consume(queue, function(msg:any){
-        console.log(" [X] Mensagem nova no compress hihi %s", msg.content.toString());
+            const imagemToString = msg.content.toString();
+            const imageToJson = JSON.parse(imagemToString)
+            console.log(imageToJson);
         },
         {
             noAck: true
@@ -23,3 +25,9 @@ amqp.connect('amqp://localhost',function(error0: Error | null, connection: amqp.
 
 
 })
+
+
+// function CompressImagem(imagem){
+//     // Implementar a lógica para compressão da imagem
+
+// }
