@@ -36,22 +36,22 @@ function CompressImagem(imageToJson:any){
     //Converte a string para base64 encoded
     const inputFile = Buffer.from(imageToJson.buffer, 'base64');
     // console.log(imageToJson);
-    const outputFile = `${imageToJson.originalname}_compressed`;
+    const outputFile = `${imageToJson.originalname}`;
     const compress_quality = 70;
 
     if(imageToJson.mimetype === 'image/jpeg'){
         // Compressão para JPEG
         sharp(inputFile)
         .jpeg({ quality: compress_quality }) // Ajusta a qualidade
-        .toFile('output.jpg') // Salva o arquivo comprimido
+        .toFile(`${outputFile}`) // Salva o arquivo comprimido
         .then(() => console.log('Imagem comprimida com sucesso!'))
         .catch(err => console.error(err));
 
     }else if(imageToJson.mimetype === 'image/png'){
         // Compressão para PNG
         sharp(inputFile)
-        .png({ compressionLevel: 1 }) // Nível de compressão (0 a 9)
-        .toFile('output.png')
+        .png({ compressionLevel: 9 }) // Nível de compressão (0 a 9)
+        .toFile(`${outputFile}`)
         .then(() => console.log('Imagem comprimida com sucesso!'))
         .catch(err => console.error(err));
 
