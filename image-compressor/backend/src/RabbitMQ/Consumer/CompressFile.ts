@@ -1,5 +1,6 @@
 import * as amqp from 'amqplib/callback_api';
 // import { Jimp } from 'jimp';
+import ZipeFiles from '@/ZipeFIles';
 import sharp from 'sharp';
 
 amqp.connect('amqp://localhost',function(error0: Error | null, connection: amqp.Connection):void{
@@ -35,7 +36,7 @@ function CompressImagem(imageToJson:any){
     
     //Converte a string para base64 encoded
     const inputFile = Buffer.from(imageToJson.buffer, 'base64');
-    // console.log(imageToJson);
+    const zipeCompressFile = new ZipeFiles;
     const outputFile = `${imageToJson.originalname}`;
     const compress_quality = 70;
 
@@ -52,7 +53,10 @@ function CompressImagem(imageToJson:any){
         sharp(inputFile)
         .png({ compressionLevel: 9 }) // Nível de compressão (0 a 9)
         .toFile(`${outputFile}`)
-        .then(() => console.log('Imagem comprimida com sucesso!'))
+        .then(() => {   
+            //Aqui chamar a API que vai chamar a classe ZipeFiles que por si irá retornar os arquivos
+            // zipeCompressFile.zipFiles() Comentei por que vamos configurar a API
+        })
         .catch(err => console.error(err));
 
     }
