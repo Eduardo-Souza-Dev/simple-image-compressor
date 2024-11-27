@@ -27,26 +27,11 @@ app.post('/files/:key',upload.array('files'), async(req,res) =>{
 })
 
 app.get('/files/zip',async(req,res) =>{
-    // await zipeFiles.zipFiles();
     //Aqui vou chamar a classe responsável por lidar com processo de zipagem dos arquivos
     try {
-        const zip = new JSZip();
-
-        // Adicionando arquivos ao ZIP dinamicamente
-        zip.file("file1.txt", "Hello World!");
-        zip.file("file2.txt", "Another file content");
-
-        // Gerando o ZIP em memória como buffer
-        const content = await zip.generateAsync({ type: "nodebuffer" });
-
-        // Configurando cabeçalhos HTTP para forçar o download
-        res.set({
-            "Content-Type": "application/zip",
-            "Content-Disposition": 'attachment; filename="example.zip"',
-        });
-
-        // Enviando o arquivo diretamente ao cliente
-        res.send(content);
+        console.log("Api esta sendo chamada!")
+        res.send("Valor de teste")
+        // zipeFiles.zipFiles(res);
     } catch (err) {
         console.error("Erro ao gerar ZIP:", err);
         res.status(500).send("Erro ao gerar ZIP");

@@ -53,9 +53,12 @@ function CompressImagem(imageToJson:any){
         sharp(inputFile)
         .png({ compressionLevel: 9 }) // Nível de compressão (0 a 9)
         .toFile(`${outputFile}`)
-        .then(() => {   
+        .then(async () => {   
             //Aqui chamar a API que vai chamar a classe ZipeFiles que por si irá retornar os arquivos
-            // zipeCompressFile.zipFiles() Comentei por que vamos configurar a API
+            const response = await fetch('http://localhost:3333/files/zip');
+            const data = await response.json();
+
+            console.log(data)
         })
         .catch(err => console.error(err));
 
