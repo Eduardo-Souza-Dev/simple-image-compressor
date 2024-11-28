@@ -19,8 +19,9 @@ amqp.connect('amqp://localhost',function(error0: Error | null, connection: amqp.
         channel.consume(queue, function(msg:any){
             const imagemToString = msg.content.toString();
             const imageToJson = JSON.parse(imagemToString)
+            console.log(imagemToString);
 
-            CompressImagem(imageToJson);
+            // CompressImagem(imageToJson);
         },
         {
             noAck: true

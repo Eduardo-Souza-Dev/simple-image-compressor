@@ -16,10 +16,7 @@ class FileUploadMQ{
                 amqp.connect('amqp://localhost', function(error0: Error | null, connection: amqp.Connection): void{
                         if(error0){
                                 throw error0;
-                        }else{
-                                res.status(200).send('Envio de arquivos feito com sucesso!');   
                         }
-                        
                 
                         connection.createChannel(function (erro1: Error | null, channel: amqp.Channel): void{
                                 if(erro1){
@@ -55,20 +52,34 @@ class FileUploadMQ{
                                         }
                                 }
                                 else if(key === 'compress'){
+
+                                        const responseExpress = JSON.stringify({
+                                                files: file,
+                                                key,
+                                                responseData: {
+                                                    headers: res.getHeaders(),
+                                                    statusCode: res.statusCode,
+                                                },
+                                            });
                             
-                                        file.forEach((file:any) => {
-                                                // Serializa o objeto em JSON
-                                                const fileData = JSON.stringify({
-                                                originalname: file.originalname,
-                                                mimetype: file.mimetype,
-                                                size: file.size,
-                                                buffer: file.buffer.toString('base64') // Buffer em Base64 para compatibilidade
-                                                });
+                            
+                                        // file.forEach((file:any) => {
+                                        //         // Serializa o objeto em JSON
+                                        //         const fileData = JSON.stringify({
+                                        //         originalname: file.originalname,
+                                        //         mimetype: file.mimetype,
+                                        //         size: file.size,
+                                        //         buffer: file.buffer.toString('base64') // Buffer em Base64 para compatibilidade
+                                        //         });
                                         
-                                                // Enviar o JSON para a fila
-                                                channel.sendToQueue(compress_queue, Buffer.from(fileData), {
+                                        //         // Enviar o JSON para a fila
+                                        //         channel.sendToQueue(compress_queue, Buffer.from(fileData), {
+                                        //         persistent: true
+                                        //         });
+                                        // });
+
+                                        channel.sendToQueue(compress_queue, Buffer.from(responseExpress), {
                                                 persistent: true
-                                                });
                                         });
                                                             
                                 } else if(key === 'convert'){
