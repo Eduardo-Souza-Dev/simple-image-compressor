@@ -1,5 +1,6 @@
 import * as amqp from 'amqplib/callback_api';
 import { Buffer } from 'buffer';
+import { jsonc } from 'jsonc';
 
 
 
@@ -53,13 +54,9 @@ class FileUploadMQ{
                                 }
                                 else if(key === 'compress'){
 
-                                        const responseExpress = JSON.stringify({
+                                        const responseExpress = jsonc.stringify({
                                                 files: file,
-                                                key,
-                                                responseData: {
-                                                    headers: res.getHeaders(),
-                                                    statusCode: res.statusCode,
-                                                },
+                                                res
                                             });
                             
                             
