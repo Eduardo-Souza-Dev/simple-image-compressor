@@ -1,25 +1,24 @@
 import JSZip from "jszip";
 import FileSaver from 'file-saver';
+import * as fs from 'node:fs';
+
+
 
 class ZipeFiles{
-     async zipFiles(/*files: any,*/ res:any){
-        const teste = "Valor de teste da API";
-        res.json(teste);
-        // console.log("Zipando arquivos");
-        // const file = new File(["Hello, world!"], "hello world.txt", {type: "text/plain;charset=utf-8"});
-        // FileSaver.saveAs(file);
-        // const zip = JSZip();
+     async zipFiles(){
+        const zip = JSZip();
 
-        // zip.file("Hello.txt", "Hello World\n");
+        zip.file("Hello.txt", "Hello World\n");
 
-        // const img = zip.folder("images");
+        const img = zip.folder("images");
 
-        // img?.file("smile.gif", URL.createObjectURL(new Blob([new Uint8Array()], {type: 'image/gif'})), {base64: true});
+
+        img?.file("smile.gif", URL.createObjectURL(new Blob([new Uint8Array()], {type: 'image/gif'})), {base64: true});
         
-        // zip.generateAsync({type:"blob"}).then(function(content) {
-        //     // see FileSaver.js
-        //    return FileSaver.saveAs(content, "example.zip");
-        // });
+        zip.generateAsync({type:"nodebuffer"}).then(function(content) {
+            //Salvando zip em folder temporario
+            fs.writeFileSync("../../temp_zip_files/example.zip", content)
+        });
         
     }
 }

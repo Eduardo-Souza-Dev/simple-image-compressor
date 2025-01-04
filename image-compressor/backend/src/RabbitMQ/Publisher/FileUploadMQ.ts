@@ -17,6 +17,8 @@ class FileUploadMQ{
                 amqp.connect('amqp://localhost', function(error0: Error | null, connection: amqp.Connection): void{
                         if(error0){
                                 throw error0;
+                        }else{
+                                res.send("Arquivos enviados com sucesso!");
                         }
                 
                         connection.createChannel(function (erro1: Error | null, channel: amqp.Channel): void{
@@ -53,30 +55,20 @@ class FileUploadMQ{
                                         }
                                 }
                                 else if(key === 'compress'){
-
-                                        const responseExpress = jsonc.stringify({
-                                                files: file,
-                                                res
-                                            });
-                            
-                            
-                                        // file.forEach((file:any) => {
-                                        //         // Serializa o objeto em JSON
-                                        //         const fileData = JSON.stringify({
-                                        //         originalname: file.originalname,
-                                        //         mimetype: file.mimetype,
-                                        //         size: file.size,
-                                        //         buffer: file.buffer.toString('base64') // Buffer em Base64 para compatibilidade
-                                        //         });
+                                           
+                                        file.forEach((file:any) => {
+                                                // Serializa o objeto em JSON
+                                                const fileData = JSON.stringify({
+                                                originalname: file.originalname,
+                                                mimetype: file.mimetype,
+                                                size: file.size,
+                                                buffer: file.buffer.toString('base64') // Buffer em Base64 para compatibilidade
+                                                });
                                         
-                                        //         // Enviar o JSON para a fila
-                                        //         channel.sendToQueue(compress_queue, Buffer.from(fileData), {
-                                        //         persistent: true
-                                        //         });
-                                        // });
-
-                                        channel.sendToQueue(compress_queue, Buffer.from(responseExpress), {
+                                                // Enviar o JSON para a fila
+                                                channel.sendToQueue(compress_queue, Buffer.from(fileData), {
                                                 persistent: true
+                                                });
                                         });
                                                             
                                 } else if(key === 'convert'){
