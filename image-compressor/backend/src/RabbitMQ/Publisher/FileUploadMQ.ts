@@ -74,12 +74,20 @@ class FileUploadMQ{
                                 } else if(key === 'convert'){
                                         if(file.length > 0){// Verfica se recebeu um file
 
-                                                file.map((value:string) =>{// Manda eles para a queue como buffer de string
-                                                channel.sendToQueue(convert_queue, Buffer.from(value), {
+                                                file.forEach((file:any) => {
+                                                        // Serializa o objeto em JSON
+                                                        const fileData = JSON.stringify({
+                                                        originalname: file.originalname,
+                                                        mimetype: file.mimetype,
+                                                        size: file.size,
+                                                        buffer: file.buffer.toString('base64') // Buffer em Base64 para compatibilidade
+                                                        });
+                                                
+                                                        // Enviar o JSON para a fila
+                                                        channel.sendToQueue(compress_queue, Buffer.from(fileData), {
                                                         persistent: true
+                                                        });
                                                 });
-                                                console.log(" [x] Sent '%s'", value);
-                                                })
                                                 
                                         }
                                 }
