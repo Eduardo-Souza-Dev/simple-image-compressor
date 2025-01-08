@@ -1,26 +1,46 @@
-import JSZip, { forEach } from "jszip";
+import JSZip from "jszip";
 import FileSaver from 'file-saver';
+import path from "node:path";
 import * as fs from 'node:fs';
 
 
 
 class ZipeFiles{
-     async zipFiles(images:any, nameImage:string){
+     async zipFiles(){
         const zip = JSZip();
-        const img = zip.folder("images");
-        const imagesBuffer = Buffer.from(images);
-        const uint8Array = new Uint8Array(images);
-        const blob = new Blob([uint8Array], {type: 'image/jpeg'});
-        const imageUrl = URL.createObjectURL(blob);
-        console.log(imageUrl);
-        img?.file(nameImage, imageUrl, {base64: true});
 
-        // img?.file(nameImage, URL.createObjectURL(new Blob([new Uint8Array(imagesBuffer)], {type: 'image/jpeg'})), {base64: true});
+        const directoryPath = path.resolve("../../temp_pictures");
+
+        fs.readdir(directoryPath, function(err, files){
+            if(err){
+                return console.log('Directory not found: ' + err);
+            }
+
+
+            // Foreach percorrendo todos os files dentro da pasta temp_pictures
+            files.forEach(function(file){
+                const filePath = path.join(directoryPath, file); // pega o caminho real da imagem ../../temp_pictures/mickey.png por exemplo
+                const fileData = fs.readFileSync(filePath); // Aqui faz a leitura do caminho da imagem
+                zip.file(file, fileData); // Adiciona a imagem ao zip hihi
+            })
+
+            zip
+            .generateAsync({ type: "nodebuffer" })
+            .then((content) =>{
+                fs.writeFileSync("../../temp_zip_files/example.zip", content);
+                console.log("Zip file created");
+            })
+            .catch((errorZip) => {
+                console.log("Error to create zip file: " + errorZip);
+            })
+
+
+        })
         
-        zip.generateAsync({type:"nodebuffer"}).then(function(content) {
-            //Salvando zip em folder temporario
-            fs.writeFileSync("../../temp_zip_files/example.zip", content)
-        });
+        // zip.generateAsync({type:"nodebuffer"}).then(function(content) {
+        //     //Salvando zip em folder temporario
+        //     fs.writeFileSync("../../temp_zip_files/example.zip", content)
+        // });
         
     }
 }
