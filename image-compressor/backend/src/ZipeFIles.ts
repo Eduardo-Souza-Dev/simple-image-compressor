@@ -37,10 +37,7 @@ class ZipeFiles{
 
         })
         
-        // zip.generateAsync({type:"nodebuffer"}).then(function(content) {
-        //     //Salvando zip em folder temporario
-        //     fs.writeFileSync("../../temp_zip_files/example.zip", content)
-        // });
+
         
     }
 }

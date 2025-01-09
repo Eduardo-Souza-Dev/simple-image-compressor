@@ -131,7 +131,15 @@ export default function Home() {
         body: formData,
       })
       .then(response => response.text())
-      .then(data => console.log("Valor de data: " ,data))
+      .then(async(data) => {
+        if(data == "Arquivos enviados com sucesso!"){
+          await fetch('http://localhost:3333/download', {
+            method: 'GET',
+          })
+          .then(response => response.json())
+          .then(data => console.log(data))
+        }
+      })
       .catch(error => console.error('Error:', error))
   
     }
@@ -236,6 +244,7 @@ export default function Home() {
           <button className="button-mq" onClick={() => sendToRabbit('convert')} >Converter para: 
             {` ${typeFile}`}
           </button>
+          {/* <a href="http://localhost:3333/file_zipe/example.zip">baixa zip</a> */}
   
       </div>
           <IoImages className={styles.animate}
