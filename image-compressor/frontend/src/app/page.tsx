@@ -133,11 +133,15 @@ export default function Home() {
       .then(response => response.text())
       .then(async(data) => {
         if(data == "Arquivos enviados com sucesso!"){
-          await fetch('http://localhost:3333/download', {
-            method: 'GET',
-          })
-          .then(response => response.json())
-          .then(data => console.log(data))
+          toast.success('Arquivos comprimidos com sucesso!');
+
+          // Criamos um link para já fazer o donwload do documento comprimido
+          const link = document.createElement('a');
+          link.href = `http://localhost:3333/download`;
+          link.download = 'example.zip';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
         }
       })
       .catch(error => console.error('Error:', error))
@@ -244,7 +248,7 @@ export default function Home() {
           <button className="button-mq" onClick={() => sendToRabbit('convert')} >Converter para: 
             {` ${typeFile}`}
           </button>
-          {/* <a href="http://localhost:3333/file_zipe/example.zip">baixa zip</a> */}
+          {/* <a href="http://localhost:3333/download">baixa zip</a> */}
   
       </div>
           <IoImages className={styles.animate}
