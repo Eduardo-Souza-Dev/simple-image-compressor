@@ -248,7 +248,6 @@ export default function Home() {
           <button className="button-mq" onClick={() => sendToRabbit('convert')} >Converter para: 
             {` ${typeFile}`}
           </button>
-          {/* <a href="http://localhost:3333/download">baixa zip</a> */}
   
       </div>
           <IoImages className={styles.animate}
