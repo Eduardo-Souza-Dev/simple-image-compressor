@@ -49,7 +49,6 @@ class FileUploadMQ{
                                                 channel.sendToQueue(resize_queue, Buffer.from(value), {
                                                         persistent: true
                                                 });
-                                                // console.log(" [x] Sent '%s'", value);
                                                 })
                                                 
                                         }

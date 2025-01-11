@@ -36,7 +36,6 @@ function CompressImagem(imageToJson:any){
     const inputFile = Buffer.from(imageToJson.buffer, 'base64');
     const zipeCompressFile = new ZipeFiles;
     const outputFile = `../../temp_pictures/${imageToJson.originalname}`;
-    console.log(outputFile);
     const compress_quality = 70;
 
     if(imageToJson.mimetype === 'image/jpeg'){
@@ -54,7 +53,6 @@ function CompressImagem(imageToJson:any){
         .toFile(`${outputFile}`)
         .then(async () => {   
         // Aqui chamar a API que vai chamar a classe ZipeFiles que por si irá retornar os arquivos
-          console.log("Imagem comprimida com sucesso!");
           await zipeCompressFile.zipFiles();
           
         })
