@@ -1,9 +1,9 @@
 import {describe, expect, test, it, jest, afterEach, beforeEach} from '@jest/globals';
-import ZipeFiles from "@/ZipeFIles";
+import ZipeFiles from "../ZipeFIles";
 import JSZip from "jszip";
 import * as fs from 'node:fs';
 import path from "node:path";
-import sinon, { SinonStub } from 'sinon';
+import sinon from 'sinon';
 
 jest.mock('node:fs', () =>{
     return {
@@ -11,25 +11,26 @@ jest.mock('node:fs', () =>{
         readFileSync: jest.fn(),
         writeFileSync: jest.fn()
     }
-})
+});
+
 
 
 // Mock do path
 jest.spyOn(path, 'resolve').mockImplementation(() => 'mocked/temp_pictures');
 describe('ZipFiles', () => {
-    const zipper = new ZipeFiles(); // Fixed typo in class name (ZipeFiles -> ZipFiles)
-    let readdirStub: sinon.SinonStub; // Corrected variable name to readdirStub
-    let readFilesStub: sinon.SinonStub;
+    const zipper = new ZipeFiles();
+    let readdirStub: sinon.SinonStub;
+    let readFileStub: sinon.SinonStub;
 
-    beforeEach(() =>{
-        readdirStub = sinon.stub(fs.promises, 'readdir');
-        readFilesStub = sinon.stub(fs.promises,'readFile');
-    })
+    beforeEach(() => {
+        readdirStub = sinon.stub(fs.promises, "readdir");
+        readFileStub = sinon.stub(fs.promises, "readFile");
+    });
 
-    afterEach(() =>{
+    afterEach(() => {
         readdirStub.restore();
-        readFilesStub.restore();
-    })
+        readFileStub.restore();
+    });
 
     describe('async zipFiles' , () => {
         it('should return a files', async () =>{
@@ -38,8 +39,8 @@ describe('ZipFiles', () => {
             // fs.writeFileSync('mocked/temp_pictures',mockFiles);
             readdirStub.resolves(['file1.png']);
             await zipper.zipFiles();
-            expect(readFilesStub.resolves('example.zip'))
+            expect(readFileStub.resolves('example.zip'));
 
-        })
-    })
+        });
+    });
 })
