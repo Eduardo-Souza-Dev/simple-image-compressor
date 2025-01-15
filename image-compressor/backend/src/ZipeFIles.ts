@@ -28,7 +28,6 @@ class ZipeFiles{
             .generateAsync({ type: "nodebuffer" })
             .then((content) =>{
                 fs.writeFileSync("../../temp_zip_files/example.zip", content);
-                return 'example.zip';
             })
             .catch((errorZip) => {
                 console.log("Error to create zip file: " + errorZip);

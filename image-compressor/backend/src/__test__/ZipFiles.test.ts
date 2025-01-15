@@ -1,40 +1,47 @@
 import {describe, expect, test, it, jest, afterEach, beforeEach} from '@jest/globals';
-import ZipeFiles from "../ZipeFIles";
-import JSZip from "jszip";
-import * as fs from 'node:fs';
+import * as fs from 'fs/promises';
 import path from "node:path";
-import sinon from 'sinon';
 
-jest.mock('node:fs', () =>{
-    return {
-        readdir: jest.fn(),
-        readFileSync: jest.fn(),
-        writeFileSync: jest.fn()
-    }
-});
+import FileUploadMQ from '../RabbitMQ/Publisher/FileUploadMQ';
+
+jest.mock('fs');
+
+jest.mock('fs/promises', () => ({
+    readdir: jest.fn(),
+    writeFileSync: jest.fn(),
+  }));
 
 
 
 describe('ZipFiles', () => {
-    const zipper = new ZipeFiles();
-    // let readdirStub: sinon.SinonStub;
-    // let readFileStub: sinon.SinonStub;
+    const uploadMQ = new FileUploadMQ();
+    const mockBuffer = Buffer.from('fake data', 'utf-8')
 
-    // beforeEach(() => {
-    //     readdirStub = sinon.stub(fs, "readdir");
-    //     readFileStub = sinon.stub(fs, "readFile");
-    // });
+    describe('POST /files/:key' , () => {
+        it('should return if the files has been created', async () =>{
 
-    // afterEach(() => {
-    //     readdirStub.restore();
-    //     readFileStub.restore();
-    // });
+            const valuesFiles = {
+                params:  "compress",    
+                files: [{
+                    fieldname: 'files',
+                    originalname: 'teste1.png',
+                    mimetype: 'image/png',
+                    size: 1024,
+                    buffer: mockBuffer
+                },        
+                {
+                    fieldname: 'files',
+                    originalname: 'teste2.png',
+                    mimetype: 'image/png',
+                    size: 1024,
+                    buffer: mockBuffer
+                }],
+                res: Response,
 
-    describe('async zipFiles' , () => {
-        it('should return a file zipped', async () =>{
-            const mockZip = new ZipeFiles;
-            const result = await mockZip.zipFiles();
-            expect(result).toEqual('example.zip');
+            };
+
+            expect(uploadMQ.uploadFile(valuesFiles.files, valuesFiles.res, valuesFiles.params)).toEqual("Arquivos enviados com sucesso!");
+
         });
     });
 })
