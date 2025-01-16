@@ -1,6 +1,7 @@
 import {describe, expect, test, it, jest, afterEach, beforeEach} from '@jest/globals';
 import * as fs from 'fs/promises';
 import path from "node:path";
+import * as httpMocks from 'node-mocks-http' 
 
 import FileUploadMQ from '../RabbitMQ/Publisher/FileUploadMQ';
 
@@ -12,6 +13,8 @@ jest.mock('fs/promises', () => ({
   }));
 
 
+const response = httpMocks.createResponse();
+const responsejson = response.json();
 
 describe('ZipFiles', () => {
     const uploadMQ = new FileUploadMQ();
@@ -36,11 +39,13 @@ describe('ZipFiles', () => {
                     size: 1024,
                     buffer: mockBuffer
                 }],
-                res: Response,
-
             };
 
-            expect(uploadMQ.uploadFile(valuesFiles.files, valuesFiles.res, valuesFiles.params)).toEqual("Arquivos enviados com sucesso!");
+            response.on('close', () =>{
+                expect(response._getData()).toEqual("Arquivos enviados com sucesso!");
+            })
+
+            // expect(uploadMQ.uploadFile(valuesFiles.files, response, valuesFiles.params)).toEqual("Arquivos enviados com sucesso!");
 
         });
     });

@@ -1,16 +1,15 @@
 import * as amqp from 'amqplib/callback_api';
 import { Buffer } from 'buffer';
 import { jsonc } from 'jsonc';
+import { Response } from 'express';
 
 
 
 class FileUploadMQ{
 
-     async uploadFile(file:any,res:any,key:string): Promise<void> {
+     async uploadFile(file:any,res:Response,key:string): Promise<void> {
 
-        console.log(file);
-        console.log(res);
-        console.log(key);
+        console.log(res.json());
         //Pegar o valor de file e definir como um array de strings, que por sua vez seria as URLs das imagens
 
         //Fazer verificação de cada file para saber se não esta corrompido, vazio ou inválido
