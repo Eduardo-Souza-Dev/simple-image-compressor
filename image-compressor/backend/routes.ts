@@ -44,20 +44,16 @@ app.use(express.static(path.join(__dirname, 'src')));
 app.post('/files/:key',upload.array('files'), async(req,res) =>{
     const files = req.files;
     const key = req.params.key;
-    await UploadMq.uploadFile(files,res,key);
-})
 
-app.get('/files/zip',async(req,res) =>{
-    //Aqui vou chamar a classe responsável por lidar com processo de zipagem dos arquivos
-    try {
-        console.log("Api esta sendo chamada!")
-        res.send("Valor de teste")
-        // zipeFiles.zipFiles(res);
-    } catch (err) {
-        console.error("Erro ao gerar ZIP:", err);
-        res.status(500).send("Erro ao gerar ZIP");
+    try{
+        const result =   await UploadMq.uploadFile(files,key);
+
+        res.status(200).send(result);
+      
+    }catch(err){
+        res.status(500).send('Generic error');
     }
+    
 })
-
 
 app.listen(3333, () => console.log('Server running on port 3333'));

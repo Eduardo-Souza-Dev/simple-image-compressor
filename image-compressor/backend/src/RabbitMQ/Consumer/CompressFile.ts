@@ -15,22 +15,23 @@ amqp.connect('amqp://localhost',function(error0: Error | null, connection: amqp.
         });
 
 
-        channel.consume(queue, function(msg:any){
+        channel.consume(queue, async function(msg:any){
             const imagemToString = msg.content.toString();
             const imageToJson = JSON.parse(imagemToString)
 
-            CompressImagem(imageToJson)
+            await CompressImagem(imageToJson)
         },
         {
-            noAck: true
+            noAck: false
         }  );
+
     })
 
 
 })
 
 
-function CompressImagem(imageToJson:any){
+async function CompressImagem(imageToJson:any){
 
     //Converte a string para base64 encoded
     const inputFile = Buffer.from(imageToJson.buffer, 'base64');

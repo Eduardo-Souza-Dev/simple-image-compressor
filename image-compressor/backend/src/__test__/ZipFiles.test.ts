@@ -17,18 +17,33 @@ jest.mock('fs/promises', () => ({
   });
 
 
-const response = httpMocks.createResponse();
-const responsejson = response.json();
-
 describe('ZipFiles', () => {
     const uploadMQ = new FileUploadMQ();
-    const mockBuffer = Buffer.from('fake data', 'utf-8')
+    const mockBuffer = JSON.stringify(Buffer.from('fake data', 'utf-8'))
 
     describe('POST /files/:key' , () => {
         it('should return if the files has been send correct', () =>{
 
+            const mockExpressRequest = httpMocks.createRequest({
+                method: 'GET',
+                url: '/files/:key',
+                params: {
+                    key: 'compress'
+                },
+                files:
+                {
+                    fieldname: 'files',
+                    originalname: 'teste1.png',
+                    mimetype: 'image/png',
+                    size: '1024',
+                    buffer: mockBuffer
+                }
+            });
+
+            const mockExpressResponse = httpMocks.createResponse();
+
+
             const valuesFiles = {
-                params:  "compress",    
                 files: [{
                     fieldname: 'files',
                     originalname: 'teste1.png',
@@ -43,15 +58,11 @@ describe('ZipFiles', () => {
                     size: 1024,
                     buffer: mockBuffer
                 }],
-            };
+            }
 
-            expect(uploadMQ.uploadFile(valuesFiles.files, response, valuesFiles.params)).toEqual("Arquivos enviados com sucesso!");
-            
-            
-
-            response.on('close', () =>{
-                expect(response._getData()).toEqual("Arquivos enviados com sucesso!");
-            })
+            // Trocar o teste para ser direto na API e não na função!
+        
+            expect(uploadMQ.uploadFile(valuesFiles.files, mockExpressRequest.params.key)).toEqual("All files have been compressed");
 
         });
     });
