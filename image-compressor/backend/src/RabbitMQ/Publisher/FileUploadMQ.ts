@@ -27,12 +27,14 @@ class FileUploadMQ{
 
                         amqp.connect('amqp://localhost', function(error0: Error | null, connection: amqp.Connection): void{
                                 if(error0){
+                                        reject();
                                         throw error0;
                                 }
                         
         
                                 connection.createChannel(function (erro1: Error | null, channel: amqp.Channel): void{
                                         if(erro1){
+                                          reject();
                                           throw erro1;
                                         }
                                 
@@ -91,6 +93,7 @@ class FileUploadMQ{
                                                         proccessedAccount++
 
                                                         if(proccessedAccount === count) { 
+                                                              connection.close();
                                                               resolve('All files have been compressed');  
                                                         }
                                                 })

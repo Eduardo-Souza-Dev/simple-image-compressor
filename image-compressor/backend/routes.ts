@@ -45,14 +45,25 @@ app.post('/files/:key',upload.array('files'), async(req,res) =>{
     const files = req.files;
     const key = req.params.key;
 
-    try{
-        const result =   await UploadMq.uploadFile(files,key);
+    const result = await UploadMq.uploadFile(files,key);
 
-        res.status(200).send(result);
+    console.log(result);
+
+    // try{
+    //     console.log(result);
+
+    //     if(result){
+    //         res.status(200).send(result);
+    //         console.log(result);
+    //     }
+        
+    //     // res.status(200).send(result);
       
-    }catch(err){
-        res.status(500).send('Generic error');
-    }
+    // }catch(err){
+    //     res.status(500).send('Generic error');
+    // }
+   
+    
     
 })
 

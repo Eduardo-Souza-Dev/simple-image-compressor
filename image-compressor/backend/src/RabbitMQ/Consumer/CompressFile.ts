@@ -42,17 +42,18 @@ async function CompressImagem(imageToJson:any){
     if(imageToJson.mimetype === 'image/jpeg'){
         // Compressão para JPEG
         sharp(inputFile)
-        .jpeg({ quality: compress_quality }) // Ajusta a qualidade
-        .toFile(`${outputFile}`) // Salva o arquivo comprimido
-        .then(() => console.log('Imagem comprimida com sucesso!'))
+        .jpeg({ quality: compress_quality })
+        .toFile(`${outputFile}`)
+        .then(() => console.log('Imagem JPEG comprimida com sucesso!'))
         .catch(err => console.error(err));
 
     }else if(imageToJson.mimetype === 'image/png'){
         // Compressão para PNG
         sharp(inputFile)
-        .webp({ quality: 10 }) // Nível de compressão (0 a 100)
+        .png({ quality: 10 }) 
         .toFile(`${outputFile}`)
         .then(async () => {   
+          console.log('Imagem PNG comprimida com sucesso!');
         // Aqui chamar a API que vai chamar a classe ZipeFiles que por si irá retornar os arquivos
           await zipeCompressFile.zipFiles();
           
