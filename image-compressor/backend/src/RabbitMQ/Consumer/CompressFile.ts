@@ -22,8 +22,9 @@ amqp.connect('amqp://localhost',function(error0: Error | null, connection: amqp.
             await CompressImagem(imageToJson)
         },
         {
-            noAck: false
+            noAck: true
         }  );
+        
 
     })
 

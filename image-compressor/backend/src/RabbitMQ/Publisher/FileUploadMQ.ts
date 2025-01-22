@@ -88,16 +88,11 @@ class FileUploadMQ{
                                                         });
         
                                                 });
-                                                
-                                                channel.on('ack', () =>{
-                                                        proccessedAccount++
 
-                                                        if(proccessedAccount === count) { 
-                                                              connection.close();
-                                                              resolve('All files have been compressed');  
-                                                        }
-                                                })
-                                                                    
+                                                if(count == file.length){ // Verifica se todos os arquivos foram percorridos                                                      
+                                                        resolve('All files have been compressed');  // Envia os dados de envio com sucesso para a API
+                                                }
+                                                          
                                         }if(key === 'convert'){
                                                 if(file.length > 0){// Verfica se recebeu um file
         

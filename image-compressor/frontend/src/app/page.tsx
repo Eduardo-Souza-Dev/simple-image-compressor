@@ -132,7 +132,7 @@ export default function Home() {
       })
       .then(response => response.text())
       .then(async(data) => {
-        if(data == "Arquivos enviados com sucesso!"){
+        if(data == "All files have been compressed"){
           toast.success('Arquivos comprimidos com sucesso!');
 
           // Criamos um link para já fazer o donwload do documento comprimido
