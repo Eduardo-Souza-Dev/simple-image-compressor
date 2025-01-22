@@ -17,6 +17,8 @@ class FileUploadMQ{
 
         //Fazer verificação de cada file para saber se não esta corrompido, vazio ou inválido
         //if....
+
+        console.log(file)
         
                 if(file.length === 0){
                         throw new Error("Any file uploaded");
