@@ -24,18 +24,18 @@ app.use(cors());
 //Aqui chama o arquivo do RabbitMQ
 
 app.get('/download',upload.array('files'), async(req, res) =>{
-    const file = path.join(__dirname,'src/temp_zip_files/example.zip');
-
+    
+    try{
+        const zip_file = path.join(__dirname,'src/temp_zip_files/example.zip');
    
-        res.download(file , (err) =>{
+        res.download(zip_file , (err) =>{
             if(err){
                 console.log(err);
-            }else{
-                console.log("Arquivo baixado com sucesso!");
             }
         })
-
-    
+    }catch(error){
+        console.log(error);
+    }
    
 })
 
