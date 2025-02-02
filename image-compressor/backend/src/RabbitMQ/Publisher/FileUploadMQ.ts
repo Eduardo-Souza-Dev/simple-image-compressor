@@ -17,8 +17,8 @@ class FileUploadMQ{
 
         //Fazer verificação de cada file para saber se não esta corrompido, vazio ou inválido
         //if....
-
-        console.log(file)
+        // let teste = Object.values(file);
+        console.log(file);
         
                 if(file.length === 0){
                         throw new Error("Any file uploaded");
@@ -27,10 +27,10 @@ class FileUploadMQ{
                 return new Promise<string>((resolve, reject) =>{
 
 
-                        amqp.connect('amqp://localhost', function(error0: Error | null, connection: amqp.Connection): void{
-                                if(error0){
+                        amqp.connect('amqp://localhost', function(error10: Error | null, connection: amqp.Connection): void{
+                                if(error10){
                                         reject();
-                                        throw error0;
+                                        throw error10;
                                 }
                         
         
@@ -72,7 +72,6 @@ class FileUploadMQ{
                                         }
                                          if(key === 'compress'){
                                                 let count = 0;
-                                                let proccessedAccount = 0;
                                                    
                                                 file.forEach((file:any) => {
                                                         count++;
@@ -92,7 +91,8 @@ class FileUploadMQ{
                                                 });
 
                                                 if(count == file.length){ // Verifica se todos os arquivos foram percorridos                                                      
-                                                        resolve('All files have been compressed');  // Envia os dados de envio com sucesso para a API
+                                                        resolve('All files have been compressed'); 
+                                                        connection.close(); // Envia os dados de envio com sucesso para a API
                                                 }
                                                           
                                         }if(key === 'convert'){

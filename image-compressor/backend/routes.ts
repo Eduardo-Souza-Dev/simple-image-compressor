@@ -27,8 +27,8 @@ app.get('/download',upload.array('files'), async(req, res) =>{
     
     try{
         const zip_file = path.join(__dirname,'src/temp_zip_files/example.zip');
-        if(fs.existsSync(zip_file)){ // Verifica se o arquivo existe no path indicado
-
+        while(!fs.existsSync(zip_file)){ // Verifica se o arquivo existe no path indicado
+            
             // Se exisitir faz o donwload do arquivo
             res.download(zip_file , (err) =>{
                 if(err){
