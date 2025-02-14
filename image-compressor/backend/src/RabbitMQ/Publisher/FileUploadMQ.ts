@@ -1,6 +1,7 @@
 import * as amqp from 'amqplib/callback_api';
 import { Buffer } from 'buffer';
 import { jsonc } from 'jsonc';
+import CompressImagem from '../Consumer/CompressFile';
 import RabbitMqConnection from '../RabbitMqConnection';
 
 const connection = RabbitMqConnection.getInstance();
@@ -83,11 +84,24 @@ class FileUploadMQ{
                                                       channel.sendToQueue(compress_queue, Buffer.from(fileData), {
                                                               persistent: true
                                                       });
+
         
                                               });
+                                              
         
                                               if(count == file.length){ // Verifica se todos os arquivos foram percorridos                                                      
-                                                      resolve('All files have been compressed'); 
+                                                    channel.consume(compress_queue, async function(msg:any){
+                                                        const imagemToString = msg.content.toString();
+                                                        const imageToJson = JSON.parse(imagemToString);
+
+                                                        console.log(imageToJson);
+                                            
+                                                        await CompressImagem(imageToJson)
+                                                    },
+                                                    {
+                                                        noAck: true
+                                                    }  );
+                                                resolve('All files have been compressed'); 
                                               }
                                                         
                                       }if(key === 'convert'){
