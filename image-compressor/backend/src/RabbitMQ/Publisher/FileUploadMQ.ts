@@ -6,14 +6,6 @@ import RabbitMqConnection from '../RabbitMqConnection';
 
 const connection = RabbitMqConnection.getInstance();
 
-interface UploadFile{
-        originalname: string;
-        buffer: Buffer;
-        mimetype: string;
-        size: number;
-        fieldname: string;
-}
-
 class FileUploadMQ{
 
      async uploadFile(file:any,key:string) {
@@ -93,15 +85,13 @@ class FileUploadMQ{
                                                     channel.consume(compress_queue, async function(msg:any){
                                                         const imagemToString = msg.content.toString();
                                                         const imageToJson = JSON.parse(imagemToString);
-
-                                                        console.log(imageToJson);
                                             
                                                         await CompressImagem(imageToJson)
+                                                        resolve('All files have been compressed'); 
                                                     },
                                                     {
                                                         noAck: true
                                                     }  );
-                                                resolve('All files have been compressed'); 
                                               }
                                                         
                                       }if(key === 'convert'){

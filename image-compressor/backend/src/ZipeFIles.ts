@@ -10,8 +10,9 @@ import RabbitMqConnection from "./RabbitMQ/RabbitMqConnection";
 class ZipeFiles{
      async zipFiles(){
         const zip = JSZip();
+        console.log("Zipando arquivos...");
 
-        const directoryPath = path.resolve("../../temp_pictures");
+        const directoryPath = path.resolve("src/temp_pictures");
 
         fs.readdir(directoryPath, function(err, files){
             if(err){
@@ -29,7 +30,7 @@ class ZipeFiles{
             zip
             .generateAsync({ type: "nodebuffer" })
             .then((content) =>{
-                fs.writeFileSync("../../temp_zip_files/example.zip", content);
+                fs.writeFileSync("src/temp_zip_files/example.zip", content);
                 const connection = RabbitMqConnection.getInstance();
                 connection.connect().finally(() => connection.closeConnection());
             })
