@@ -15,7 +15,11 @@ async function CompressImagem(imageToJson:any){
           await sharp(inputFile)
           .jpeg({ quality: compress_quality })
           .toFile(`${outputFile}`)
-          .then(() => console.log('Imagem JPEG comprimida com sucesso!'))
+          .then(async () => {
+              console.log('Imagem JPEG comprimida com sucesso!');
+              // Aqui chamar a API que vai chamar a classe ZipeFiles que por si irá retornar os arquivos
+              await zipeCompressFile.zipFiles();
+          })
           .catch(err => console.error(err));
 
           return true;

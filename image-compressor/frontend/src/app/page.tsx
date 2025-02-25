@@ -1,4 +1,6 @@
 "use client";
+// Todo o layout aqui é temporário, apenas para testes
+// O layout final será feito com o Bootstrap
 
 import styles from "./page.module.css";
 import { IoImages } from "react-icons/io5";
@@ -15,10 +17,29 @@ import { Toaster, toast } from 'sonner'
 
 
 export default function Home() {
-  const [ valuePixel, setValuePixel ] = useState(0);
+  const [ timer, setTimer ] = useState(false);
   const [isLinked, setIsLinked] = useState(false);
   const [file, setFile ] =  useState([]);
   const [typeFile, setTypeFile] = useState('');
+  const [btnDownload, setBtnDownload] = useState(false);
+
+  const countTime = 5 * 60;
+  let now = 0;
+
+  const valueTime = setInterval(() =>{
+    now++;
+    let distance = countTime - now;
+    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    setTimer(true);
+    if(distance < 0){
+      clearInterval(valueTime);
+      setTimer(false);
+    };
+
+    document.getElementById('timer').innerHTML = `${minutes}:${seconds}`;
+
+  },1000)
 
   function changedNotLinkedIcon(){
     let not_linked: HTMLElement = document.getElementById('not_linked');
@@ -111,6 +132,16 @@ export default function Home() {
     setFile(Array.from(fileValue));
   }
 
+  function downloadImages(){
+            // Criamos um link para já fazer o donwload do documento comprimido
+            const link = document.createElement('a');
+            link.href = `http://localhost:3333/download`;
+            link.download = 'example.zip';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+  }
+
   async function sendToRabbit(key:string){
     
   
@@ -134,14 +165,7 @@ export default function Home() {
       .then(async(data) => {
         if(data == "All files have been compressed"){
           toast.success('Arquivos comprimidos com sucesso!');
-
-          // Criamos um link para já fazer o donwload do documento comprimido
-          const link = document.createElement('a');
-          link.href = `http://localhost:3333/download`;
-          link.download = 'example.zip';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
+          setBtnDownload(true);
         }
       })
       .catch(error => console.error('Error:', error))
@@ -156,6 +180,9 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <div className={styles.body_file}>    
+        <div id="timer">
+          Teste
+        </div>
       <Toaster richColors position="top-right" />
 
         <div className="wrapper"> 
@@ -245,6 +272,11 @@ export default function Home() {
 
       <div className="container-buttons">
           <button className="button-mq" onClick={() => sendToRabbit('compress')} >Comprimir Imagens</button>
+          {
+            btnDownload == true ? 
+            <button className="button-mq" onClick={() => downloadImages()} >Baixar Imagens</button>
+            : null
+          }
           <button className="button-mq" onClick={() => sendToRabbit('convert')} >Converter para: 
             {` ${typeFile}`}
           </button>
