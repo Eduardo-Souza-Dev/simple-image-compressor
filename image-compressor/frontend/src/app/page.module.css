@@ -25,6 +25,17 @@
   gap: 0.5rem;
 }
 
+.body_timer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 40px;
+  color: white;
+  border-radius: 5px;
+  background-color: #006cfa;
+}
+
 .description p {
   position: relative;
   margin: 0;

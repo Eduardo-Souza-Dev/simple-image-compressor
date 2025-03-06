@@ -9,8 +9,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import { LuLink2Off } from "react-icons/lu";
 import { LuLink2 } from "react-icons/lu";
 import { useEffect, useState } from "react";
-import { Toaster, toast } from 'sonner'
-
+import { Toaster, toast } from 'sonner';
 
 
 
@@ -22,24 +21,9 @@ export default function Home() {
   const [file, setFile ] =  useState([]);
   const [typeFile, setTypeFile] = useState('');
   const [btnDownload, setBtnDownload] = useState(false);
-
-  const countTime = 5 * 60;
-  let now = 0;
-
-  const valueTime = setInterval(() =>{
-    now++;
-    let distance = countTime - now;
-    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    setTimer(true);
-    if(distance < 0){
-      clearInterval(valueTime);
-      setTimer(false);
-    };
-
-    document.getElementById('timer').innerHTML = `${minutes}:${seconds}`;
-
-  },1000)
+  let totalSeconds = 10;// 5 minutos = 300 segundos
+  let teste = false
+  
 
   function changedNotLinkedIcon(){
     let not_linked: HTMLElement = document.getElementById('not_linked');
@@ -51,6 +35,61 @@ export default function Home() {
     }
     
   }
+
+  async function ExpireZipDownload() {
+
+    if(typeof window !== 'undefined') { // Aqui é só para garantir que já tenha sido renderizado no browser
+
+      let rende_timer = document.getElementById('rende_timer');
+
+      // Aguarda até que o elemento seja encontrado no DOM
+        while (!rende_timer) {
+            await new Promise(resolve => setTimeout(resolve, 100)); // Aguarda 100ms antes de tentar novamente
+            rende_timer = document.getElementById('rende_timer');
+        }
+        const element = document.createElement('div');
+        element.id = 'demo';
+        element.className = 'body_timer';
+        element.innerHTML = '05 : 00';
+        element.style.display = 'flex';
+        element.style.justifyContent = 'center';
+        element.style.alignItems = 'center';
+        element.style.width = '120px';
+        element.style.height = '40px';
+        element.style.color = 'white';
+        element.style.borderRadius = '5px';
+        element.style.backgroundColor = '#006cfa';
+        rende_timer.appendChild(element);
+        await new Promise(resolve => setTimeout(resolve, 0));
+
+        
+        const timerElement = document.getElementById('demo');
+        
+        const timer = setInterval(function() {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            
+            const formattedTime = 
+                `${String(minutes).padStart(2, '0')} : ${String(seconds).padStart(2, '0')}`;
+
+            if(timerElement){
+              timerElement.textContent = formattedTime;
+            }
+            
+            
+            if (totalSeconds <= 0) {
+                clearInterval(timer);
+                setBtnDownload(false);
+                timerElement.textContent = '00:00'; // Resete do timer
+            }
+            
+            totalSeconds--;
+        }, 1000);
+
+      }
+    
+  }
+
 
 
   function changeColor(value:any){
@@ -166,6 +205,7 @@ export default function Home() {
         if(data == "All files have been compressed"){
           toast.success('Arquivos comprimidos com sucesso!');
           setBtnDownload(true);
+          ExpireZipDownload();
         }
       })
       .catch(error => console.error('Error:', error))
@@ -179,10 +219,14 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      <div className={styles.body_file}>    
-        <div id="timer">
-          Teste
-        </div>
+      <div id="body_file" className={styles.body_file}>    
+          {
+            btnDownload == true ? 
+            <div id="rende_timer"></div>
+            : null
+          }
+      
+      
       <Toaster richColors position="top-right" />
 
         <div className="wrapper"> 
@@ -273,7 +317,7 @@ export default function Home() {
       <div className="container-buttons">
           <button className="button-mq" onClick={() => sendToRabbit('compress')} >Comprimir Imagens</button>
           {
-            btnDownload == true ? 
+            btnDownload == true && totalSeconds > 0 ? 
             <button className="button-mq" onClick={() => downloadImages()} >Baixar Imagens</button>
             : null
           }
