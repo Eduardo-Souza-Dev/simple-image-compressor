@@ -19,18 +19,21 @@ class ZipeFiles{
                 return console.log('Directory not found: ' + err);
             }
 
+            let userID: any;
+
 
             // Foreach percorrendo todos os files dentro da pasta temp_pictures
             files.forEach(function(file){
                 const filePath = path.join(directoryPath, file); // pega o caminho real da imagem ../../temp_pictures/mickey.png por exemplo
                 const fileData = fs.readFileSync(filePath); // Aqui faz a leitura do caminho da imagem
+                userID = file.split('_')[0]; // Pega só o primeiro nome da imagem que é o id do user
                 zip.file(file, fileData); // Adiciona a imagem ao zip hihi
             })
 
             zip
             .generateAsync({ type: "nodebuffer" })
             .then((content) =>{
-                fs.writeFileSync("src/temp_zip_files/example.zip", content);
+                fs.writeFileSync(`src/temp_zip_files/${userID}.zip`, content);
                 const connection = RabbitMqConnection.getInstance();
                 connection.connect().finally(() => connection.closeConnection());
             })

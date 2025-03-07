@@ -10,6 +10,8 @@ import { LuLink2Off } from "react-icons/lu";
 import { LuLink2 } from "react-icons/lu";
 import { useEffect, useState } from "react";
 import { Toaster, toast } from 'sonner';
+import { GenerateUUID } from "./scripts/GenerateUUID";
+import { nanoid } from "nanoid";
 
 
 
@@ -21,8 +23,8 @@ export default function Home() {
   const [file, setFile ] =  useState([]);
   const [typeFile, setTypeFile] = useState('');
   const [btnDownload, setBtnDownload] = useState(false);
-  let totalSeconds = 10;// 5 minutos = 300 segundos
-  let teste = false
+  let totalSeconds = 300;// 5 minutos = 300 segundos
+  const UUID = GenerateUUID();
   
 
   function changedNotLinkedIcon(){
@@ -175,7 +177,7 @@ export default function Home() {
             // Criamos um link para já fazer o donwload do documento comprimido
             const link = document.createElement('a');
             link.href = `http://localhost:3333/download`;
-            link.download = 'example.zip';
+            link.download = UUID;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -191,9 +193,14 @@ export default function Home() {
   
       Array.from(file).map((value) => arrayFiles.push((value as File)));
 
+      
+
       const formData = new FormData();
+      
       file.forEach((file, index) => {
-          formData.append('files', file, file.name);
+        // Gera um id unico para cada foto e adiciona o id do usuário atual para cada foto
+        let nanoidValue = nanoid(5);
+          formData.append('files', file, `${UUID}_${nanoidValue}_${file.name}`);
       });
   
      await fetch(`http://localhost:3333/files/${key}`,{
