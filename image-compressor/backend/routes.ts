@@ -23,12 +23,12 @@ app.use(cors());
 
 //Aqui chama o arquivo do RabbitMQ
 
-app.get('/download',upload.array('files'), async(req, res) =>{
+app.get('/download/:id_user',upload.array('files'), async(req, res) =>{
     
     try{
-        const zip_file = path.join(__dirname,'src/temp_zip_files/example.zip');
+        const id_user = req.params.id_user;
+        const zip_file = path.join(__dirname,`src/temp_zip_files/${id_user}.zip`);
         if(zip_file){
-            console.log('Arquivo existe');
             res.download(zip_file , (err) =>{
                 if(err){
                     console.log(err);

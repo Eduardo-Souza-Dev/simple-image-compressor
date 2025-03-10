@@ -176,11 +176,13 @@ export default function Home() {
   function downloadImages(){
             // Criamos um link para já fazer o donwload do documento comprimido
             const link = document.createElement('a');
-            link.href = `http://localhost:3333/download`;
+            link.href = `http://localhost:3333/download/${UUID}`;
             link.download = UUID;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+
+            setBtnDownload(false);
   }
 
   async function sendToRabbit(key:string){
