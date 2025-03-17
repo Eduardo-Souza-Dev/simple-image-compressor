@@ -33,6 +33,7 @@ app.get('/download/:id_user',upload.array('files'), async(req, res) =>{
                 if(err){
                     console.log(err);
                 }
+
             });
         }else{
             console.log('Arquivo não existe');
@@ -42,6 +43,25 @@ app.get('/download/:id_user',upload.array('files'), async(req, res) =>{
         console.log(error);
     }
    
+})
+
+app.delete('/delete/:id_user', async(req,res) =>{
+    try{
+        const id_user = req.params.id_user;
+        const zip_file = path.join(__dirname,`src/temp_zip_files/${id_user}.zip`);
+        if(zip_file){
+            fs.unlink(zip_file, (err) =>{
+                if(err){
+                    console.log(err);
+                }
+            });
+        }else{
+            console.log('Arquivo não existe');
+        }
+        res.status(200).send('Arquivo deletado com sucesso');
+    }catch(error){
+        console.log(error);
+    }
 })
 
 app.use(express.static(path.join(__dirname, 'src')));

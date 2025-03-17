@@ -17,10 +17,12 @@ import { nanoid } from "nanoid";
 
 
 
+
 export default function Home() {
   const [ timer, setTimer ] = useState(false);
   const [isLinked, setIsLinked] = useState(false);
   const [file, setFile ] =  useState([]);
+  let urlResponse = '';
   const [typeFile, setTypeFile] = useState('');
   const [btnDownload, setBtnDownload] = useState(false);
   let totalSeconds = 300;// 5 minutos = 300 segundos
@@ -175,14 +177,35 @@ export default function Home() {
 
   function downloadImages(){
             // Criamos um link para já fazer o donwload do documento comprimido
-            const link = document.createElement('a');
-            link.href = `http://localhost:3333/download/${UUID}`;
-            link.download = UUID;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+
+            fetch(`http://localhost:3333/download/${UUID}`,{
+              method: 'GET',
+            }).then((response) => {
+                urlResponse = response.url
+              } 
+            )
+            .then(() => {
+              const xmlHTTP = new XMLHttpRequest();
+              const link = document.createElement('a');
+              link.href = urlResponse;
+
+              xmlHTTP.open('GET', link.href, true);
+              xmlHTTP.onprogress
+              xmlHTTP.onloadend = () => {
+                DeleteZipUser(xmlHTTP.status);
+              }
+              xmlHTTP.send();
+
+              document.body.appendChild(link);
+              link.click();
+            })
+            .catch(error => console.error('Error:', error));
+           
+      
 
             setBtnDownload(false);
+
+
   }
 
   async function sendToRabbit(key:string){
@@ -209,7 +232,9 @@ export default function Home() {
         method: 'POST',
         body: formData,
       })
-      .then(response => response.text())
+      .then( response =>
+        response.text()
+       )
       .then(async(data) => {
         if(data == "All files have been compressed"){
           toast.success('Arquivos comprimidos com sucesso!');
@@ -220,6 +245,21 @@ export default function Home() {
       .catch(error => console.error('Error:', error))
   
     }
+  }
+
+  async function DeleteZipUser(data: number){
+    if(data == 200){
+
+        fetch(`http://localhost:3333/delete/${UUID}`,{
+          method: 'DELETE',
+        })
+        .then(response => response.text())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error:', error))
+    
+      }
+
+
   }
 
 
@@ -335,167 +375,8 @@ export default function Home() {
           </button>
   
       </div>
-          <IoImages className={styles.animate}
-              size={170} 
-              style={{ 
-                  left: '40%', 
-                  top: '116%', 
-                  animationDelay: '0s', 
-                  width: 'fit-content', 
-                  padding: '6px', 
-                  borderRadius: '3xl', 
-                  boxShadow: 'md' 
-              }} 
-          />
    
-      </div>
-
-{/* Provavelmente tem forma mais inteligente de fazer isso aqui abaixo kk, um for etc */}
-        
-<IoImages className={styles.animate}
-    size={150} 
-    style={{ 
-        left: '10%', 
-        top: '110%', 
-        animationDelay: '0s', 
-        width: 'fit-content', 
-        padding: '6px', 
-        borderRadius: '3xl', 
-        boxShadow: 'md' 
-    }} 
-/>
-<IoImages className={styles.animate}
-    size={100} 
-    style={{ 
-        left: '30%', 
-        top: '110%', 
-        animationDelay: '0.5s', 
-        width: 'fit-content', 
-        padding: '6px', 
-        borderRadius: '3xl', 
-        boxShadow: 'md' 
-    }} 
-/>
-<IoImages className={styles.animate}
-    size={170} 
-    style={{ 
-        left: '10%', 
-        top: '110%', 
-        animationDelay: '1s', 
-        width: 'fit-content', 
-        padding: '6px', 
-        borderRadius: '3xl', 
-        boxShadow: 'md' 
-    }} 
-/>
-<IoImages className={styles.animate}
-    size={20} 
-    style={{ 
-        right: '70%', 
-        top: '140%', 
-        animationDelay: '1.5s', 
-        width: 'fit-content', 
-        padding: '6px', 
-        borderRadius: '3xl', 
-        boxShadow: 'md' 
-    }} 
-/>
-<IoImages className={styles.animate}
-    size={80} 
-    style={{ 
-        left: '20%', 
-        top: '120%', 
-        animationDelay: '2s', 
-        width: 'fit-content', 
-        padding: '6px', 
-        borderRadius: '3xl', 
-        boxShadow: 'md' 
-    }} 
-/>
-<IoImages className={styles.animate}
-    size={50} 
-    style={{ 
-        left: '90%', 
-        top: '130%', 
-        animationDelay: '2s', 
-        width: 'fit-content', 
-        padding: '6px', 
-        borderRadius: '3xl', 
-        boxShadow: 'md' 
-    }} 
-/>
-<IoImages className={styles.animate}
-    size={190} 
-    style={{ 
-        left: '80%', 
-        top: '115%', 
-        animationDelay: '2s', 
-        width: 'fit-content', 
-        padding: '6px', 
-        borderRadius: '3xl', 
-        boxShadow: 'md' 
-    }} 
-/>
-<IoImages className={styles.animate}
-    size={70} 
-    style={{ 
-        left: '50%', 
-        top: '125%', 
-        animationDelay: '2s', 
-        width: 'fit-content', 
-        padding: '6px', 
-        borderRadius: '3xl', 
-        boxShadow: 'md' 
-    }} 
-/>
-<IoImages className={styles.animate}
-    size={55} 
-    style={{ 
-        left: '55%', 
-        top: '117%', 
-        animationDelay: '2s', 
-        width: 'fit-content', 
-        padding: '6px', 
-        borderRadius: '3xl', 
-        boxShadow: 'md' 
-    }} 
-/>
-<IoImages className={styles.animate}
-    size={80} 
-    style={{ 
-        left: '77%', 
-        top: '105%', 
-        animationDelay: '2s', 
-        width: 'fit-content', 
-        padding: '6px', 
-        borderRadius: '3xl', 
-        boxShadow: 'md' 
-    }} 
-/>
-<IoImages className={styles.animate}
-    size={20} 
-    style={{ 
-        left: '70%', 
-        top: '120%', 
-        animationDelay: '2s', 
-        width: 'fit-content', 
-        padding: '6px', 
-        borderRadius: '3xl', 
-        boxShadow: 'md' 
-    }} 
-/>
-<IoImages className={styles.animate}
-    size={50} 
-    style={{ 
-        left: '0%', 
-        top: '135%', 
-        animationDelay: '2s', 
-        width: 'fit-content', 
-        padding: '6px', 
-        borderRadius: '3xl', 
-        boxShadow: 'md' 
-    }} 
-/>
+      </div>        
     
     </main>
   );
