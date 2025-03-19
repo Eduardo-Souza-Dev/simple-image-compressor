@@ -190,9 +190,12 @@ export default function Home() {
               link.href = urlResponse;
 
               xmlHTTP.open('GET', link.href, true);
-              xmlHTTP.onprogress
-              xmlHTTP.onloadend = () => {
-                DeleteZipUser(xmlHTTP.status);
+              // Verifica se o download foi feito com sucesso
+              xmlHTTP.onloadend = async () => {
+                  if(xmlHTTP.status == 200){
+                    // Deleta o arquivo zipado do servidor
+                    DeleteZipUser(xmlHTTP.status);
+                  }
               }
               xmlHTTP.send();
 

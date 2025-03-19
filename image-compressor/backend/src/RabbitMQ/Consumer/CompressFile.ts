@@ -1,13 +1,23 @@
 import ZipeFiles from '../../ZipeFIles';
 import sharp from 'sharp';
 import RabbitMqConnection from '../RabbitMqConnection';
+import * as fs from 'node:fs';
+
+import path from 'node:path';
 
 async function CompressImagem(imageToJson:any){
   const zipeCompressFile = new ZipeFiles;
 
     //Converte a string para base64 encoded
       const inputFile = Buffer.from(imageToJson.buffer, 'base64');
-      const outputFile = `src/temp_pictures/${imageToJson.originalname}`;
+      const userID = imageToJson.originalname.split('_')[0];
+      const userFolder = path.join('src/temp_pictures', userID);
+
+      if(!fs.existsSync(userFolder)){
+          fs.mkdirSync(userFolder, { recursive: true});
+      }
+      
+      const outputFile = `src/temp_pictures/${userID}/${imageToJson.originalname}`;
       const compress_quality = 70;
   
       if(imageToJson.mimetype === 'image/jpeg'){
@@ -27,8 +37,6 @@ async function CompressImagem(imageToJson:any){
       }
       
       if(imageToJson.mimetype === 'image/png'){
-        console.log("Valor de inputFile: ", inputFile);
- 
           // Compressão para PNG
            await sharp(inputFile)
           .png({ quality: 10 }) 

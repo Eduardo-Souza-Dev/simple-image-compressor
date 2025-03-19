@@ -13,7 +13,7 @@ class ZipeFiles{
             if(err){
                 return console.log('Directory not found: ' + err);
             }
-            let userID: any;
+            let userID: string;
             let zipUserID: { [key: string]: JSZip } = {}; // Cria um objeto vazio para armazenar os zips de cada user
         
             // Foreach percorrendo todos os files dentro da pasta temp_pictures
