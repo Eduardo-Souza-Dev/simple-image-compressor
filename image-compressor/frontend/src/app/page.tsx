@@ -84,6 +84,7 @@ export default function Home() {
             if (totalSeconds <= 0) {
                 clearInterval(timer);
                 setBtnDownload(false);
+                DeleteZipUser(200);
                 timerElement.textContent = '00:00'; // Resete do timer
             }
             

@@ -48,17 +48,33 @@ app.get('/download/:id_user',upload.array('files'), async(req, res) =>{
 app.delete('/delete/:id_user', async(req,res) =>{
     try{
         const id_user = req.params.id_user;
+
+        // Deleta o zip do usuário
         const zip_file = path.join(__dirname,`src/temp_zip_files/${id_user}.zip`);
-        if(zip_file){
+        if(fs.existsSync(zip_file)){// verifica se o zip realmente existe
             fs.unlink(zip_file, (err) =>{
                 if(err){
                     console.log(err);
                 }
             });
         }else{
-            console.log('Arquivo não existe');
+            console.log('ZIP do usuário não existe');
         }
-        res.status(200).send('Arquivo deletado com sucesso');
+
+        // Deleta a pasta e os arquivos do usuário
+        const user_files = path.join(__dirname,`src/temp_pictures/${id_user}`);
+        if(fs.existsSync(user_files)){// Verifica se a pasta realmente existe
+            fs.rm( user_files, { recursive: true, force: true}, err =>{
+                if(err){
+                    console.log(err);
+                }
+            });
+        }else{
+            console.log('Arquivo do usuário não existe');
+        }
+
+
+        res.status(200).send('Arquivos e ZIP deletado com sucesso');
     }catch(error){
         console.log(error);
     }
@@ -76,7 +92,7 @@ app.post('/files/:key',upload.array('files'), async(req,res) =>{
         res.status(200).send(result);
       
     }catch(err){
-        res.status(500).send('Generic error');
+        res.status(500).send('Erro interno no servidor');
     }
     
 })

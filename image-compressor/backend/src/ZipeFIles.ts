@@ -6,8 +6,8 @@ import RabbitMqConnection from "./RabbitMQ/RabbitMqConnection";
 
 
 class ZipeFiles{
-     async zipFiles(){
-        const directoryPath = path.resolve("src/temp_pictures");
+     async zipFiles(ID : string){
+        const directoryPath = path.resolve(`src/temp_pictures/${ID}`);
 
         fs.readdir(directoryPath, function(err, files){
             if(err){
@@ -18,9 +18,9 @@ class ZipeFiles{
         
             // Foreach percorrendo todos os files dentro da pasta temp_pictures
             files.forEach(function(file){
+                userID = file.split('_')[0]; // Pega só o primeiro nome da imagem que é o id do user
                 const filePath = path.join(directoryPath, file); // pega o caminho real da imagem ../../temp_pictures/mickey.png por exemplo
                 const fileData = fs.readFileSync(filePath); // Aqui faz a leitura do caminho da imagem
-                userID = file.split('_')[0]; // Pega só o primeiro nome da imagem que é o id do user
                 if(!zipUserID[userID]){
 
                     zipUserID[userID] = JSZip(); // Cria um zip para cada user

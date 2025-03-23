@@ -14,7 +14,7 @@ async function CompressImagem(imageToJson:any){
       const userFolder = path.join('src/temp_pictures', userID);
 
       if(!fs.existsSync(userFolder)){
-          fs.mkdirSync(userFolder, { recursive: true});
+          fs.mkdirSync(userFolder);
       }
       
       const outputFile = `src/temp_pictures/${userID}/${imageToJson.originalname}`;
@@ -28,7 +28,7 @@ async function CompressImagem(imageToJson:any){
           .then(async () => {
               console.log('Imagem JPEG comprimida com sucesso!');
               // Aqui chamar a API que vai chamar a classe ZipeFiles que por si irá retornar os arquivos
-              await zipeCompressFile.zipFiles();
+              await zipeCompressFile.zipFiles(userID);
           })
           .catch(err => console.error(err));
 
@@ -44,7 +44,7 @@ async function CompressImagem(imageToJson:any){
           .then(async() => {   
             console.log('Imagem PNG comprimida com sucesso!');
             // Aqui chamar a API que vai chamar a classe ZipeFiles que por si irá retornar os arquivos
-            await zipeCompressFile.zipFiles();
+            await zipeCompressFile.zipFiles(userID);
             
           })
           .catch(err => console.error(err));
