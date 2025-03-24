@@ -19,7 +19,6 @@ import { nanoid } from "nanoid";
 
 
 export default function Home() {
-  const [ timer, setTimer ] = useState(false);
   const [isLinked, setIsLinked] = useState(false);
   const [file, setFile ] =  useState([]);
   let urlResponse = '';
@@ -293,7 +292,7 @@ export default function Home() {
               size={120} />
               </div>
               <input  
-                      accept='.png,.jpg,.jpeg,.webp' 
+                      accept='.png,.jpg,.jpeg,.webp,.svg' 
                       style={{display:'none'}} 
                       onChange={handleFile} 
                       type="file" 

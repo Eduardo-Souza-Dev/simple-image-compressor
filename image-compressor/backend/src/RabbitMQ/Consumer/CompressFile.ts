@@ -2,7 +2,7 @@ import ZipeFiles from '../../ZipeFIles';
 import sharp from 'sharp';
 import RabbitMqConnection from '../RabbitMqConnection';
 import * as fs from 'node:fs';
-
+import { optimize } from 'svgo';
 import path from 'node:path';
 
 async function CompressImagem(imageToJson:any){
@@ -26,7 +26,6 @@ async function CompressImagem(imageToJson:any){
           .jpeg({ quality: compress_quality })
           .toFile(`${outputFile}`)
           .then(async () => {
-              console.log('Imagem JPEG comprimida com sucesso!');
               // Aqui chamar a API que vai chamar a classe ZipeFiles que por si irá retornar os arquivos
               await zipeCompressFile.zipFiles(userID);
           })
@@ -42,7 +41,6 @@ async function CompressImagem(imageToJson:any){
           .png({ quality: 10 }) 
           .toFile(`${outputFile}`)
           .then(async() => {   
-            console.log('Imagem PNG comprimida com sucesso!');
             // Aqui chamar a API que vai chamar a classe ZipeFiles que por si irá retornar os arquivos
             await zipeCompressFile.zipFiles(userID);
             
@@ -51,6 +49,22 @@ async function CompressImagem(imageToJson:any){
           return true;  
   
       }
+
+      if(imageToJson.mimetype === 'image/svg+xml'){
+        // Compressão para SVG
+        const result = optimize(inputFile.toString(), {
+          path: outputFile,
+          multipass: true
+        })
+
+        if(result.data){
+          fs.writeFileSync(outputFile, result.data);
+          await zipeCompressFile.zipFiles(userID);
+          return true
+        }
+
+       }
+
   
 
 
