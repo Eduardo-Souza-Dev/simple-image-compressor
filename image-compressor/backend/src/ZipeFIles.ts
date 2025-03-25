@@ -37,7 +37,7 @@ class ZipeFiles{
                 .then((content) => {
                     fs.writeFileSync(`src/temp_zip_files/${userID}.zip`, content);
                     const connection = RabbitMqConnection.getInstance();
-                    connection.connect().finally(() => connection.closeConnection());
+                    connection.closeConnection()
                 })
                 .catch((errorZip) => {
                         console.log("Error to create zip file: " + errorZip);
