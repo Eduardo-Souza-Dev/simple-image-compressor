@@ -1,25 +1,23 @@
-import * as amqp from 'amqplib/callback_api';
+import ZipeFiles from '../../ZipeFIles';
+import sharp from 'sharp';
+import * as fs from 'node:fs';
+import path from 'node:path';
 
-amqp.connect('amqp://localhost',function(error0: Error | null, connection: amqp.Connection):void{
-    if(error0) throw error0;
+async function ConvertFile(imageToJson: any, key: string, type: string){
+    const zipeConvertFile = new ZipeFiles;
+    const userID = imageToJson.originalname.split('_')[0];
+    const userFolder = path.join('src/temp_pictures', userID);
 
-    connection.createChannel(function(error1: Error | null, channel: amqp.Channel):void{
-        if(error1) throw error1;
+    if(!fs.existsSync(userFolder)){
+        fs.mkdirSync(userFolder);
+    }
 
-        let queue = 'convert';
+    const outputFile = `src/temp_pictures/${userID}/${imageToJson.originalname}`;
 
-        channel.assertQueue(queue, {
-            durable: true
-        });
+    // if(key == ''){
 
-        console.log("[*] Waiting for messages in %s. To exit press CTRL + C", queue)
-        channel.consume(queue, function(msg:any){
-        console.log(" [X] Mensagem nova no convert hihi %s", msg.content.toString());
-        },
-        {
-            noAck: true
-        }  );
-    })
+    // }
 
+}
 
-})
+export default ConvertFile;

@@ -211,7 +211,7 @@ export default function Home() {
 
   }
 
-  async function sendToRabbit(key:string){
+  async function sendToRabbit(key:string, type: string = ''){
     
   
     if(file.length == 0){
@@ -231,7 +231,7 @@ export default function Home() {
           formData.append('files', file, `${UUID}_${nanoidValue}_${file.name}`);
       });
   
-     await fetch(`http://localhost:3333/files/${key}`,{
+     await fetch(`http://localhost:3333/files/${key}/${type}`,{
         method: 'POST',
         body: formData,
       })

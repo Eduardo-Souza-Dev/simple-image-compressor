@@ -2,13 +2,14 @@ import * as amqp from 'amqplib/callback_api';
 import { Buffer } from 'buffer';
 import { jsonc } from 'jsonc';
 import CompressImagem from '../Consumer/CompressFile';
+import ConvertFile from '../Consumer/ConvertFile';
 import RabbitMqConnection from '../RabbitMqConnection';
 
 const connection = RabbitMqConnection.getInstance();
 
 class FileUploadMQ{
 
-     async uploadFile(file:any,key:string) {
+     async uploadFile(file:any,key:string, type: string = '') {
         //Pegar o valor de file e definir como um array de strings, que por sua vez seria as URLs das imagens
 
         //Fazer verificação de cada file para saber se não esta corrompido, vazio ou inválido
@@ -93,24 +94,39 @@ class FileUploadMQ{
                                               }
                                                         
                                       }if(key === 'convert'){
-                                              if(file.length > 0){// Verfica se recebeu um file
-        
-                                                      file.forEach((file:any) => {
-                                                              // Serializa o objeto em JSON
-                                                              const fileData = JSON.stringify({
-                                                                      originalname: file.originalname,
-                                                                      mimetype: file.mimetype,
-                                                                      size: file.size,
-                                                                      buffer: file.buffer.toString('base64') // Buffer em Base64 para compatibilidade
-                                                              });
-                                                      
-                                                              // Enviar o JSON para a fila
-                                                              channel.sendToQueue(convert_queue, Buffer.from(fileData), {
-                                                                      persistent: true
-                                                              });
-                                                      });
-                                                      
-                                              }
+                                        let count = 0;
+                                                 
+                                        file.forEach((file:any) => {
+                                                count++;
+                                                // Serializa o objeto em JSON
+                                                const fileData = JSON.stringify({
+                                                        originalname: file.originalname,
+                                                        mimetype: file.mimetype,
+                                                        size: file.size,
+                                                        buffer: file.buffer.toString('base64') // Buffer em Base64 para compatibilidade
+                                                });
+                                        
+                                                // Enviar o JSON para a fila
+                                                channel.sendToQueue(convert_queue, Buffer.from(fileData), {
+                                                        persistent: true
+                                                });
+
+  
+                                        });
+                                        
+  
+                                        if(count == file.length){ // Verifica se todos os arquivos foram percorridos                                                      
+                                              channel.consume(convert_queue, async function(msg:any){
+                                                  const imagemToString = msg.content.toString();
+                                                  const imageToJson = JSON.parse(imagemToString);
+                                      
+                                                  await ConvertFile(imageToJson, key, type)
+                                                  resolve('All files have been compressed'); 
+                                              },
+                                              {
+                                                  noAck: true
+                                              }  );
+                                        }
                                       }
         
                                 

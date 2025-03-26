@@ -82,13 +82,15 @@ app.delete('/delete/:id_user', async(req,res) =>{
 
 app.use(express.static(path.join(__dirname, 'src')));
 
-app.post('/files/:key',upload.array('files'), async(req,res) =>{
+app.post('/files/:key/:type',upload.array('files'), async(req,res) =>{
     const files = req.files;
-    const key = req.params.key;
+    const { key, type } = req.params; 
+    console.log(key);
+    console.log(type);
 
     try{
         
-        const result = await UploadMq.uploadFile(files,key);
+        const result = await UploadMq.uploadFile(files,key, type);
         res.status(200).send(result);
       
     }catch(err){
