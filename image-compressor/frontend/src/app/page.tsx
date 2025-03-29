@@ -213,7 +213,7 @@ export default function Home() {
 
   async function sendToRabbit(key:string, type: string = ''){
     
-  
+    console.log('type', type);
     if(file.length == 0){
       toast.warning('Adicione alguma imagem antes de continuar!');
     }else{
@@ -373,7 +373,7 @@ export default function Home() {
             <button className="button-mq" onClick={() => downloadImages()} >Baixar Imagens</button>
             : null
           }
-          <button className="button-mq" onClick={() => sendToRabbit('convert')} >Converter para: 
+          <button className="button-mq" onClick={() => sendToRabbit('convert',typeFile)} >Converter para: 
             {` ${typeFile}`}
           </button>
   

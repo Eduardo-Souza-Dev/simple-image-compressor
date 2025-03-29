@@ -85,8 +85,6 @@ app.use(express.static(path.join(__dirname, 'src')));
 app.post('/files/:key/:type',upload.array('files'), async(req,res) =>{
     const files = req.files;
     const { key, type } = req.params; 
-    console.log(key);
-    console.log(type);
 
     try{
         

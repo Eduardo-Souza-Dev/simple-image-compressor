@@ -5,6 +5,7 @@ import path from 'node:path';
 
 async function ConvertFile(imageToJson: any, key: string, type: string){
     const zipeConvertFile = new ZipeFiles;
+    const inputFile = Buffer.from(imageToJson.buffer, 'base64');
     const userID = imageToJson.originalname.split('_')[0];
     const userFolder = path.join('src/temp_pictures', userID);
 
@@ -14,9 +15,23 @@ async function ConvertFile(imageToJson: any, key: string, type: string){
 
     const outputFile = `src/temp_pictures/${userID}/${imageToJson.originalname}`;
 
-    // if(key == ''){
+    if(type == 'png'){
 
-    // }
+        const data = await sharp(inputFile).toFormat('png').toBuffer()
+        .then(value => console.log(value))
+        .catch(err => console.error(err));
+
+        // console.log("Valor de data: ", data);
+        // fs.writeFileSync(outputFile, data);
+
+        // if(fs.existsSync(outputFile)){
+        //     await zipeConvertFile.zipFiles(userID);
+        //     return true;
+
+        // }
+       
+
+    }
 
 }
 

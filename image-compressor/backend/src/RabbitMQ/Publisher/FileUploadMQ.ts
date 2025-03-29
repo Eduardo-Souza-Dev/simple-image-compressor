@@ -39,6 +39,10 @@ class FileUploadMQ{
                                       channel.assertQueue(compress_queue, {
                                        durable: true
                                       });
+
+                                      channel.assertQueue(convert_queue, {
+                                        durable: true
+                                       });
         
                                       
                                       // channe.prefetch para não pesar o envio de arquivo para um worker
