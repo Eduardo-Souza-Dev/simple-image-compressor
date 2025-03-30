@@ -211,17 +211,14 @@ export default function Home() {
 
   }
 
-  async function sendToRabbit(key:string, type: string = ''){
+  async function sendToRabbit(key:string, type: string = 'none'){
     
-    console.log('type', type);
     if(file.length == 0){
       toast.warning('Adicione alguma imagem antes de continuar!');
     }else{
       let arrayFiles = [];
   
       Array.from(file).map((value) => arrayFiles.push((value as File)));
-
-      
 
       const formData = new FormData();
       
