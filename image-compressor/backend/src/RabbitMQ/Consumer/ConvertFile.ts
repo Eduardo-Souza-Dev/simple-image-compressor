@@ -11,8 +11,6 @@ async function ConvertFile(imageToJson: any, key: string, type: string){
     const imageName = imageToJson.originalname.split('.').slice(0, -1).join('.');
     const typeFile = imageToJson.originalname.split('.').pop();
 
-    console.log("Tipo de arquivo: ", typeFile);
-
     if(!fs.existsSync(userFolder)){
         fs.mkdirSync(userFolder);
     }
@@ -24,6 +22,32 @@ async function ConvertFile(imageToJson: any, key: string, type: string){
         await sharp(inputFile)
         .rotate()
         .toFile(`${outputFile}.jpeg`)
+        .then(async () => {
+            // Aqui chamar a API que vai chamar a classe ZipeFiles que por si irá retornar os arquivos
+            await zipeConvertFile.zipFiles(userID);
+        })
+       
+
+    }
+    
+    if(type == 'png'){
+        // Converte a imagem para PNG
+        await sharp(inputFile)
+        .rotate()
+        .toFile(`${outputFile}.png`)
+        .then(async () => {
+            // Aqui chamar a API que vai chamar a classe ZipeFiles que por si irá retornar os arquivos
+            await zipeConvertFile.zipFiles(userID);
+        })
+       
+
+    }
+
+    if(type == 'svg'){
+        // Converte a imagem para SVG
+        await sharp(inputFile)
+        .rotate()
+        .toFile(`${outputFile}.svg`)
         .then(async () => {
             // Aqui chamar a API que vai chamar a classe ZipeFiles que por si irá retornar os arquivos
             await zipeConvertFile.zipFiles(userID);
