@@ -9,7 +9,6 @@ async function ConvertFile(imageToJson: any, key: string, type: string){
     const userID = imageToJson.originalname.split('_')[0];
     const userFolder = path.join('src/temp_pictures', userID);
     const imageName = imageToJson.originalname.split('.').slice(0, -1).join('.');
-    const typeFile = imageToJson.originalname.split('.').pop();
 
     if(!fs.existsSync(userFolder)){
         fs.mkdirSync(userFolder);

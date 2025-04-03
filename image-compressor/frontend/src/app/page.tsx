@@ -19,12 +19,13 @@ import { nanoid } from "nanoid";
 
 
 export default function Home() {
-  const [isLinked, setIsLinked] = useState(false);
-  const [file, setFile ] =  useState([]);
-  let urlResponse = '';
-  const [typeFile, setTypeFile] = useState('');
-  const [btnDownload, setBtnDownload] = useState(false);
-  let totalSeconds = 300;// 5 minutos = 300 segundos
+  const [isLinked, setIsLinked] = useState<boolean>(false);
+  const [file, setFile ] =  useState<File[]>([]);
+  let urlResponse:string = '';
+  const [typeFile, setTypeFile] = useState<string>('');
+  const [btnDownload, setBtnDownload] = useState<boolean>(false);
+  const [pixelsValue, setPixelsValue] = useState<number[]>([]);
+  let totalSeconds:number = 300;// 5 minutos = 300 segundos
   const UUID = GenerateUUID();
   
 
