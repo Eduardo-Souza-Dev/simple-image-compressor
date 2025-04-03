@@ -4,18 +4,22 @@ import { jsonc } from 'jsonc';
 import CompressImagem from '../Consumer/CompressFile';
 import ConvertFile from '../Consumer/ConvertFile';
 import RabbitMqConnection from '../RabbitMqConnection';
-import { Request } from 'express';
 
 const connection = RabbitMqConnection.getInstance();
 
+interface FileUploadMQInterface {
+        file: any;
+        key: string;
+        type: string | '';
+        size1: string | '';
+        size2: string | '';
+}
+
 class FileUploadMQ{
 
-     async uploadFile(file:any,key:string, type: string = '', body_sizes: Request) {
-        //Pegar o valor de file e definir como um array de strings, que por sua vez seria as URLs das imagens
+     async uploadFile(params: FileUploadMQInterface): Promise<string>{
+        const { file, key, type, size1, size2 } = params;
 
-        //Fazer verificação de cada file para saber se não esta corrompido, vazio ou inválido
-        //if....
-        
                 if(file.length === 0){
                         throw new Error("Any file uploaded");
                 }

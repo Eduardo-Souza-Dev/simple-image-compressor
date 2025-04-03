@@ -213,6 +213,7 @@ export default function Home() {
   }
 
   async function sendToRabbit(key:string, type: string = 'none'){
+    let teste = '10';
     
     if(file.length == 0){
       toast.warning('Adicione alguma imagem antes de continuar!');
@@ -229,7 +230,7 @@ export default function Home() {
           formData.append('files', file, `${UUID}_${nanoidValue}_${file.name}`);
       });
   
-     await fetch(`http://localhost:3333/files/${key}/${type}`,{
+     await fetch(`http://localhost:3333/files/${key}/${type}/${teste}/${teste}`,{
         method: 'POST',
         body: formData,
       })
