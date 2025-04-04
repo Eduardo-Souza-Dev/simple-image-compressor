@@ -2,6 +2,7 @@ import * as amqp from 'amqplib/callback_api';
 import { Buffer } from 'buffer';
 import { jsonc } from 'jsonc';
 import CompressImagem from '../Consumer/CompressFile';
+import ResizeFile from '../Consumer/ResizeFile';
 import ConvertFile from '../Consumer/ConvertFile';
 import RabbitMqConnection from '../RabbitMqConnection';
 
@@ -11,14 +12,20 @@ interface FileUploadMQInterface {
         file: any;
         key: string;
         type: string | '';
-        size1: string | '';
-        size2: string | '';
+        width: string | '';
+        height: string | '';
 }
 
 class FileUploadMQ{
 
      async uploadFile(params: FileUploadMQInterface): Promise<string>{
-        const { file, key, type, size1, size2 } = params;
+        let { file, key, type, width, height } = params;
+
+
+                if(width !== '' || height !== ''){
+                        key = 'resize';
+                }
+
 
                 if(file.length === 0){
                         throw new Error("Any file uploaded");
@@ -80,7 +87,7 @@ class FileUploadMQ{
                                                   const imagemToString = msg.content.toString();
                                                   const imageToJson = JSON.parse(imagemToString);
                                       
-                                                  await CompressImagem(imageToJson)
+                                                  await ResizeFile(imageToJson, width, height)
                                                   resolve('All files have been compressed'); 
                                               },
                                               {
@@ -150,7 +157,7 @@ class FileUploadMQ{
                                                   const imagemToString = msg.content.toString();
                                                   const imageToJson = JSON.parse(imagemToString);
                                       
-                                                  await ConvertFile(imageToJson, key, type)
+                                                  await ConvertFile(imageToJson, type)
                                                   resolve('All files have been compressed'); 
                                               },
                                               {

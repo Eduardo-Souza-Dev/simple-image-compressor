@@ -24,7 +24,8 @@ export default function Home() {
   let urlResponse:string = '';
   const [typeFile, setTypeFile] = useState<string>('');
   const [btnDownload, setBtnDownload] = useState<boolean>(false);
-  const [pixelsValue, setPixelsValue] = useState<number[]>([]);
+  const [widthValue, setWidthValue] = useState<any>(0);
+  const [heightValue, setHeightValue] = useState<any>(0);
   let totalSeconds:number = 300;// 5 minutos = 300 segundos
   const UUID = GenerateUUID();
   
@@ -148,9 +149,12 @@ export default function Home() {
   }
 
   function captureValue1(){
+   
+    let pixel_1 = document.getElementById('pixel_1') as HTMLInputElement;
+    let pixel_2 = document.getElementById('pixel_2') as HTMLInputElement;
+    setWidthValue(pixel_1.value);
       if(isLinked == true){
-          let pixel_1 = document.getElementById('pixel_1') as HTMLInputElement;
-          let pixel_2 = document.getElementById('pixel_2') as HTMLInputElement;
+
 
           if(pixel_1){
             pixel_2.value = pixel_1.value;
@@ -160,10 +164,11 @@ export default function Home() {
   }
 
   function captureValue2(){
+    let pixel_1 = document.getElementById('pixel_1') as HTMLInputElement;
+    let pixel_2 = document.getElementById('pixel_2') as HTMLInputElement;
+    setHeightValue(pixel_2.value);
     if(isLinked == true){
-      let pixel_1 = document.getElementById('pixel_1') as HTMLInputElement;
-      let pixel_2 = document.getElementById('pixel_2') as HTMLInputElement;
-      
+  
       if(pixel_2){
         pixel_1.value = pixel_2.value;
       }
@@ -212,9 +217,7 @@ export default function Home() {
 
   }
 
-  async function sendToRabbit(key:string, type: string = 'none'){
-    let teste = '10';
-    
+  async function sendToRabbit(key:string, type: string = 'none'){    
     if(file.length == 0){
       toast.warning('Adicione alguma imagem antes de continuar!');
     }else{
@@ -230,7 +233,7 @@ export default function Home() {
           formData.append('files', file, `${UUID}_${nanoidValue}_${file.name}`);
       });
   
-     await fetch(`http://localhost:3333/files/${key}/${type}/${teste}/${teste}`,{
+     await fetch(`http://localhost:3333/files/${key}/${type}/${heightValue}/${widthValue}`,{
         method: 'POST',
         body: formData,
       })
