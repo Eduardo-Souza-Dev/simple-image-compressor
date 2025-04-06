@@ -3,7 +3,6 @@
 // O layout final será feito com o Bootstrap
 
 import styles from "./page.module.css";
-import { IoImages } from "react-icons/io5";
 import { FaFileImage } from "react-icons/fa";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { LuLink2Off } from "react-icons/lu";

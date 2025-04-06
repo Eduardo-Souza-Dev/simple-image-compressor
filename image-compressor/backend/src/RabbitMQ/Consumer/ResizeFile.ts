@@ -23,7 +23,6 @@ async function ResizeFile(imageToJson: any, height: string, width: string) {
   }
 
   if(height == '0'){// Se o valor de height for vazio, pega o valor original da imagem
-    console.log('Height vazio')
     height = String(heightFile);
   }
 

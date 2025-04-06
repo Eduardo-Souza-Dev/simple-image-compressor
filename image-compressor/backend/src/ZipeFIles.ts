@@ -7,7 +7,11 @@ import RabbitMqConnection from "./RabbitMQ/RabbitMqConnection";
 
 class ZipeFiles{
      async zipFiles(ID : string){
+        let countConnetcion = 0; // Contador para verificar se a conexão foi fechada
+        let countJSON = 0; // Contador para verificar se o zip foi criado
+        const connection = RabbitMqConnection.getInstance();
         const directoryPath = path.resolve(`src/temp_pictures/${ID}`);
+        connection.connect();
 
         fs.readdir(directoryPath, function(err, files){
             if(err){
@@ -23,32 +27,33 @@ class ZipeFiles{
                 const fileData = fs.readFileSync(filePath); // Aqui faz a leitura do caminho da imagem
                 if(!zipUserID[userID]){
 
-                    zipUserID[userID] = JSZip(); // Cria um zip para cada user
+                    zipUserID[userID] = JSZip(); // Cria um zip para cada user diferente que achar
 
                 }
 
-                zipUserID[userID].file(file, fileData); // Adiciona a imagem ao zip hihi
+                zipUserID[userID].file(file, fileData); // Adiciona a imagem ao zip do user correspondente
                
             })
 
+            countJSON = Object.keys(zipUserID).length;
+            
 
-            for(const userID in zipUserID){ // Generate zip file para cada user
+            for(const userID in zipUserID){
+                countConnetcion++; // Generate zip file para cada user
                 zipUserID[userID].generateAsync({ type: "nodebuffer" })
                 .then((content) => {
-                    fs.writeFileSync(`src/temp_zip_files/${userID}.zip`, content);
-                    const connection = RabbitMqConnection.getInstance();
-                    connection.connect()
-                    .then(() => {
-                        connection.closeConnection()
-                    })
+                    fs.writeFileSync(`src/temp_zip_files/${userID}.zip`, content); // Craiação do do ziper para cada user
                 })
                 .catch((errorZip) => {
                         console.log("Error to create zip file: " + errorZip);
                 })
             }
 
-
         })
+
+        if(countConnetcion == countJSON){
+            connection.closeConnection(); // Fecha a conexão se o contador for igual ao número de zips criados
+        }
         
 
         
