@@ -83,7 +83,6 @@ app.delete('/delete/:id_user', async(req,res) =>{
 app.use(express.static(path.join(__dirname, 'src')));
 
 app.post('/files/:key/:type/:width/:height',upload.array('files'), async(req,res) =>{
-    const files = req.files;
     const params = {
         file: req.files,
         key: req.params.key,

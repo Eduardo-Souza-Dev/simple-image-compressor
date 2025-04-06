@@ -7,10 +7,25 @@ async function ResizeFile(imageToJson: any, height: string, width: string) {
   const zipeResizeFile = new ZipeFiles();
   const inputFile = Buffer.from(imageToJson.buffer, "base64");
   const userID = imageToJson.originalname.split("_")[0];
+  let widthFile: number | undefined;
+  let heightFile: number | undefined;
   const userFolder = path.join("src/temp_pictures", userID);
 
-  console.log("Valor de width: ",width);
-  console.log("Valor de height: ",height);
+  await sharp(inputFile)
+  .metadata()
+  .then((data) =>{
+    widthFile = data.width;
+    heightFile = data.height; 
+  })
+
+  if(width == '0'){ // Se o valor de width for vazio, pega o valor original da imagem
+    width = String(widthFile);
+  }
+
+  if(height == '0'){// Se o valor de height for vazio, pega o valor original da imagem
+    console.log('Height vazio')
+    height = String(heightFile);
+  }
 
   if (!fs.existsSync(userFolder)) {
     fs.mkdirSync(userFolder);

@@ -157,6 +157,7 @@ export default function Home() {
 
 
           if(pixel_1){
+            setHeightValue(pixel_1.value);
             pixel_2.value = pixel_1.value;
           }
         
@@ -170,6 +171,7 @@ export default function Home() {
     if(isLinked == true){
   
       if(pixel_2){
+        setWidthValue(pixel_2.value);
         pixel_1.value = pixel_2.value;
       }
       
@@ -210,8 +212,6 @@ export default function Home() {
             })
             .catch(error => console.error('Error:', error));
            
-      
-
             setBtnDownload(false);
 
 
