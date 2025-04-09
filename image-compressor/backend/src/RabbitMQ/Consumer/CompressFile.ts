@@ -1,6 +1,5 @@
 import ZipeFiles from '../../ZipeFIles';
 import sharp from 'sharp';
-import RabbitMqConnection from '../RabbitMqConnection';
 import * as fs from 'node:fs';
 import { optimize } from 'svgo';
 import path from 'node:path';

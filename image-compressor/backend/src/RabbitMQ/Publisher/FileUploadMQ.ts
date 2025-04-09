@@ -1,6 +1,5 @@
 import * as amqp from 'amqplib/callback_api';
 import { Buffer } from 'buffer';
-import { jsonc } from 'jsonc';
 import CompressImagem from '../Consumer/CompressFile';
 import ResizeFile from '../Consumer/ResizeFile';
 import ConvertFile from '../Consumer/ConvertFile';
@@ -19,10 +18,9 @@ interface FileUploadMQInterface {
 class FileUploadMQ{
 
      async uploadFile(params: FileUploadMQInterface): Promise<string>{
-        let { file, key, type, width, height } = params;
+                let { file, key, type, width, height } = params;
 
-
-                if(width !== '' || height !== ''){
+                if(width !== '0' || height !== '0'){
                         key = 'resize';
                 }
 
@@ -35,7 +33,7 @@ class FileUploadMQ{
 
                         connection.connect().then(() =>
                                 connection.getConnection()?.createChannel(function (erro1: Error | null, channel: amqp.Channel): void{
-                                if(erro1){
+                                      if(erro1){
                                         reject();
                                         throw erro1;
                                       }
@@ -43,6 +41,8 @@ class FileUploadMQ{
                                       let resize_queue = 'resize';
                                       let compress_queue = 'compress';
                                       let convert_queue = 'convert';
+
+
                               
                                       channel.assertQueue(resize_queue, {
                                        durable: true
@@ -97,6 +97,7 @@ class FileUploadMQ{
                                       }
                                        if(key === 'compress'){
                                               let count = 0;
+                                              let processed = 0;
                                                  
                                               file.forEach((file:any) => {
                                                       count++;
@@ -116,18 +117,26 @@ class FileUploadMQ{
         
                                               });
                                               
-        
                                               if(count == file.length){ // Verifica se todos os arquivos foram percorridos                                                      
                                                     channel.consume(compress_queue, async function(msg:any){
                                                         const imagemToString = msg.content.toString();
                                                         const imageToJson = JSON.parse(imagemToString);
-                                            
-                                                        await CompressImagem(imageToJson)
-                                                        resolve('All files have been compressed'); 
+                                                        processed++;
+                                                        await CompressImagem(imageToJson);
+
+                                                        if(processed == file.length){
+                                                                resolve('All files have been compressed'); 
+                                                                connection.closeConnection();
+                                                        }
+
+
                                                     },
                                                     {
                                                         noAck: true
                                                     }  );
+
+
+
                                               }
                                                         
                                       }if(key === 'convert'){
@@ -168,9 +177,9 @@ class FileUploadMQ{
         
                                 
                          })
-        );
+                 );
                        
-                })
+           })
 
         
               
