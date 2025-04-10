@@ -8,7 +8,6 @@ import RabbitMqConnection from "./RabbitMQ/RabbitMqConnection";
 class ZipeFiles{
      async zipFiles(ID : string){
   
-        const connection = RabbitMqConnection.getInstance();
         const directoryPath = path.resolve(`src/temp_pictures/${ID}`);
 
         fs.readdir(directoryPath, function(err, files){

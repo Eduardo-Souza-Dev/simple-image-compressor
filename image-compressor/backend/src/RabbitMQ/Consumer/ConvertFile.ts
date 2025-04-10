@@ -2,8 +2,10 @@ import ZipeFiles from '../../ZipeFIles';
 import sharp from 'sharp';
 import * as fs from 'node:fs';
 import path from 'node:path';
+import { Image } from "@/configs/Interfaces";
 
-async function ConvertFile(imageToJson: any, type: string){
+
+async function ConvertFile(imageToJson: Image, type: string){
     const zipeConvertFile = new ZipeFiles;
     const inputFile = Buffer.from(imageToJson.buffer, 'base64');
     const userID = imageToJson.originalname.split('_')[0];

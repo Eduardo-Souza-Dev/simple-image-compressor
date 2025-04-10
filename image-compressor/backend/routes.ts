@@ -6,6 +6,7 @@ import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import * as fs from 'node:fs';
+import { FileUploadMQInterface } from "@/configs/Interfaces";
 
 
 const upload = multer({ storage: multer.memoryStorage() });
@@ -83,17 +84,17 @@ app.delete('/delete/:id_user', async(req,res) =>{
 app.use(express.static(path.join(__dirname, 'src')));
 
 app.post('/files/:key/:type/:width/:height',upload.array('files'), async(req,res) =>{
-    const params = {
+    const fileUploadData: FileUploadMQInterface = {
         file: req.files,
         key: req.params.key,
         type: req.params.type,
-        width: req.params.width,
-        height: req.params.height
-    }
+        width: parseInt(req.params.width, 10),
+        height: parseInt(req.params.height, 10)
+    };
 
     try{
         
-        const result = await UploadMq.uploadFile(params);
+        const result = await UploadMq.uploadFile(fileUploadData);
         res.status(200).send(result);
       
     }catch(err){

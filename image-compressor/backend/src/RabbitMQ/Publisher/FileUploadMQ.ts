@@ -4,28 +4,21 @@ import CompressImagem from '../Consumer/CompressFile';
 import ResizeFile from '../Consumer/ResizeFile';
 import ConvertFile from '../Consumer/ConvertFile';
 import RabbitMqConnection from '../RabbitMqConnection';
+import { FileUploadMQInterface } from '@/configs/Interfaces';
 
 const connection = RabbitMqConnection.getInstance();
-
-interface FileUploadMQInterface {
-        file: any;
-        key: string;
-        type: string | '';
-        width: string | '';
-        height: string | '';
-}
 
 class FileUploadMQ{
 
      async uploadFile(params: FileUploadMQInterface): Promise<string>{
                 let { file, key, type, width, height } = params;
 
-                if(width !== '0' || height !== '0'){
+                if(width !== 0 || height !== 0){
                         key = 'resize';
                 }
 
 
-                if(file.length === 0){
+                if(file?.length === 0){
                         throw new Error("Any file uploaded");
                 }
 
@@ -62,32 +55,38 @@ class FileUploadMQ{
                                       
                                       if(key === 'resize'){
                                         let count = 0;
-                                                 
-                                        file.forEach((file:any) => {
-                                                count++;
-                                                // Serializa o objeto em JSON
-                                                const fileData = JSON.stringify({
-                                                        originalname: file.originalname,
-                                                        mimetype: file.mimetype,
-                                                        size: file.size,
-                                                        buffer: file.buffer.toString('base64') // Buffer em Base64 para compatibilidade
-                                                });
-                                        
-                                                // Enviar o JSON para a fila
-                                                channel.sendToQueue(compress_queue, Buffer.from(fileData), {
-                                                        persistent: true
-                                                });
 
-  
-                                        });
+                                        if(Array.isArray(file)){
+            
+                                                file?.forEach((file:Express.Multer.File) => {
+                                                        count++;
+                                                        // Serializa o objeto em JSON
+                                                        const fileData = JSON.stringify({
+                                                                originalname: file.originalname,
+                                                                mimetype: file.mimetype,
+                                                                size: file.size,
+                                                                buffer: file.buffer.toString('base64') // Buffer em Base64 para compatibilidade
+                                                        });
+                                                
+                                                        // Enviar o JSON para a fila
+                                                        channel.sendToQueue(compress_queue, Buffer.from(fileData), {
+                                                                persistent: true
+                                                        });
+        
+          
+                                                });
+                                        }
+                                     
                                         
   
-                                        if(count == file.length){ // Verifica se todos os arquivos foram percorridos                                                      
+                                        if(count == file?.length){ // Verifica se todos os arquivos foram percorridos                                                      
                                               channel.consume(compress_queue, async function(msg:any){
                                                   const imagemToString = msg.content.toString();
                                                   const imageToJson = JSON.parse(imagemToString);
+                                                  let widthString = width.toString();
+                                                  let heightString = height.toString();
                                       
-                                                  await ResizeFile(imageToJson, width, height)
+                                                  await ResizeFile(imageToJson,widthString,heightString)
                                                   resolve('All files have been compressed'); 
                                               },
                                               {
@@ -98,26 +97,32 @@ class FileUploadMQ{
                                        if(key === 'compress'){
                                               let count = 0;
                                               let processed = 0;
-                                                 
-                                              file.forEach((file:any) => {
-                                                      count++;
-                                                      // Serializa o objeto em JSON
-                                                      const fileData = JSON.stringify({
-                                                              originalname: file.originalname,
-                                                              mimetype: file.mimetype,
-                                                              size: file.size,
-                                                              buffer: file.buffer.toString('base64') // Buffer em Base64 para compatibilidade
-                                                      });
-                                              
-                                                      // Enviar o JSON para a fila
-                                                      channel.sendToQueue(compress_queue, Buffer.from(fileData), {
-                                                              persistent: true
-                                                      });
 
-        
-                                              });
+                                              if(Array.isArray(file)){
+                                                
+                                                file?.forEach((file:Express.Multer.File) => {
+                                                        count++;
+                                                        // Serializa o objeto em JSON
+                                                        const fileData = JSON.stringify({
+                                                                originalname: file.originalname,
+                                                                mimetype: file.mimetype,
+                                                                size: file.size,
+                                                                buffer: file.buffer.toString('base64') // Buffer em Base64 para compatibilidade
+                                                        });
+                                                
+                                                        // Enviar o JSON para a fila
+                                                        channel.sendToQueue(compress_queue, Buffer.from(fileData), {
+                                                                persistent: true
+                                                        });
+  
+          
+                                                });
+
+                                              }
+                                                 
+                                             
                                               
-                                              if(count == file.length){ // Verifica se todos os arquivos foram percorridos                                                      
+                                              if(count == file?.length){ // Verifica se todos os arquivos foram percorridos                                                      
                                                     channel.consume(compress_queue, async function(msg:any){
                                                         const imagemToString = msg.content.toString();
                                                         const imageToJson = JSON.parse(imagemToString);
@@ -141,27 +146,30 @@ class FileUploadMQ{
                                                         
                                       }if(key === 'convert'){
                                         let count = 0;
-                                                 
-                                        file.forEach((file:any) => {
-                                                count++;
-                                                // Serializa o objeto em JSON
-                                                const fileData = JSON.stringify({
-                                                        originalname: file.originalname,
-                                                        mimetype: file.mimetype,
-                                                        size: file.size,
-                                                        buffer: file.buffer.toString('base64') // Buffer em Base64 para compatibilidade
-                                                });
-                                        
-                                                // Enviar o JSON para a fila
-                                                channel.sendToQueue(convert_queue, Buffer.from(fileData), {
-                                                        persistent: true
-                                                });
 
+                                        if(Array.isArray(file)){
+                                                file.forEach((file:Express.Multer.File ) => {
+                                                        count++;
+                                                        // Serializa o objeto em JSON
+                                                        const fileData = JSON.stringify({
+                                                                originalname: file?.originalname,
+                                                                mimetype: file?.mimetype,
+                                                                size: file?.size,
+                                                                buffer: file?.buffer.toString('base64') // Buffer em Base64 para compatibilidade
+                                                        });
+                                                
+                                                        // Enviar o JSON para a fila
+                                                        channel.sendToQueue(convert_queue, Buffer.from(fileData), {
+                                                                persistent: true
+                                                        });
+        
+                                                });
+                                                
+                                        }
+                                                 
+                                      
   
-                                        });
-                                        
-  
-                                        if(count == file.length){ // Verifica se todos os arquivos foram percorridos                                                      
+                                        if(count == file?.length){ // Verifica se todos os arquivos foram percorridos                                                      
                                               channel.consume(convert_queue, async function(msg:any){
                                                   const imagemToString = msg.content.toString();
                                                   const imageToJson = JSON.parse(imagemToString);

@@ -3,8 +3,10 @@ import sharp from 'sharp';
 import * as fs from 'node:fs';
 import { optimize } from 'svgo';
 import path from 'node:path';
+import { Image } from "@/configs/Interfaces";
 
-async function CompressImagem(imageToJson:any){
+
+async function CompressImagem(imageToJson: Image) {
   const zipeCompressFile = new ZipeFiles;
 
     //Converte a string para base64 encoded

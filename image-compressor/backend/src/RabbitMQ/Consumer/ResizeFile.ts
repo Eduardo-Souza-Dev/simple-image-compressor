@@ -2,8 +2,9 @@ import ZipeFiles from "@/ZipeFIles";
 import sharp from "sharp";
 import * as fs from "node:fs";
 import path from "node:path";
+import { Image } from "@/configs/Interfaces";
 
-async function ResizeFile(imageToJson: any, height: string, width: string) {
+async function ResizeFile(imageToJson: Image, height: string, width: string) {
   const zipeResizeFile = new ZipeFiles();
   const inputFile = Buffer.from(imageToJson.buffer, "base64");
   const userID = imageToJson.originalname.split("_")[0];
