@@ -1,8 +1,9 @@
-import ZipeFiles from "@/ZipeFIles";
+import ZipeFiles from "../../ZipeFIles";
 import sharp from "sharp";
 import * as fs from "node:fs";
 import path from "node:path";
-import { Image } from "@/configs/Interfaces";
+import { Image } from "../../configs/Interfaces";
+
 
 async function ResizeFile(imageToJson: Image, height: string, width: string) {
   const zipeResizeFile = new ZipeFiles();
@@ -42,8 +43,6 @@ async function ResizeFile(imageToJson: Image, height: string, width: string) {
         // Aqui chamar a API que vai chamar a classe ZipeFiles que por si irá retornar os arquivos
         await zipeResizeFile.zipFiles(userID);
       });
-  } else {
-    throw new Error("Width and height are required");
   }
     
 }

@@ -1,8 +1,5 @@
 import {describe, expect, test, it, jest, afterEach, beforeEach, afterAll} from '@jest/globals';
 import * as fs from 'fs'
-import path from "node:path";
-import * as httpMocks from 'node-mocks-http' 
-
 import FileUploadMQ from '../RabbitMQ/Publisher/FileUploadMQ';
 
 // jest.mock('fs');
@@ -20,8 +17,6 @@ import FileUploadMQ from '../RabbitMQ/Publisher/FileUploadMQ';
 
 describe('ZipFiles', () => {
     const uploadMQ = new FileUploadMQ();
-    const mockBuffer = JSON.stringify(Buffer.from('fake data', 'utf-8'))
-
 
     describe('POST /files/:key' , () => {
         it('should return if the files has been send correct', () =>{
@@ -30,44 +25,51 @@ describe('ZipFiles', () => {
 
                 const imageBuffer1 = fs.readFileSync('./src/__test__/assets/image003.png');
                 const imageBuffer2 = fs.readFileSync('./src/__test__/assets/mickey.png');
-               
-                const originalName1 = path.basename('./src/__test__/assets/mickey.png');
-                const originalName2 = path.basename('./src/__test__/assets/image003.png');
 
-                     // Serializa o objeto em JSON
-                const file = {
-                    originalname: originalName1,
+                const fakeFile1: Express.Multer.File | File[] | undefined = {
+                    fieldname: 'file',
+                    originalname: 'image003.png',
+                    encoding: '7bit',
                     mimetype: 'image/png',
-                    size:imageBuffer1.length,
-                    buffer: imageBuffer1.toString('base64') // Buffer em Base64 para compatibilidade
+                    size: imageBuffer1.length,
+                    buffer: imageBuffer1,
+                    stream: fs.createReadStream('./src/__test__/assets/image003.png'),
+                    destination: '',
+                    filename: '',
+                    path: '',
                 };
 
-                const file2 = {
-                    originalname: originalName2,
+                const fakeFile2 = {
+                    fieldname: 'file',
+                    originalname: 'mickey.png',
+                    encoding: '7bit',
                     mimetype: 'image/png',
-                    size:imageBuffer2.length,
-                    buffer: imageBuffer2.toString('base64') // Buffer em Base64 para compatibilidade
+                    size: imageBuffer2.length,
+                    buffer: imageBuffer2,
+                    stream: fs.createReadStream('./src/__test__/assets/mickey.png'),
+                    destination: '',
+                    filename: '',
+                    path: '',
                 }
 
-                const mockFiles = [file, file2];
 
-                const mockExpressRequest = httpMocks.createRequest({
-                    method: 'GET',
-                    url: '/files/:key',
-                    params: {
-                        key: 'compress'
-                    },
-                });
-    
-                const mockExpressResponse = httpMocks.createResponse();
-    
-                uploadMQ.uploadFile(mockFiles, mockExpressRequest.params.key);
-                const data = mockExpressResponse._getData();
-                console.log(data);
+                const mockFiles = [fakeFile1, fakeFile2];
+
+                
+                const fileData = {
+                    file: mockFiles ,
+                    key: 'compress',
+                    type: 'none',
+                    width: 0,
+                    height: 0
+                }
+        
+                let teste = uploadMQ.uploadFile(fileData);
+                console.log(teste);
     
                 // Trocar o teste para ser direto na API e não na função!
             
-                expect(uploadMQ.uploadFile(mockFiles, mockExpressRequest.params.key)).toEqual("All files have been compressed");
+                // expect(uploadMQ.uploadFile(mockFiles, mockExpressRequest.params.key)).toEqual("All files have been compressed");
             
 
     

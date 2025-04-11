@@ -130,8 +130,11 @@ class FileUploadMQ{
                                                         await CompressImagem(imageToJson);
 
                                                         if(processed == file.length){
+                                                                await channel.cancel(msg.fields.consumerTag);   // ela esta bugando a conexão do rabbit mq, não sei porque
+                                                                await connection.closeConnection();
+                                                              
                                                                 resolve('All files have been compressed'); 
-                                                                connection.closeConnection();
+
                                                         }
 
 

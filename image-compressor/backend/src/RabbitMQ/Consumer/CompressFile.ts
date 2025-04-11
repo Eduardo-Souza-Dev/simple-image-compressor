@@ -3,7 +3,7 @@ import sharp from 'sharp';
 import * as fs from 'node:fs';
 import { optimize } from 'svgo';
 import path from 'node:path';
-import { Image } from "@/configs/Interfaces";
+import { Image } from "../../configs/Interfaces";
 
 
 async function CompressImagem(imageToJson: Image) {
@@ -26,11 +26,10 @@ async function CompressImagem(imageToJson: Image) {
           await sharp(inputFile)
           .jpeg({ quality: compress_quality })
           .toFile(`${outputFile}`)
-          .then(async () => {
-              // Aqui chamar a API que vai chamar a classe ZipeFiles que por si irá retornar os arquivos
-              await zipeCompressFile.zipFiles(userID);
-          })
-          .catch(err => console.error(err));
+        
+          // Aqui chamar a API que vai chamar a classe ZipeFiles que por si irá retornar os arquivos
+          await zipeCompressFile.zipFiles(userID);
+        
 
           return true;
   
@@ -41,12 +40,10 @@ async function CompressImagem(imageToJson: Image) {
            await sharp(inputFile)
           .png({ quality: 10 }) 
           .toFile(`${outputFile}`)
-          .then(async() => {   
-            // Aqui chamar a API que vai chamar a classe ZipeFiles que por si irá retornar os arquivos
-            await zipeCompressFile.zipFiles(userID);
+        
+          // Aqui chamar a API que vai chamar a classe ZipeFiles que por si irá retornar os arquivos
+          await zipeCompressFile.zipFiles(userID);
             
-          })
-          .catch(err => console.error(err));
           return true;  
   
       }

@@ -2,7 +2,7 @@ import ZipeFiles from '../../ZipeFIles';
 import sharp from 'sharp';
 import * as fs from 'node:fs';
 import path from 'node:path';
-import { Image } from "@/configs/Interfaces";
+import { Image } from "../../configs/Interfaces";
 
 
 async function ConvertFile(imageToJson: Image, type: string){
