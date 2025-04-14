@@ -17,7 +17,6 @@ class RabbitMqConnection {
         const url = 'amqp://localhost';
         return new Promise((resolve, reject) => {
             if (this.connection) {
-                console.log("Conexão já estabelecida.");
                 return resolve(this.connection);
             }
 
@@ -27,7 +26,6 @@ class RabbitMqConnection {
                     return reject(error);
                 }
                 this.connection = connection;
-                console.log("Conectado ao RabbitMQ!");
                 resolve(connection);
             });
         });
@@ -41,9 +39,6 @@ class RabbitMqConnection {
         if (this.connection) {
             this.connection.close();
             this.connection = null;
-            console.log("Conexão com RabbitMQ fechada.");
-        } else {
-            console.log("Nenhuma conexão ativa para fechar.");
         }
     }
 }

@@ -64,12 +64,8 @@ describe('ZipFiles', () => {
                     height: 0
                 }
         
-                let teste = uploadMQ.uploadFile(fileData);
-                console.log(teste);
+               uploadMQ.uploadFile(fileData);
     
-                // Trocar o teste para ser direto na API e não na função!
-            
-                // expect(uploadMQ.uploadFile(mockFiles, mockExpressRequest.params.key)).toEqual("All files have been compressed");
             
 
     

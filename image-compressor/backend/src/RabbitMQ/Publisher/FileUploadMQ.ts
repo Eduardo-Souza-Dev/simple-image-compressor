@@ -122,7 +122,8 @@ class FileUploadMQ{
                                                  
                                              
                                               
-                                              if(count == file?.length){ // Verifica se todos os arquivos foram percorridos                                                      
+                                              if(count == file?.length){ // Verifica se todos os arquivos foram percorridos       
+                                                    let isConnectionClosed = false;                                         
                                                     channel.consume(compress_queue, async function(msg:any){
                                                         const imagemToString = msg.content.toString();
                                                         const imageToJson = JSON.parse(imagemToString);
@@ -130,9 +131,12 @@ class FileUploadMQ{
                                                         await CompressImagem(imageToJson);
 
                                                         if(processed == file.length){
-                                                                await channel.cancel(msg.fields.consumerTag);   // ela esta bugando a conexão do rabbit mq, não sei porque
-                                                                await connection.closeConnection();
-                                                              
+                                                                
+                                                                if(isConnectionClosed == false){ 
+                                                                        connection.closeConnection();
+                                                                        isConnectionClosed = true;
+                                                                }
+
                                                                 resolve('All files have been compressed'); 
 
                                                         }
