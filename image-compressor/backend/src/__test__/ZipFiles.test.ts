@@ -1,5 +1,6 @@
 import {describe, expect, test, it, jest, afterEach, beforeEach, afterAll} from '@jest/globals';
 import * as fs from 'fs'
+import path from 'path';
 import FileUploadMQ from '../RabbitMQ/Publisher/FileUploadMQ';
 
 // jest.mock('fs');
@@ -19,21 +20,20 @@ describe('ZipFiles', () => {
     const uploadMQ = new FileUploadMQ();
 
     describe('POST /files/:key' , () => {
-        it('should return if the files has been send correct', () =>{
+        it('should return if the files has been send ziped',async () =>{
 
-           
-
-                const imageBuffer1 = fs.readFileSync('./src/__test__/assets/image003.png');
-                const imageBuffer2 = fs.readFileSync('./src/__test__/assets/mickey.png');
+                const zipPath = path.join('./src/temp_zip_files/userTeste.zip');
+                const imageBuffer1 = fs.readFileSync('./src/__test__/assets/userTeste_image003.png');
+                const imageBuffer2 = fs.readFileSync('./src/__test__/assets/userTeste_mickey.png');
 
                 const fakeFile1: Express.Multer.File | File[] | undefined = {
                     fieldname: 'file',
-                    originalname: 'image003.png',
+                    originalname: 'userTeste_image003.png',
                     encoding: '7bit',
                     mimetype: 'image/png',
                     size: imageBuffer1.length,
                     buffer: imageBuffer1,
-                    stream: fs.createReadStream('./src/__test__/assets/image003.png'),
+                    stream: fs.createReadStream('./src/__test__/assets/userTeste_image003.png'),
                     destination: '',
                     filename: '',
                     path: '',
@@ -41,12 +41,12 @@ describe('ZipFiles', () => {
 
                 const fakeFile2 = {
                     fieldname: 'file',
-                    originalname: 'mickey.png',
+                    originalname: 'userTeste_mickey.png',
                     encoding: '7bit',
                     mimetype: 'image/png',
                     size: imageBuffer2.length,
                     buffer: imageBuffer2,
-                    stream: fs.createReadStream('./src/__test__/assets/mickey.png'),
+                    stream: fs.createReadStream('./src/__test__/assets/userTeste_mickey.png'),
                     destination: '',
                     filename: '',
                     path: '',
@@ -64,11 +64,10 @@ describe('ZipFiles', () => {
                     height: 0
                 }
         
-               uploadMQ.uploadFile(fileData);
-    
-            
+                await uploadMQ.uploadFile(fileData);
 
-    
+                const zipExists = fs.existsSync(zipPath);
+                expect(zipExists).toBe(true);
 
         });
     });
