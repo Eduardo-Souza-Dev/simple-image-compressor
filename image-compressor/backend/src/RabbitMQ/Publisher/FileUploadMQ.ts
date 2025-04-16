@@ -55,6 +55,7 @@ class FileUploadMQ{
                                       
                                       if(key === 'resize'){
                                         let count = 0;
+                                        let processed = 0;
 
                                         if(Array.isArray(file)){
             
@@ -79,15 +80,27 @@ class FileUploadMQ{
                                      
                                         
   
-                                        if(count == file?.length){ // Verifica se todos os arquivos foram percorridos                                                      
+                                        if(count == file?.length){ // Verifica se todos os arquivos foram percorridos    
+                                              let isConnectionClosed = false;                                                  
                                               channel.consume(compress_queue, async function(msg:any){
                                                   const imagemToString = msg.content.toString();
                                                   const imageToJson = JSON.parse(imagemToString);
                                                   let widthString = width.toString();
                                                   let heightString = height.toString();
+                                                  processed++;
                                       
-                                                  await ResizeFile(imageToJson,widthString,heightString)
-                                                  resolve('All files have been compressed'); 
+                                                  await ResizeFile(imageToJson,widthString,heightString);
+
+                                                  if(processed == file.length){
+                                                                
+                                                        if(isConnectionClosed == false){ 
+                                                                connection.closeConnection();
+                                                                isConnectionClosed = true;
+                                                        }
+
+                                                        resolve('All files have been compressed'); 
+
+                                                  }
                                               },
                                               {
                                                   noAck: true
@@ -153,6 +166,7 @@ class FileUploadMQ{
                                                         
                                       }if(key === 'convert'){
                                         let count = 0;
+                                        let processed = 0;
 
                                         if(Array.isArray(file)){
                                                 file.forEach((file:Express.Multer.File ) => {
@@ -176,13 +190,24 @@ class FileUploadMQ{
                                                  
                                       
   
-                                        if(count == file?.length){ // Verifica se todos os arquivos foram percorridos                                                      
+                                        if(count == file?.length){ // Verifica se todos os arquivos foram percorridos     
+                                              let isConnectionClosed = false;                                                     
                                               channel.consume(convert_queue, async function(msg:any){
                                                   const imagemToString = msg.content.toString();
                                                   const imageToJson = JSON.parse(imagemToString);
+                                                  processed++;
                                       
                                                   await ConvertFile(imageToJson, type)
-                                                  resolve('All files have been compressed'); 
+                                                  if(processed == file.length){
+                                                                
+                                                        if(isConnectionClosed == false){ 
+                                                                connection.closeConnection();
+                                                                isConnectionClosed = true;
+                                                        }
+
+                                                        resolve('All files have been compressed'); 
+
+                                                  }
                                               },
                                               {
                                                   noAck: true
