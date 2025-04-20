@@ -41,6 +41,6 @@
   "scripts": {
     "start": "npx tsx routes.ts",
     "dev": "npx tsx routes.ts",
-    "test": "jest"
+    "test": "jest --detectOpenHandles --runInBand"
   }
 }

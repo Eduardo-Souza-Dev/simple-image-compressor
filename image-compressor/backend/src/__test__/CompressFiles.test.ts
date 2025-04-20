@@ -1,21 +1,28 @@
 import {describe, expect, it, jest, beforeAll, afterAll} from '@jest/globals';
 import * as fs from 'fs'
-import JSZip from "jszip";
-import { cleanTestFiles, getZipPath, uploadFile } from './utils/TestUploadHelper.test';
+import { cleanTestFiles, getZipPath, uploadFile, getImage } from './utils/TestUploadHelper.test';
 
 describe('CompressFiles', () => {
+    const fakeFile = getImage();
+
     beforeAll(async () => {
         await uploadFile();
     });
 
-    afterAll(async () =>{
+   it('should return if the file has been compressed',async () =>{
+
+        const newFile =  fs.statSync('./src/__test__/assets/userTeste_mickey.png');
+        const newFileSize = newFile.size / (1024*1024);
+        const compareFile = fakeFile.size > newFileSize;
+        expect(compareFile).toBe(true);
+ 
+     });
+
+
+     afterAll(async () =>{
         jest.clearAllMocks();
         await cleanTestFiles();
     })
-
-//    it('should create a file compressed', async () => {
-
-//    })
 
 
 })

@@ -26,12 +26,7 @@ class ZipeFiles{
 
         for(const userID in zipUserID){
             const content = await zipUserID[userID].generateAsync({ type: "nodebuffer" });
-
-            try{
-                await fs.writeFile(`src/temp_zip_files/${userID}.zip`, content); // Craiação do do ziper para cada user
-            }catch(error){
-                console.log("Error to create zip file: " + error);
-            }
+            await fs.writeFile(`src/temp_zip_files/${userID}.zip`, content); // Craiação do do ziper para cada user
         }
 
 

@@ -10,17 +10,13 @@ describe('ZipFiles', () => {
         await uploadFile();
     });
 
-    afterAll(async () =>{
-        jest.clearAllMocks();
-        await cleanTestFiles();
-    })
-
     it('should return if the files has been send ziped',async () =>{
         
             const zipExists = fs.existsSync(zipPath);
             expect(zipExists).toBe(true);
 
     });
+
 
     it('should return if the files has been send to the ziped file',async () =>{
 
@@ -31,5 +27,11 @@ describe('ZipFiles', () => {
             expect(zipFileNames.length).toBe(expectedFileNames.length);
 
     });
+
+    afterAll(async () =>{
+        jest.clearAllMocks();
+        await cleanTestFiles();
+    })
+
     
 })

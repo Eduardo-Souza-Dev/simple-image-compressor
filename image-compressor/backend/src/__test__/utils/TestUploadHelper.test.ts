@@ -52,18 +52,16 @@ export const uploadFile = async () => {
 
 export const cleanTestFiles = async () =>{
 
-        // If you want to see the files an the zip that are being deleted, you can uncomment the lines below
+       
         if(fs.existsSync('./src/temp_pictures/userTeste/userTeste_cat2.png') && fs.existsSync('./src/temp_pictures/userTeste/userTeste_mickey.png')){
             fs.unlinkSync('./src/temp_pictures/userTeste/userTeste_cat2.png');
             fs.unlinkSync('./src/temp_pictures/userTeste/userTeste_mickey.png');
         }
     
-        // this is to remove the zip file userTeste.zip
         if(fs.existsSync('./src/temp_zip_files/userTeste.zip')){
             fs.unlinkSync('./src/temp_zip_files/userTeste.zip');
         }
     
-        // this is to remove the folder temp_pictures/userTeste
         try 
         {
             await fs.promises.rm('./src/temp_pictures/userTeste', { recursive: true, force: true });
@@ -74,3 +72,4 @@ export const cleanTestFiles = async () =>{
 };
 
 export const getZipPath = () => zipPath;
+export const getImage = () => fakeFile1;
