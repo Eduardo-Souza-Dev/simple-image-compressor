@@ -23,7 +23,7 @@ const fakeFile1: Express.Multer.File | File[] | undefined = {
     path: '',
 };
 
-const fakeFile2 = {
+const fakeFile2: Express.Multer.File | File[] | undefined = {
     fieldname: 'file',
     originalname: 'userTeste_mickey.png',
     encoding: '7bit',
@@ -38,15 +38,17 @@ const fakeFile2 = {
 
 const mockFiles = [fakeFile1, fakeFile2];
 
-const fileData = {
-    file: mockFiles ,
-    key: 'compress',
-    type: 'none',
-    width: 0,
-    height: 0
-}
 
-export const uploadFile = async () => {
+export const uploadFile = async (key: string,type: string,width: number,height: number) => {
+
+    const fileData = {
+        file: mockFiles ,
+        key: key,
+        type: type,
+        width: width,
+        height: height
+    }
+
     await uploadMQ.uploadFile(fileData);
 }
 

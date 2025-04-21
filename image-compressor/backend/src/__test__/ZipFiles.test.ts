@@ -7,7 +7,7 @@ describe('ZipFiles', () => {
     const zipPath = getZipPath();
 
     beforeAll(async () => {
-        await uploadFile();
+        await uploadFile('compress','none',0,0);
     });
 
     it('should return if the files has been send ziped',async () =>{

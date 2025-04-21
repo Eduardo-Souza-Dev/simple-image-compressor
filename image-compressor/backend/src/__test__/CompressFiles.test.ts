@@ -6,7 +6,7 @@ describe('CompressFiles', () => {
     const fakeFile = getImage();
 
     beforeAll(async () => {
-        await uploadFile();
+        await uploadFile('compress','none',0,0);
     });
 
    it('should return if the file has been compressed',async () =>{
