@@ -15,7 +15,7 @@ async function ConvertFile(imageToJson: Image, type: string){
         fs.mkdirSync(userFolder);
     }
 
-    const outputFile = `src/temp_pictures/${userID}/${imageToJson.originalname}`;
+    const outputFile = `src/temp_pictures/${userID}/${path.parse(imageToJson.originalname).name}`;
 
     if(type == 'jpeg'){
         // Converte a imagem para JPEG

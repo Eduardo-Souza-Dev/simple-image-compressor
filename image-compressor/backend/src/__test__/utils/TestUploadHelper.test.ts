@@ -55,21 +55,21 @@ export const uploadFile = async (key: string,type: string,width: number,height: 
 export const cleanTestFiles = async () =>{
 
        
-        if(fs.existsSync('./src/temp_pictures/userTeste/userTeste_cat2.png') && fs.existsSync('./src/temp_pictures/userTeste/userTeste_mickey.png')){
-            fs.unlinkSync('./src/temp_pictures/userTeste/userTeste_cat2.png');
-            fs.unlinkSync('./src/temp_pictures/userTeste/userTeste_mickey.png');
-        }
+        // if(fs.existsSync('./src/temp_pictures/userTeste/userTeste_cat2.png') && fs.existsSync('./src/temp_pictures/userTeste/userTeste_mickey.png')){
+        //     fs.unlinkSync('./src/temp_pictures/userTeste/userTeste_cat2.png');
+        //     fs.unlinkSync('./src/temp_pictures/userTeste/userTeste_mickey.png');
+        // }
     
-        if(fs.existsSync('./src/temp_zip_files/userTeste.zip')){
-            fs.unlinkSync('./src/temp_zip_files/userTeste.zip');
-        }
+        // if(fs.existsSync('./src/temp_zip_files/userTeste.zip')){
+        //     fs.unlinkSync('./src/temp_zip_files/userTeste.zip');
+        // }
     
-        try 
-        {
-            await fs.promises.rm('./src/temp_pictures/userTeste', { recursive: true, force: true });
-        }catch (err) {
-            console.error('Erro ao remover a pasta:', err);
-        }
+        // try 
+        // {
+        //     await fs.promises.rm('./src/temp_pictures/userTeste', { recursive: true, force: true });
+        // }catch (err) {
+        //     console.error('Erro ao remover a pasta:', err);
+        // }
         
 };
 
