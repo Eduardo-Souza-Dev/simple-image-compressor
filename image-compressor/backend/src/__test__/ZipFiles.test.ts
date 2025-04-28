@@ -29,15 +29,11 @@ describe('ZipFiles', () => {
                "userTeste_littlecat.jpeg", 
                "userTeste_mickey.png"
             ];
-            // expect(zipFileNames).toEqual(expect.arrayContaining(expectedFileNames));
-            // expect(zipFileNames.length).toBe(expectedFileNames.length);
+            expect(zipFileNames).toEqual(expect.arrayContaining(expectedFileNames));
+            expect(zipFileNames.length).toBe(expectedFileNames.length);
 
     });
 
-    // afterAll(async () =>{
-    //     jest.clearAllMocks();
-    //     await cleanTestFiles();
-    // })
 
     
 })
