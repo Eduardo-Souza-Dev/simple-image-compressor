@@ -1,6 +1,6 @@
 import {describe, expect, it, jest, beforeAll, afterAll} from '@jest/globals';
 import sharp from 'sharp';
-import { cleanTestFiles, uploadFile } from './utils/TestUploadHelper.test';
+import { uploadFile } from './utils/TestUploadHelper.test';
 
 describe('ReiszeFiles', () => {
     beforeAll(async () => {
@@ -17,11 +17,6 @@ describe('ReiszeFiles', () => {
         });
  
      });
-
-     afterAll(async () =>{
-        jest.clearAllMocks();
-        await cleanTestFiles();
-    })
 
 
 })

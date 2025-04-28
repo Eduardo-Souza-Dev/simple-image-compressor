@@ -44,9 +44,8 @@ async function ConvertFile(imageToJson: Image, type: string){
     }
 
     if(type == 'svg'){
-        // Converte a imagem para SVG
+        // Não converte a imagem para SVG, apenas renomeia o arquivo
         await sharp(inputFile)
-        .rotate()
         .toFile(`${outputFile}.svg`)
         .then(async () => {
             // Aqui chamar a API que vai chamar a classe ZipeFiles que por si irá retornar os arquivos

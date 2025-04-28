@@ -1,6 +1,6 @@
 import {describe, expect, it, jest, beforeAll, afterAll} from '@jest/globals';
 import * as fs from 'fs'
-import { cleanTestFiles, uploadFile, getImage } from './utils/TestUploadHelper.test';
+import { uploadFile, getImage } from './utils/TestUploadHelper.test';
 
 describe('CompressFiles', () => {
     const fakeFile = getImage();
@@ -17,12 +17,6 @@ describe('CompressFiles', () => {
         expect(compareFile).toBe(true);
  
      });
-
-
-     afterAll(async () =>{
-        jest.clearAllMocks();
-        await cleanTestFiles();
-    })
 
 
 })
