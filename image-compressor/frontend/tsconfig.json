@@ -5,6 +5,10 @@
       "dom.iterable",
       "esnext"
     ],
+    "baseUrl": "./",
+      "paths": {
+        "@/*": ["src/*"]
+    },
     "allowJs": true,
     "skipLibCheck": true,
     "jsx": "preserve", // Para projetos com React 17+
@@ -20,11 +24,6 @@
         "name": "next"
       }
     ],
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    },
     "strict": false
   },
   "include": [
@@ -33,7 +32,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/backend/FileUploadMQ.ts"
-  ],
+, "tailwind.config.ts", "next.config.mjs"  ],
   "exclude": [
     "node_modules"
   ]

@@ -4,12 +4,12 @@
 
 import styles from "./page.module.css";
 import { FaFileImage } from "react-icons/fa";
-import { AiOutlineCloseCircle } from "react-icons/ai";
+import { AiOutlineCloseCircle, AiOutlineDelete } from "react-icons/ai";
 import { LuLink2Off } from "react-icons/lu";
 import { LuLink2 } from "react-icons/lu";
 import { useEffect, useState } from "react";
 import { Toaster, toast } from 'sonner';
-import { GenerateUUID } from "./scripts/GenerateUUID";
+import { GenerateUUID } from "../scripts/GenerateUUID";
 import { nanoid } from "nanoid";
 
 
@@ -97,43 +97,8 @@ export default function Home() {
 
 
 
-  function changeColor(value:any){
+  function changeType(value:any){
     setTypeFile(value);
-    let svg: HTMLElement = document.getElementById('svg');
-    let png: HTMLElement = document.getElementById('png');
-    let jpeg: HTMLElement = document.getElementById('jpeg');
-
-    if(value == 'svg'){
-      //Muda a cor do background
-      svg.style.backgroundColor = '#007BFF';
-      png.style.background = '#f9f9f9';
-      jpeg.style.background = '#f9f9f9';
-
-      //Muda a cor da fonte
-      svg.style.color = 'white';
-      jpeg.style.color = 'black';
-      png.style.color = 'black';
-    }
-    else if(value == 'jpeg'){
-      svg.style.background = '#f9f9f9';
-      png.style.background = '#f9f9f9';
-      jpeg.style.backgroundColor = '#007BFF';
-
-      jpeg.style.color = 'white';
-      png.style.color = 'black';
-      svg.style.color = 'black';
-    }
-    else if(value == 'png'){
-
-      svg.style.background = '#f9f9f9';
-      jpeg.style.background = '#f9f9f9';
-      png.style.backgroundColor = '#007BFF';
-      
-      png.style.color = 'white';
-      jpeg.style.color = 'black';
-      svg.style.color = 'black';
-    }
-
   }
 
   function changedLinkedIcon(){
@@ -272,116 +237,124 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      <div id="body_file" className={styles.body_file}>    
-          {
-            btnDownload == true ? 
-            <div id="rende_timer"></div>
-            : null
-          }
-      
-      
-      <Toaster richColors position="top-right" />
+  <div className={styles.body_file}>
+    {btnDownload == true ? <div id="rende_timer" className={styles.body_timer}></div> : null}
 
-        <div className="wrapper"> 
-        <div className="container">
-          <h2 style={{fontSize:'22px'}}>Envie uma imagem para comprimi-la ou converte-la.</h2>
-          <div id="upload-container" className="upload-container">
-            <div className="border-container">
-              <div className="icons fa-4x">
-              <FaFileImage
-              style={{margin: '15px'}}
-              size={120} />
-              </div>
-              <input  
-                      accept='.png,.jpg,.jpeg,.webp,.svg' 
-                      style={{display:'none'}} 
-                      onChange={handleFile} 
-                      type="file" 
-                      id="file-upload" 
-                      multiple/>
-              <p>
-                <a href="#" id="file-browser"> <label style={{cursor:'pointer'}} htmlFor="file-upload"> Clique aqui</label> </a> para adicionar uma imagem.</p>
+    <Toaster richColors position="top-right" />
+
+    <div className={styles.content_wrapper}> {/* Novo wrapper para o conteúdo principal */}
+      <div className={styles.upload_section}>
+        <h2 style={{ fontSize: '22px', marginBottom: '1rem', color: '#333' }}>
+          Arraste e solte seus arquivos aqui ou clique para selecionar.
+        </h2>
+        <div id="upload-container" className={styles.upload_container}>
+          <label htmlFor="file-upload" className={styles.upload_label}>
+            <div className={styles.upload_icon}>
+              <FaFileImage size={60} color="#ff8c00" />
             </div>
+            <p className={styles.upload_text}>Clique aqui para adicionar arquivos</p>
+            <input
+              accept=".png,.jpg,.jpeg,.webp,.svg"
+              style={{ display: 'none' }}
+              onChange={handleFile}
+              type="file"
+              id="file-upload"
+              multiple
+            />
+          </label>
+        </div>
+
+        <div className={styles.options_container}>
+          <div className={styles.file_type_selector}>
+            <span
+              onClick={() => {
+                changeType('svg');
+              }}
+              className={`${styles.kind_file} ${typeFile === 'svg' ? styles.active : ''}`}
+              id="svg"
+            >
+              .svg
+            </span>
+            <span
+              onClick={() => {
+                changeType('png');
+              }}
+              className={`${styles.kind_file} ${typeFile === 'png' ? styles.active : ''}`}
+              id="png"
+            >
+              .png
+            </span>
+            <span
+              onClick={() => {
+                changeType('jpeg');
+              }}
+              className={`${styles.kind_file} ${typeFile === 'jpeg' ? styles.active : ''}`}
+              id="jpeg"
+            >
+              .jpeg
+            </span>
           </div>
-          <div style={{margin:'13px 0px 13px 0px'}} className="container-pixel">
-            <div className="choose-container">
-              <span onClick={() =>{
-                // convertSVG();
-                changeColor('svg');
-              }} className="kindFile" id="svg">.svg</span> 
-              <span onClick={() =>{
-                // convertSVG();
-                changeColor('png');
-              }} className="kindFile" id="png">.png</span> 
-              <span onClick={() =>{
-                // convertSVG();
-                changeColor('jpeg');
-              }} className="kindFile" id="jpeg">.jpeg</span>
+
+          <div className={styles.pixel_control}>
+            <input
+              id="pixel_1"
+              className={styles.pixel_value}
+              placeholder="Largura"
+              onChange={captureValue1}
+            />
+            <div className={styles.pixel_separator}>
+              <p style={{ fontWeight: 'bolder', color: '#FFF' }}>X</p>
             </div>
-            <div className="escale-container">
-                <input id = 'pixel_1' className="pixel-value" onChange={captureValue1}/>
-                <div className="middle-pixel-value">
-                <p style={{fontWeight:'bolder'}}>X</p>                    
-                </div>
-                <input id = 'pixel_2' className="pixel-value" onChange={captureValue2}/>
-                <LuLink2Off onClick={changedNotLinkedIcon}  id="not_linked"  size={23} style={{rotate:'90deg', marginLeft:'5px'}} />
-                <LuLink2 id="linked" onClick={changedLinkedIcon} display={'none'} size={23} style={{rotate:'90deg', marginLeft:'5px'}} />
-            </div>
-           
-          </div>
-          
-          <div className="upload-container" id="images_container" style={{marginTop:'10px', justifyContent:'start', display:'flex', flexWrap:'wrap', overflowY:'scroll', height:'120px', overflowX:'hidden'}}>
-            {
-              file.map((item, index) => (
-                <div key={index}>
-                  <span id={`id_span_${index}`} onClick={function deleteImage(){  
-                      document.getElementById(`image_${index}`).remove();
-                      document.getElementById(`id_span_${index}`).remove();
-                      }
-                    } 
-                    onMouseEnter={function(){
-                    let image: HTMLElement = document.getElementById(`image_${index}`);
-                    image.style.borderColor = 'red';
-                    image.style.borderWidth = '5px';
-                    image.style.transition = 'border-color 0.5s ease';
-                    } }
-                    onMouseLeave={function(){
-                      let image: HTMLElement = document.getElementById(`image_${index}`);
-                      image.style.borderColor = '#007BFF';
-                      image.style.borderWidth = '3px';
-                      image.style.transition = 'border-color 0.5s ease';
-                    }}
-                    style={{position:'relative',
-                     bottom:'86px', 
-                     left:'15px',
-                     cursor: 'pointer',
-                     transition: '0.5s ease',
-                    }}
-                     >
-                      <AiOutlineCloseCircle size={30} color="red" /></span>
-                <img className="image-compress" id={`image_${index}`} style={{border:'3px solid #007BFF',margin:'5px'}} src={URL.createObjectURL(item)} width="100" height="100"></img>
-                </div>               
-              ))
-            }
+            <input
+              id="pixel_2"
+              className={styles.pixel_value}
+              placeholder="Altura"
+              onChange={captureValue2}
+            />
+             <LuLink2Off onClick={changedNotLinkedIcon}  id="not_linked"  size={23} style={{rotate:'90deg', marginLeft:'5px'}} />
+             <LuLink2 id="linked" onClick={changedLinkedIcon} display={'none'} size={23} style={{rotate:'90deg', marginLeft:'5px'}} />
           </div>
         </div>
       </div>
 
-      <div className="container-buttons">
-          <button className="button-mq" onClick={() => sendToRabbit('compress')} >Comprimir Imagens</button>
-          {
-            btnDownload == true && totalSeconds > 0 ? 
-            <button className="button-mq" onClick={() => downloadImages()} >Baixar Imagens</button>
-            : null
-          }
-          <button className="button-mq" onClick={() => sendToRabbit('convert',typeFile)} >Converter para: 
-            {` ${typeFile}`}
-          </button>
-  
+      <div
+        id="files_list_container"
+        className={styles.files_list_container}
+      >
+        <h3 style={{ color: '#eee', marginBottom: '0.5rem' }}>Arquivos:</h3>
+        {file.map((item, index) => (
+          <div key={index} className={styles.file_item}>
+            <span className={styles.file_name}>{item.name}</span>
+            <span
+              id={`id_span_${index}`}
+              onClick={function deleteImage() {
+                const newFile = [...file];
+                newFile.splice(index, 1);
+                setFile(newFile);
+              }}
+              className={styles.delete_button}
+            >
+              <AiOutlineDelete size={20} color="#ff4500" />
+            </span>
+          </div>
+        ))}
       </div>
-   
-      </div>        
-    
-    </main>
+    </div>
+
+    <div className={styles.buttons_container}>
+      <button className={styles.button_mq_compress} onClick={() => sendToRabbit('compress')}>
+        Comprimir Arquivos
+      </button>
+      {btnDownload == true && totalSeconds > 0 ? (
+        <button className={styles.button_mq_download} onClick={() => downloadImages()}>
+          Baixar Arquivos
+        </button>
+      ) : null}
+      <button className={styles.button_mq_convert} onClick={() => sendToRabbit('convert', typeFile)}>
+        Converter para: {typeFile}
+      </button>
+    </div>
+  </div>
+</main>
   );
 }
