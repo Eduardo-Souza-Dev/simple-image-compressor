@@ -1,0 +1,69 @@
+/* header.module.css */
+.header {
+    background-color: #333; /* Fundo preto */
+    color: #f4f4f4; /* Texto claro */
+    display: flex;
+    margin: 0;
+    height: 80px;
+    padding: 10px;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  }
+  
+  .logo {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .navigation ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  .navigation li {
+    margin-left: 1.5rem;
+  }
+  
+  .navigation li:first-child {
+    margin-left: 0;
+  }
+  
+  .navLink {
+    color: #f4f4f4;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .navLink:hover {
+    color: #ff8c00; /* Laranja no hover */
+  }
+  
+  .contributeButton {
+    background-color: #ff8c00; /* Botão de contribuir laranja */
+    color: #1a1a1a; /* Texto preto no botão */
+    padding: 0.7rem 1.2rem;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .contributeButton:hover {
+    background-color: #e67e00; /* Laranja mais escuro no hover */
+  }
+  
+  /* Estilos responsivos (opcional) */
+  @media (max-width: 768px) {
+    .navigation {
+      display: none; /* Oculta a navegação em telas menores */
+    }
+  
+    .logo {
+      font-size: 1.5rem; /* Aumenta o logo em telas menores */
+    }
+  
+    /* Você pode adicionar um ícone de menu aqui e lógica para exibir a navegação */
+  }
