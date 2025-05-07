@@ -1,7 +1,7 @@
 import {describe, expect, it, jest, beforeAll, afterAll} from '@jest/globals';
 import * as fs from 'fs'
 import JSZip from "jszip";
-import { getZipPath, uploadFile } from './utils/TestUploadHelper.test';
+import { getZipPath, uploadFile } from './utils/TestUploadHelper';
   
 describe('ZipFiles', () => {
     const zipPath = getZipPath();

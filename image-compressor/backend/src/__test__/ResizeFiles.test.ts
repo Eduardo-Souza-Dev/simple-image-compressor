@@ -1,6 +1,6 @@
 import {describe, expect, it, jest, beforeAll, afterAll} from '@jest/globals';
 import sharp from 'sharp';
-import { uploadFile } from './utils/TestUploadHelper.test';
+import { uploadFile } from './utils/TestUploadHelper';
 
 describe('ReiszeFiles', () => {
     beforeAll(async () => {

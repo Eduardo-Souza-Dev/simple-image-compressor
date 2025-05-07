@@ -322,7 +322,9 @@ export default function FileController() {
         id="files_list_container"
         className={styles.files_list_container}
       >
+        <span className={styles.h1_arch}>
         <h3 style={{ color: '#eee', marginBottom: '0.5rem' }}>Arquivos:</h3>
+        </span>
         {file.map((item, index) => (
           <div key={index} className={styles.file_item}>
             <span className={styles.file_name}>{item.name}</span>

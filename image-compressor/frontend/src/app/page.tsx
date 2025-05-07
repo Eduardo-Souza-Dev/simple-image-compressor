@@ -1,6 +1,4 @@
 "use client";
-// Todo o layout aqui é temporário, apenas para testes
-// O layout final será feito com o Bootstrap
 
 import styles from "./../css/page.module.css";
 import FileController from "../components/file_controller";
@@ -13,7 +11,8 @@ export default function Home() {
     <main className={styles.main}>
       <Toaster richColors position="top-right" />
       <Header />
-      <h1>Conversor de Imagens Gratuito ilimitado</h1>
+      <h1 className={styles.h1_main}>Conversor, Redimensionador e Compressor de Imagens online</h1>
+      <h3>teste</h3>
 
       <FileController />
     </main>

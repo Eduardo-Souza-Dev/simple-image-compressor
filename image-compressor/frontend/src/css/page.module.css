@@ -1,4 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+
 .main {
+  font-family: 'Poppins', sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -6,4 +10,9 @@
   background-color: #e9e9e9;
   color: #f4f4f4;
   box-sizing: border-box; /* Garante que o padding não afete a altura total */
+}
+
+.h1_main{
+  font-family: 'Poppins', sans-serif;
+  margin-top: 70px;
 }

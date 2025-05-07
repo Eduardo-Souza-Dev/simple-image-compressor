@@ -1,7 +1,7 @@
 import {describe, expect, it, jest, beforeAll, afterAll} from '@jest/globals';
 import sharp from 'sharp';
 import * as fs from 'fs'
-import { uploadFile } from './utils/TestUploadHelper.test';
+import { uploadFile } from './utils/TestUploadHelper';
 
 describe('ConvertFilesPNG', () => {   
     beforeAll(async () => {

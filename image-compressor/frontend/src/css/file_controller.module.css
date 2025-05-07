@@ -156,12 +156,21 @@
     padding: 1.5rem;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-    flex: 1; 
+    max-width: 350px;
     max-height: 400px;
     overflow-y: auto;
   }
+
+  .h1_arch{
+    height: 60px;
+    padding: 10px;
+    background-color: red;
+    width: 18%;
+    position: fixed;
+  }
   
   .file_item {
+    max-width: 350px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -205,6 +214,7 @@
     color: #1a1a1a;
     font-size: 1rem;
     cursor: pointer;
+    font-family: 'Poppins', sans-serif;
     transition: background-color 0.3s ease;
   }
   

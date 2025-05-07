@@ -1,6 +1,6 @@
 import {describe, expect, it, jest, beforeAll, afterAll} from '@jest/globals';
 import * as fs from 'fs'
-import { uploadFile, getImage } from './utils/TestUploadHelper.test';
+import { uploadFile, getImage } from './utils/TestUploadHelper';
 
 describe('CompressFiles', () => {
     const fakeFile = getImage();
