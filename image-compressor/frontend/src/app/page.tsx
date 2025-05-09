@@ -11,7 +11,7 @@ export default function Home() {
     <main className={styles.main}>
       <Toaster richColors position="top-right" />
       <Header />
-      <h1 className={styles.h1_main}>Conversor, Redimensionador e Compressor de Imagens online</h1>
+      <h2 className={styles.h1_main}>Conversor, Redimensionador e Compressor de Imagens online</h2>
       <h3>teste</h3>
 
       <FileController />

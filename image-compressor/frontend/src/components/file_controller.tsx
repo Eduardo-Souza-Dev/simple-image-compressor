@@ -146,6 +146,39 @@ export default function FileController() {
     setFile(Array.from(fileValue));
   }
 
+  function dragOverHandler(event){
+    event.preventDefault();
+
+  }
+
+  function dropHandler(event){
+    event.preventDefault();
+    console.log(event.dataTransfer.items);
+
+    if(event.dataTransfer.items){
+      [...event.dataTransfer.items].forEach((item, i) =>{
+        console.log(item)
+
+        const entry = item.webkitGetAsEntry?.(); // Acesso ao sistema de arquivos
+
+        if(entry?.isDirectory){
+          console.log(`📁 Pasta detectada: ${entry.name}`);
+        }
+
+        if(item.kind === "file"){
+          const file =item.getAsFile();
+          console.log(`... file [${i}].name = ${file.name}`)
+        }else{
+          [...event.dataTransfer.files].forEach((file,i) =>{
+            console.log(`... file[${i}].name = ${file.name}`);
+          })
+        }
+
+      })
+    }
+
+  }
+
   function downloadImages(){
             // Criamos um link para já fazer o donwload do documento comprimido
 
@@ -247,14 +280,13 @@ export default function FileController() {
           Arraste e solte seus arquivos aqui ou clique para selecionar.
         </h2>
         <label htmlFor="file-upload" className={styles.upload_label}>
-        <div id="upload-container" className={styles.upload_container}>
+        <div id="upload-container" onDrop={(e) => dropHandler(e)} onDragOver={(e) => dragOverHandler(e)} className={styles.upload_container}>
           
             <div className={styles.upload_icon}>
               <FaFileImage size={60} color="#ff8c00" />
             </div>
             <p className={styles.upload_text}>Clique aqui para adicionar arquivos</p>
             <input
-              accept=".png,.jpg,.jpeg,.webp,.svg"
               style={{ display: 'none' }}
               onChange={handleFile}
               type="file"
@@ -323,8 +355,9 @@ export default function FileController() {
         className={styles.files_list_container}
       >
         <span className={styles.h1_arch}>
-        <h3 style={{ color: '#eee', marginBottom: '0.5rem' }}>Arquivos:</h3>
+        <h3 style={{ color: '#eee', marginBottom: '0.5rem' }}>Arquivos: </h3>
         </span>
+        <section className={styles.files_list}>
         {file.map((item, index) => (
           <div key={index} className={styles.file_item}>
             <span className={styles.file_name}>{item.name}</span>
@@ -341,6 +374,7 @@ export default function FileController() {
             </span>
           </div>
         ))}
+        </section>
       </div>
     </div>
 
