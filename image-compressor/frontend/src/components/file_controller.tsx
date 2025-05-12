@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { Toaster, toast } from 'sonner';
 import { GenerateUUID } from "../scripts/GenerateUUID";
 import { nanoid } from "nanoid";
-
+import JSZip from "jszip";
 
 
 
@@ -154,24 +154,36 @@ export default function FileController() {
   function dropHandler(event){
     event.preventDefault();
     console.log(event.dataTransfer.items);
+    const zipFolder = new JSZip();
 
     if(event.dataTransfer.items){
+      
       [...event.dataTransfer.items].forEach((item, i) =>{
-        console.log(item)
+        const file =item.getAsFile();
+        const arrFiles = [];
 
-        const entry = item.webkitGetAsEntry?.(); // Acesso ao sistema de arquivos
+        if(item.type != 'image/svg+xml' && item.type != 'image/png' && item.type != 'image/jpeg' && item.type != 'application/x-zip-compressed'){
+          toast.warning("Somente arquivos de imagens ou zipados!");
+          return;
+        }
 
-        if(entry?.isDirectory){
-          console.log(`📁 Pasta detectada: ${entry.name}`);
+        if(item.type == "application/x-zip-compressed"){
+          zipFolder.loadAsync(file)
+          .then((zip) => {
+            zip.forEach(async (filePath,fileContent) =>{
+              const blob = await fileContent.async("blob");
+              const extension = fileContent.name.split('.').pop()?.toLowerCase(); // "jpeg"
+              console.log("Extensão:", extension);
+              const file = new File([blob], fileContent.name, { type: blob.type }); // converte o arquivo para o tipo blob
+              arrFiles.push(file); // faz o push em um array
+              console.log(arrFiles)
+              setFile(arrFiles); // manda o array para o setFile
+            })
+          })
         }
 
         if(item.kind === "file"){
-          const file =item.getAsFile();
           console.log(`... file [${i}].name = ${file.name}`)
-        }else{
-          [...event.dataTransfer.files].forEach((file,i) =>{
-            console.log(`... file[${i}].name = ${file.name}`);
-          })
         }
 
       })
@@ -220,6 +232,7 @@ export default function FileController() {
       let arrayFiles = [];
   
       Array.from(file).map((value) => arrayFiles.push((value as File)));
+      console.log(arrayFiles);
 
       const formData = new FormData();
       
@@ -290,6 +303,7 @@ export default function FileController() {
               style={{ display: 'none' }}
               onChange={handleFile}
               type="file"
+              accept=".png,.jpg,.jpeg,.svg,.zip"
               id="file-upload"
               multiple
             />

@@ -15,6 +15,7 @@
     "bootstrap": "^5.0.1",
     "framer-motion": "^12.9.4",
     "fs": "^0.0.1-security",
+    "jszip": "^3.10.1",
     "lucide-react": "^0.507.0",
     "nanoid": "^5.1.2",
     "next": "14.2.7",
