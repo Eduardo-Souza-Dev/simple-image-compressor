@@ -163,7 +163,7 @@ export default function FileController() {
         const arrFiles = [];
 
         if(item.type != 'image/svg+xml' && item.type != 'image/png' && item.type != 'image/jpeg' && item.type != 'application/x-zip-compressed'){
-          toast.warning("Somente arquivos de imagens ou zipados!");
+          toast.warning("Somente imagens ou ZIP!");
           return;
         }
 
@@ -171,19 +171,33 @@ export default function FileController() {
           zipFolder.loadAsync(file)
           .then((zip) => {
             zip.forEach(async (filePath,fileContent) =>{
-              const blob = await fileContent.async("blob");
-              const extension = fileContent.name.split('.').pop()?.toLowerCase(); // "jpeg"
-              console.log("Extensão:", extension);
-              const file = new File([blob], fileContent.name, { type: blob.type }); // converte o arquivo para o tipo blob
-              arrFiles.push(file); // faz o push em um array
-              console.log(arrFiles)
+              let blob = await fileContent.async("blob");
+              let extension = fileContent.name.split('.').pop()?.toLowerCase(); // "jpeg"
+
+              if(!["jpg", "jpeg", "png", "svg"].includes(extension)){
+                toast.warning("Arquivos incompatíveis removidos. Envie apenas imagens nos formatos permitidos.");
+                return;
+              }
+
+              // Alterando os mimetypes do extension
+              if(extension == 'jpeg' || extension == 'jpg'){
+                extension = 'image/jpeg';
+              }
+
+              if(extension == 'svg'){
+                extension = 'image/svg+xml';
+              }
+
+              if(extension == 'png'){
+                extension = 'image/png';
+              }
+
+
+              const file = new File([blob], fileContent.name, { type: extension }); // converte o arquivo para o tipo blob
+              arrFiles.push(file); // faz o push somente de imagens
               setFile(arrFiles); // manda o array para o setFile
             })
           })
-        }
-
-        if(item.kind === "file"){
-          console.log(`... file [${i}].name = ${file.name}`)
         }
 
       })
@@ -221,6 +235,7 @@ export default function FileController() {
             .catch(error => console.error('Error:', error));
            
             setBtnDownload(false);
+            setFile([]);
 
 
   }
