@@ -22,8 +22,8 @@ export default function FileController() {
   let urlResponse:string = '';
   const [typeFile, setTypeFile] = useState<string>('');
   const [btnDownload, setBtnDownload] = useState<boolean>(false);
-  const [widthValue, setWidthValue] = useState<any>(0);
-  const [heightValue, setHeightValue] = useState<any>(0);
+  const [widthValue, setWidthValue] = useState<string>('0');
+  const [heightValue, setHeightValue] = useState<string>('0');
   let totalSeconds:number = 300;// 5 minutos = 300 segundos
   const UUID = GenerateUUID();
   
@@ -148,18 +148,28 @@ export default function FileController() {
 
   function dragOverHandler(event){
     event.preventDefault();
+    event.currentTarget.style.borderColor = '#ff8c00';
+  }
 
+  function dragOnLeave(event){
+    event.preventDefault();
+    event.currentTarget.style.borderColor = '#666';
+  }
+
+  function dragOnEnd(event){
+    event.preventDefault();
+    event.currentTarget.style.borderColor = '#666';
   }
 
   function dropHandler(event){
     event.preventDefault();
-    console.log(event.dataTransfer.items);
+    event.currentTarget.style.borderColor = '#666';
     const zipFolder = new JSZip();
 
     if(event.dataTransfer.items){
       
       [...event.dataTransfer.items].forEach((item, i) =>{
-        const file =item.getAsFile();
+        const file = item.getAsFile();
         const arrFiles = [];
 
         if(item.type != 'image/svg+xml' && item.type != 'image/png' && item.type != 'image/jpeg' && item.type != 'application/x-zip-compressed'){
@@ -172,7 +182,7 @@ export default function FileController() {
           .then((zip) => {
             zip.forEach(async (filePath,fileContent) =>{
               let blob = await fileContent.async("blob");
-              let extension = fileContent.name.split('.').pop()?.toLowerCase(); // "jpeg"
+              let extension = fileContent.name.split('.').pop()?.toLowerCase(); // Pega o tipo de extensão que é o arquivo
 
               if(!["jpg", "jpeg", "png", "svg"].includes(extension)){
                 toast.warning("Arquivos incompatíveis removidos. Envie apenas imagens nos formatos permitidos.");
@@ -198,6 +208,9 @@ export default function FileController() {
               setFile(arrFiles); // manda o array para o setFile
             })
           })
+        }else{
+          arrFiles.push(file); 
+          setFile(arrFiles);
         }
 
       })
@@ -206,7 +219,7 @@ export default function FileController() {
   }
 
   function downloadImages(){
-            // Criamos um link para já fazer o donwload do documento comprimido
+            // Criamos um link para fazer o donwload do documento comprimido
 
             fetch(`http://localhost:3333/download/${UUID}`,{
               method: 'GET',
@@ -247,7 +260,6 @@ export default function FileController() {
       let arrayFiles = [];
   
       Array.from(file).map((value) => arrayFiles.push((value as File)));
-      console.log(arrayFiles);
 
       const formData = new FormData();
       
@@ -304,16 +316,14 @@ export default function FileController() {
 
     <div className={styles.content_wrapper}> {/* Novo wrapper para o conteúdo principal */}
       <div className={styles.upload_section}>
-        <h2 style={{ fontSize: '22px', marginBottom: '1rem', color: '#333' }}>
-          Arraste e solte seus arquivos aqui ou clique para selecionar.
-        </h2>
+  
         <label htmlFor="file-upload" className={styles.upload_label}>
-        <div id="upload-container" onDrop={(e) => dropHandler(e)} onDragOver={(e) => dragOverHandler(e)} className={styles.upload_container}>
+        <div id="upload-container" onDrop={(e) => dropHandler(e)} onDragOver={(e) => dragOverHandler(e)} onDragLeave={(e) => dragOnLeave(e)} onDragEnd={(e) => dragOnEnd(e)} className={styles.upload_container}>
           
             <div className={styles.upload_icon}>
               <FaFileImage size={60} color="#ff8c00" />
             </div>
-            <p className={styles.upload_text}>Clique aqui para adicionar arquivos</p>
+            <p className={styles.upload_text}>Clique aqui ou arraste sua imagem/zip.</p>
             <input
               style={{ display: 'none' }}
               onChange={handleFile}
