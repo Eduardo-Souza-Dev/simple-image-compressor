@@ -1,5 +1,5 @@
 "use client";
-// Page to handle file upload and conversion
+// Page to handle file upload
 
 import styles from "./../css/file_controller.module.css";
 import { FaFileImage } from "react-icons/fa";
@@ -142,8 +142,48 @@ export default function FileController() {
   }
 
   async function handleFile(event:any){
-    const fileValue = event.target.files
-    setFile(Array.from(fileValue));
+    const fileValue = event.target.files;
+    const typeFile = fileValue[0].type;
+    const zipFolder = new JSZip();
+    const arrFiles = [];
+
+      if(typeFile == "application/x-zip-compressed"){
+        zipFolder.loadAsync(fileValue[0])
+        .then((zip) => {
+          zip.forEach(async (filePath,fileContent) =>{
+            let blob = await fileContent.async("blob");
+            let extension = fileContent.name.split('.').pop()?.toLowerCase(); // Pega o tipo de extensão que é o arquivo
+
+            if(!["jpg", "jpeg", "png", "svg"].includes(extension)){
+              toast.warning("Arquivos incompatíveis removidos. Envie apenas imagens nos formatos permitidos.");
+              return;
+            }
+
+            // Alterando os mimetypes do extension
+            if(extension == 'jpeg' || extension == 'jpg'){
+              extension = 'image/jpeg';
+            }
+
+            if(extension == 'svg'){
+              extension = 'image/svg+xml';
+            }
+
+            if(extension == 'png'){
+              extension = 'image/png';
+            }
+
+
+            const file = new File([blob], fileContent.name, { type: extension }); // converte o arquivo para o tipo blob
+            arrFiles.push(file); // faz o push somente de imagens
+            setFile(arrFiles); // manda o array para o setFile
+            console.log(arrFiles)
+          })
+
+      })
+    }else{
+      setFile(Array.from(fileValue));
+    } 
+
   }
 
   function dragOverHandler(event){
@@ -206,6 +246,7 @@ export default function FileController() {
               const file = new File([blob], fileContent.name, { type: extension }); // converte o arquivo para o tipo blob
               arrFiles.push(file); // faz o push somente de imagens
               setFile(arrFiles); // manda o array para o setFile
+              console.log(arrFiles)
             })
           })
         }else{
