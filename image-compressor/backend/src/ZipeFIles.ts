@@ -20,8 +20,10 @@ class ZipeFiles{
             if(!zipUserID[userID]){
                 zipUserID[userID] = new JSZip(); // Cria um zip para cada user diferente que achar
             }
+            const renamedFile = file.split("_")[2]; // Renomeia o arquivo para não ter o id do user
+            console.log(renamedFile);
 
-            zipUserID[userID].file(file, fileData); // Adiciona a imagem ao zip do user correspondente
+            zipUserID[userID].file(renamedFile, fileData); // Adiciona a imagem ao zip do user correspondente
         }
 
         for(const userID in zipUserID){

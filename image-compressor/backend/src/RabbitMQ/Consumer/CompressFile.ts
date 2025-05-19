@@ -42,7 +42,6 @@ async function CompressImagem(imageToJson: Image) {
         
           // Aqui chamar a API que vai chamar a classe ZipeFiles que por si irá retornar os arquivos
           await zipeCompressFile.zipFiles(userID);
-            
           return true;  
   
       }

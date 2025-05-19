@@ -11,6 +11,8 @@ import { Toaster, toast } from 'sonner';
 import { GenerateUUID } from "../scripts/GenerateUUID";
 import { nanoid } from "nanoid";
 import JSZip from "jszip";
+import Timer from 'easytimer.js';
+
 
 
 
@@ -40,57 +42,23 @@ export default function FileController() {
   }
 
   async function ExpireZipDownload() {
+    let timer = new Timer();
+    timer.start({countdown: true, startValues: {seconds: 300}});
 
-    if(typeof window !== 'undefined') { // Aqui é só para garantir que já tenha sido renderizado no browser
+    timer.addEventListener('secondsUpdated', (e) =>{
+    let rende_timer = document.getElementById('rende_timer');
 
-      let rende_timer = document.getElementById('rende_timer');
-
-      // Aguarda até que o elemento seja encontrado no DOM
-        while (!rende_timer) {
-            await new Promise(resolve => setTimeout(resolve, 100)); // Aguarda 100ms antes de tentar novamente
-            rende_timer = document.getElementById('rende_timer');
-        }
-        const element = document.createElement('div');
-        element.id = 'demo';
-        element.className = 'body_timer';
-        element.innerHTML = '05 : 00';
-        element.style.display = 'flex';
-        element.style.justifyContent = 'center';
-        element.style.alignItems = 'center';
-        element.style.width = '120px';
-        element.style.height = '40px';
-        element.style.color = 'white';
-        element.style.borderRadius = '5px';
-        element.style.backgroundColor = '#006cfa';
-        rende_timer.appendChild(element);
-        await new Promise(resolve => setTimeout(resolve, 0));
-
-        
-        const timerElement = document.getElementById('demo');
-        
-        const timer = setInterval(function() {
-            const minutes = Math.floor(totalSeconds / 60);
-            const seconds = totalSeconds % 60;
-            
-            const formattedTime = 
-                `${String(minutes).padStart(2, '0')} : ${String(seconds).padStart(2, '0')}`;
-
-            if(timerElement){
-              timerElement.textContent = formattedTime;
-            }
-            
-            
-            if (totalSeconds <= 0) {
-                clearInterval(timer);
-                setBtnDownload(false);
-                DeleteZipUser(200);
-                timerElement.textContent = '00:00'; // Resete do timer
-            }
-            
-            totalSeconds--;
-        }, 1000);
-
+      if(rende_timer) {
+        rende_timer.innerHTML = timer.getTimeValues().toString();
       }
+
+    })
+
+    timer.addEventListener('targetAchieved', (e) => {
+      DeleteZipUser(200);
+      return;
+    })
+
     
   }
 
@@ -176,7 +144,6 @@ export default function FileController() {
             const file = new File([blob], fileContent.name, { type: extension }); // converte o arquivo para o tipo blob
             arrFiles.push(file); // faz o push somente de imagens
             setFile(arrFiles); // manda o array para o setFile
-            console.log(arrFiles)
           })
 
       })
@@ -246,7 +213,6 @@ export default function FileController() {
               const file = new File([blob], fileContent.name, { type: extension }); // converte o arquivo para o tipo blob
               arrFiles.push(file); // faz o push somente de imagens
               setFile(arrFiles); // manda o array para o setFile
-              console.log(arrFiles)
             })
           })
         }else{
@@ -290,6 +256,9 @@ export default function FileController() {
            
             setBtnDownload(false);
             setFile([]);
+            localStorage.clear(); // Limpa o localStorage
+            toast.success('Download realizado com sucesso!');
+
 
 
   }
@@ -343,10 +312,6 @@ export default function FileController() {
 
 
   }
-
-
-
- 
 
   return (
     <main className={styles.main}>
