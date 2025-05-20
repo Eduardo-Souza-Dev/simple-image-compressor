@@ -24,10 +24,10 @@ describe('ZipFiles', () => {
             const zip = await JSZip.loadAsync(fs.readFileSync(zipPath));
             const zipFileNames = Object.keys(zip.files);
             const expectedFileNames = [ 
-               "userTeste_11576965591711520535.svg", 
-               "userTeste_cat2.png", 
-               "userTeste_littlecat.jpeg", 
-               "userTeste_mickey.png"
+               "11576965591711520535.svg", 
+               "cat2.png", 
+               "littlecat.jpeg", 
+               "mickey.png"
             ];
             expect(zipFileNames).toEqual(expect.arrayContaining(expectedFileNames));
             expect(zipFileNames.length).toBe(expectedFileNames.length);

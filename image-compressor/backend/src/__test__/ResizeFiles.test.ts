@@ -9,7 +9,7 @@ describe('ReiszeFiles', () => {
 
    it('should return if the file has been resized to 100x100',async () =>{
 
-        await sharp('./src/temp_pictures/userTeste/userTeste_mickey.png')
+        await sharp('./src/temp_pictures/userTeste/userTeste_uuidrandom_mickey.png')
         .metadata()
         .then((metadata) => {
             expect(metadata.width).toBe(100);

@@ -11,8 +11,8 @@ describe('ConvertFilesPNG', () => {
 
     it('should return if the file has converted to png',async () =>{
     
-        if(fs.existsSync('./src/temp_pictures/userTeste/userTeste_littlecat.png')){
-        await sharp('./src/temp_pictures/userTeste/userTeste_littlecat.png')
+        if(fs.existsSync('./src/temp_pictures/userTeste/userTeste_uuidrandom_littlecat.png')){
+        await sharp('./src/temp_pictures/userTeste/userTeste_uuidrandom_littlecat.png')
         .metadata()
         .then((metadata) => {
             expect(metadata.format).toBe('png');

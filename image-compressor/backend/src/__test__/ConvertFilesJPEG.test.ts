@@ -11,8 +11,8 @@ describe('ConvertFilesJPEG', () => {
 
     it('should return if the file has converted to jpeg',async () =>{
 
-        if(fs.existsSync('./src/temp_pictures/userTeste/userTeste_mickey.jpeg')){
-            await sharp('./src/temp_pictures/userTeste/userTeste_mickey.jpeg')
+        if(fs.existsSync('./src/temp_pictures/userTeste/userTeste_uuidrandom_mickey.jpeg')){
+            await sharp('./src/temp_pictures/userTeste/userTeste_uuidrandom_mickey.jpeg')
             .metadata()
             .then((metadata) => {
                 expect(metadata.format).toBe('jpeg');

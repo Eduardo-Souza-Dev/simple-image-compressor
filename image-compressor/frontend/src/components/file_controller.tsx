@@ -9,6 +9,7 @@ import { LuLink2 } from "react-icons/lu";
 import { useEffect, useState } from "react";
 import { Toaster, toast } from 'sonner';
 import { GenerateUUID } from "../scripts/GenerateUUID";
+import FileList from "./file_list";
 import { nanoid } from "nanoid";
 import JSZip from "jszip";
 import Timer from 'easytimer.js';
@@ -111,7 +112,7 @@ export default function FileController() {
 
   async function handleFile(event:any){
     const fileValue = event.target.files;
-    const typeFile = fileValue[0].type;
+    const typeFile = fileValue[0]?.type;
     const zipFolder = new JSZip();
     const arrFiles = [];
 
@@ -403,22 +404,18 @@ export default function FileController() {
         <h3 style={{ color: '#eee', marginBottom: '0.5rem' }}>Arquivos: </h3>
         </span>
         <section className={styles.files_list}>
-        {file.map((item, index) => (
-          <div key={index} className={styles.file_item}>
-            <span className={styles.file_name}>{item.name}</span>
-            <span
-              id={`id_span_${index}`}
-              onClick={function deleteImage() {
-                const newFile = [...file];
-                newFile.splice(index, 1);
-                setFile(newFile);
+          {file.length > 0 ? (
+            <FileList
+              files={file.map((f) => f.name)}
+              onDelete={(fileName) => {
+                setFile((prevFiles) => prevFiles.filter((f) => f.name !== fileName));
               }}
-              className={styles.delete_button}
-            >
-              <AiOutlineDelete size={20} color="#ff4500" />
-            </span>
-          </div>
-        ))}
+            />
+          ) : (
+            <div className={styles.delete_button}>
+              <small style={{ color: '#eee' }}><i>Nenhum arquivo adicionado.</i></small>
+            </div>
+          )}
         </section>
       </div>
     </div>
