@@ -9,6 +9,7 @@ import { LuLink2 } from "react-icons/lu";
 import { useEffect, useState } from "react";
 import { Toaster, toast } from 'sonner';
 import { GenerateUUID } from "../scripts/GenerateUUID";
+import OptionsTypeFiles from "./options_type_files";
 import FileList from "./file_list";
 import { nanoid } from "nanoid";
 import JSZip from "jszip";
@@ -316,7 +317,7 @@ export default function FileController() {
 
   return (
     <main className={styles.main}>
-  <div className={styles.body_file}>
+  <div>
     {btnDownload == true ? <div id="rende_timer" className={styles.body_timer}></div> : null}
 
     <Toaster richColors position="top-right" />
@@ -344,35 +345,7 @@ export default function FileController() {
         </label>
 
         <div className={styles.options_container}>
-          <div className={styles.file_type_selector}>
-            <span
-              onClick={() => {
-                changeType('svg');
-              }}
-              className={`${styles.kind_file} ${typeFile === 'svg' ? styles.active : ''}`}
-              id="svg"
-            >
-              .svg
-            </span>
-            <span
-              onClick={() => {
-                changeType('png');
-              }}
-              className={`${styles.kind_file} ${typeFile === 'png' ? styles.active : ''}`}
-              id="png"
-            >
-              .png
-            </span>
-            <span
-              onClick={() => {
-                changeType('jpeg');
-              }}
-              className={`${styles.kind_file} ${typeFile === 'jpeg' ? styles.active : ''}`}
-              id="jpeg"
-            >
-              .jpeg
-            </span>
-          </div>
+         <OptionsTypeFiles changeType={ changeType} typeFile={typeFile}/> 
 
           <div className={styles.pixel_control}>
             <input
@@ -394,9 +367,26 @@ export default function FileController() {
              <LuLink2 id="linked" onClick={changedLinkedIcon} display={'none'} size={23} style={{rotate:'90deg', marginLeft:'5px'}} />
           </div>
         </div>
+
+        <div className={styles.buttons_container}>
+          <button className={styles.button_mq_compress} onClick={() => sendToRabbit('compress')}>
+            Comprimir Arquivos
+          </button>
+          {btnDownload == true && totalSeconds > 0 ? (
+            <button className={styles.button_mq_download} onClick={() => downloadImages()}>
+              Baixar Arquivos
+            </button>
+          ) : null}
+          <button className={styles.button_mq_convert} onClick={() => sendToRabbit('convert', typeFile)}>
+            Converter para: {typeFile}
+          </button>
+        </div>
+      </div>
       </div>
 
-      <div
+    </div>
+
+        <div
         id="files_list_container"
         className={styles.files_list_container}
       >
@@ -418,22 +408,6 @@ export default function FileController() {
           )}
         </section>
       </div>
-    </div>
-
-    <div className={styles.buttons_container}>
-      <button className={styles.button_mq_compress} onClick={() => sendToRabbit('compress')}>
-        Comprimir Arquivos
-      </button>
-      {btnDownload == true && totalSeconds > 0 ? (
-        <button className={styles.button_mq_download} onClick={() => downloadImages()}>
-          Baixar Arquivos
-        </button>
-      ) : null}
-      <button className={styles.button_mq_convert} onClick={() => sendToRabbit('convert', typeFile)}>
-        Converter para: {typeFile}
-      </button>
-    </div>
-  </div>
 </main>
   );
 }
