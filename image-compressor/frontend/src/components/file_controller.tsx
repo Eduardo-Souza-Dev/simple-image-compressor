@@ -265,6 +265,12 @@ export default function FileController() {
 
   }
 
+  async function resizeImage(){
+    if(heightValue == '' && widthValue == ''){
+      toast.warning('Preencha os campos de largura ou altura!');
+    }
+  }
+
   async function sendToRabbit(key:string, type: string = 'none'){    
     if(file.length == 0){
       toast.warning('Adicione alguma imagem antes de continuar!');
@@ -380,6 +386,11 @@ export default function FileController() {
           <button className={styles.button_mq_convert} onClick={() => sendToRabbit('convert', typeFile)}>
             Converter para: {typeFile}
           </button>
+           
+          <button className={styles.button_mq_download} onClick={() => resizeImage()}>
+            Redimensionar Imagens
+          </button>
+         
         </div>
       </div>
       </div>

@@ -7,7 +7,7 @@ export default function FileList({ files, onDelete }: { files: string[]; onDelet
     return (
         <div className={styles.file_list}>
         {files.map((file) => (
-            <div key={file}>
+            <div className={styles.file_element} key={file}>
             <span>{file}</span>
             <button
                 onClick={() => onDelete(file)}

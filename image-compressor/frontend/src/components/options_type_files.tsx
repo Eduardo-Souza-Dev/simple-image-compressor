@@ -37,7 +37,60 @@ export default function OptionsTypeFiles({ changeType, typeFile }: OptionsTypeFi
             >
               .jpeg
             </span>
-
+              <span
+              onClick={() => {
+                changeType('webp');
+              }}
+              className={`${styles.kind_file} ${typeFile === 'webp' ? styles.active : ''}`}
+              id="webp"
+            >
+              .webp
+            </span>
+              <span
+              onClick={() => {
+                changeType('bmp');
+              }}
+              className={`${styles.kind_file} ${typeFile === 'bmp' ? styles.active : ''}`}
+              id="bmp"
+            >
+              .bmp
+            </span>
+              <span
+              onClick={() => {
+                changeType('tiff');
+              }}
+              className={`${styles.kind_file} ${typeFile === 'tiff' ? styles.active : ''}`}
+              id="tiff"
+            >
+              .tiff
+            </span>
+              <span
+              onClick={() => {
+                changeType('ico');
+              }}
+              className={`${styles.kind_file} ${typeFile === 'ico' ? styles.active : ''}`}
+              id="ico"
+            >
+              .ico
+            </span>
+              <span
+              onClick={() => {
+                changeType('gif');
+              }}
+              className={`${styles.kind_file} ${typeFile === 'gif' ? styles.active : ''}`}
+              id="gif"
+            >
+              .gif
+            </span>
+              <span
+              onClick={() => {
+                changeType('heic');
+              }}
+              className={`${styles.kind_file} ${typeFile === 'heic' ? styles.active : ''}`}
+              id="heic"
+            >
+              .heic
+            </span>
 
           </div>
     );

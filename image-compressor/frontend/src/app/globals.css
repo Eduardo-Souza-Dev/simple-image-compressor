@@ -77,6 +77,7 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  /* outline: 1px solid red; */
 }
 
 html,
@@ -89,7 +90,7 @@ body {
 
 body {
   color: rgb(var(--foreground-rgb));
-background-color: #95afc0;
+  background-color: #444;
 }
 
 a {
