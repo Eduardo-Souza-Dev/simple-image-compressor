@@ -11,7 +11,7 @@ import { Toaster, toast } from 'sonner';
 import { GenerateUUID } from "../scripts/GenerateUUID";
 import OptionsTypeFiles from "./options_type_files";
 import FileList from "./file_list";
-import { nanoid } from "nanoid";
+import { customAlphabet } from "nanoid";
 import JSZip from "jszip";
 import Timer from 'easytimer.js';
 
@@ -117,7 +117,12 @@ export default function FileController() {
     const zipFolder = new JSZip();
     const arrFiles = [];
 
-      if(typeFile == "application/x-zip-compressed"){
+    if(!['image/png', 'image/jpeg', 'image/svg+xml','application/x-zip-compressed'].includes(typeFile)){
+      toast.warning("Somente imagens ou ZIP!");
+      return;
+    }
+
+    if(typeFile == "application/x-zip-compressed"){
         zipFolder.loadAsync(fileValue[0])
         .then((zip) => {
           zip.forEach(async (filePath,fileContent) =>{
@@ -271,10 +276,13 @@ export default function FileController() {
     }
   }
 
-  async function sendToRabbit(key:string, type: string = 'none'){    
+  async function sendToRabbit(key:string, type: string = 'none'){  
+    
     if(file.length == 0){
       toast.warning('Adicione alguma imagem antes de continuar!');
     }else{
+
+    
       let arrayFiles = [];
   
       Array.from(file).map((value) => arrayFiles.push((value as File)));
@@ -283,8 +291,11 @@ export default function FileController() {
       
       file.forEach((file, index) => {
         // Gera um id unico para cada foto e adiciona o id do usuário atual para cada foto
-        let nanoidValue = nanoid(5);
-          formData.append('files', file, `${UUID}_${nanoidValue}_${file.name}`);
+        let nanoidValue = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', 5);
+        let id = nanoidValue();
+        console.log("Valor de nanoid", id);
+        formData.append('files', file, `${UUID}_${id}_${file.name}`);
+        console.log(formData.get('files'));
       });
   
      await fetch(`http://localhost:3333/files/${key}/${type}/${heightValue}/${widthValue}`,{
