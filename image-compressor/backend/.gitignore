@@ -2,6 +2,8 @@
 
 # dependencies
 /node_modules
+/temp_pictures
+/temp_zip_files
 /.pnp
 .pnp.js
 .yarn/install-state.gz
