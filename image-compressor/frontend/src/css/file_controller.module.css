@@ -15,7 +15,6 @@
   
   .body_timer {
     display: flex;
-    justify-content: center;
     align-items: center;
     width: 100px;
     height: 30px;
@@ -23,10 +22,10 @@
     border-radius: 5px;
     background-color: #ff8c00;
     font-size: 0.9rem;
-    margin-bottom: 1rem;
   }
   
   .content_wrapper {
+    margin-top: 40px;
     display: flex;
     width: 100%;
     max-width: 960px;
@@ -162,6 +161,7 @@
 
   .files_list_container {
     background-color: #333;
+    margin-top: 40px;
     padding: 0rem 1.5rem 1.5rem 1.5rem;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
@@ -179,6 +179,13 @@
     top: 0;
     background-color: rgb(51, 51, 51);
     display: flex;
+    justify-content: space-between;
+  }
+
+  .btnDelete:hover{
+    outline: none;
+    cursor: pointer;
+    size: 70;
   }
   
   .file_item {

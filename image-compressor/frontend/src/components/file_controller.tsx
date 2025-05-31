@@ -3,7 +3,7 @@
 
 import styles from "./../css/file_controller.module.css";
 import { FaFileImage } from "react-icons/fa";
-import { AiOutlineCloseCircle, AiOutlineDelete } from "react-icons/ai";
+import { MdOutlineDeleteSweep } from "react-icons/md";
 import { LuLink2Off } from "react-icons/lu";
 import { LuLink2 } from "react-icons/lu";
 import { useEffect, useState } from "react";
@@ -41,6 +41,18 @@ export default function FileController() {
         setIsLinked(true);
     }
     
+  }
+
+  function removeAllfiles(){
+
+    if(file.length == 0){
+      toast.warning('Nenhum arquivo para remover!');
+      return;
+    }
+    // Limpa o array de arquivos
+    setFile([]);
+    toast.success('Todos os arquivos foram removidos com sucesso!');
+
   }
 
   async function ExpireZipDownload() {
@@ -293,9 +305,7 @@ export default function FileController() {
         // Gera um id unico para cada foto e adiciona o id do usuário atual para cada foto
         let nanoidValue = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', 5);
         let id = nanoidValue();
-        console.log("Valor de nanoid", id);
         formData.append('files', file, `${UUID}_${id}_${file.name}`);
-        console.log(formData.get('files'));
       });
   
      await fetch(`http://localhost:3333/files/${key}/${type}/${heightValue}/${widthValue}`,{
@@ -339,7 +349,7 @@ export default function FileController() {
 
     <Toaster richColors position="top-right" />
 
-    <div className={styles.content_wrapper}> {/* Novo wrapper para o conteúdo principal */}
+    <div className={styles.content_wrapper}> 
       <div className={styles.upload_section}>
   
         <label htmlFor="file-upload" className={styles.upload_label}>
@@ -408,28 +418,28 @@ export default function FileController() {
 
     </div>
 
-        <div
-        id="files_list_container"
-        className={styles.files_list_container}
-      >
-        <span className={styles.h1_arch}>
-        <h3 style={{ color: '#eee', marginBottom: '0.5rem' }}>Arquivos: </h3>
-        </span>
-        <section className={styles.files_list}>
-          {file.length > 0 ? (
-            <FileList
-              files={file.map((f) => f.name)}
-              onDelete={(fileName) => {
-                setFile((prevFiles) => prevFiles.filter((f) => f.name !== fileName));
-              }}
-            />
-          ) : (
-            <div className={styles.delete_button}>
-              <small style={{ color: '#eee' }}><i>Nenhum arquivo adicionado.</i></small>
-            </div>
-          )}
-        </section>
-      </div>
+    <div
+    className={styles.files_list_container}
+    >
+          <span className={styles.h1_arch}>
+            <h3 style={{ color: '#eee', marginBottom: '0.5rem' }}>Arquivos: </h3>
+            <MdOutlineDeleteSweep className={styles.btnDelete} onClick={() => removeAllfiles()} title="Remover arquivos" size={25} color="#ff4500"/>
+          </span>
+          <section className={styles.files_list}>
+            {file.length > 0 ? (
+              <FileList
+                files={file.map((f) => f.name)}
+                onDelete={(fileName) => {
+                  setFile((prevFiles) => prevFiles.filter((f) => f.name !== fileName));
+                }}
+              />
+            ) : (
+              <div className={styles.delete_button}>
+                <small style={{ color: '#eee' }}><i>Nenhum arquivo adicionado.</i></small>
+              </div>
+            )}
+          </section>
+    </div>
 </main>
   );
 }
