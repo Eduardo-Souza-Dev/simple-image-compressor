@@ -14,6 +14,7 @@ import FileList from "./file_list";
 import { customAlphabet } from "nanoid";
 import JSZip from "jszip";
 import Timer from 'easytimer.js';
+import { render } from "react-dom";
 
 
 
@@ -57,11 +58,11 @@ export default function FileController() {
 
   async function ExpireZipDownload() {
     let timer = new Timer();
-    timer.start({countdown: true, startValues: {seconds: 300}});
+    timer.start({countdown: true, startValues: {seconds: 20}});
 
     timer.addEventListener('secondsUpdated', (e) =>{
-    let rende_timer = document.getElementById('rende_timer');
-
+      let rende_timer = document.getElementById('rende_timer');
+ 
       if(rende_timer) {
         rende_timer.innerHTML = timer.getTimeValues().toString();
       }
@@ -69,7 +70,10 @@ export default function FileController() {
     })
 
     timer.addEventListener('targetAchieved', (e) => {
+      let rende_timer = document.getElementById('rende_timer');
       DeleteZipUser(200);
+      rende_timer.style.display = 'none'; 
+      setBtnDownload(false);
       return;
     })
 
