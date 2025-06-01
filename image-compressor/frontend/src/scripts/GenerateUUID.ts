@@ -1,12 +1,14 @@
 // Função para gerar ids para cada imagem e zips gerados por cada usuário
-import { nanoid } from "nanoid";
+import { customAlphabet } from "nanoid";
 
 export function GenerateUUID (){
     if (typeof window !== "undefined") {
         let userID = localStorage.getItem('userID');
+        let nanoidValue = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', 5);
+        let id = nanoidValue();
 
         if(!userID){
-            userID = nanoid(7);
+            userID = id;
             localStorage.setItem('userID', userID);
         }
 
