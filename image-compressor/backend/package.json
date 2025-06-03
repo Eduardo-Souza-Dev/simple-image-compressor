@@ -3,6 +3,7 @@
   "dependencies": {
     "@types/amqplib": "^0.10.5",
     "@types/svgo": "^2.6.4",
+    "adm-zip": "^0.5.16",
     "amqplib": "^0.10.4",
     "buffer": "^6.0.3",
     "cors": "^2.8.5",
@@ -20,6 +21,7 @@
     "svgo": "^3.3.2"
   },
   "devDependencies": {
+    "@types/adm-zip": "^0.5.7",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/file-saver": "^2.0.7",

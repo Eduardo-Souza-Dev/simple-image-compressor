@@ -7,6 +7,8 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import * as fs from 'node:fs';
 import { FileUploadMQInterface } from "@/configs/Interfaces";
+import { Request, Response } from 'express';
+import AdmZip from 'adm-zip';
 
 
 const upload = multer({ storage: multer.memoryStorage() });
@@ -44,6 +46,30 @@ app.get('/download/:id_user',upload.array('files'), async(req, res) =>{
         console.log(error);
     }
    
+})
+ 
+app.get('/files/:id_user', async(req, res) =>{
+const { id_user } = req.params;
+  const zipFilePath = path.join(__dirname, `src/temp_zip_files/${id_user}.zip`);
+
+  if (fs.existsSync(zipFilePath)) {
+    try {
+      const zip = new AdmZip(zipFilePath);
+      const zipEntries = zip.getEntries();
+
+      const fileNames = zipEntries
+        .filter(entry => !entry.isDirectory) // Ignora pastas
+        .map(entry => entry.entryName); // Pega nomes dos arquivos
+
+      res.status(200).json(fileNames);
+    } catch (error) {
+      console.error('Erro ao ler o zip:', error);
+      res.status(500).send('Erro ao ler os arquivos do zip.');
+    }
+  } else {
+    console.warn('Arquivo ZIP do usuário não existe.');
+    res.status(404).send('Arquivo do usuário não existe.');
+  }
 })
 
 app.delete('/delete/:id_user', async(req,res) =>{
