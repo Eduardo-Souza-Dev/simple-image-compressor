@@ -1,16 +1,16 @@
 "use client";
 // Page to handle file upload
 
-import styles from "./../css/file_controller.module.css";
+import styles from "../../css/file_controller.module.css";
 import { FaFileImage } from "react-icons/fa";
 import { MdOutlineDeleteSweep } from "react-icons/md";
 import { LuLink2Off } from "react-icons/lu";
 import { LuLink2 } from "react-icons/lu";
 import { useEffect, useState } from "react";
 import { Toaster, toast } from 'sonner';
-import { GenerateUUID } from "../scripts/GenerateUUID";
-import OptionsTypeFiles from "./options_type_files";
-import FileList from "./file_list";
+import { GenerateUUID } from "../../scripts/GenerateUUID";
+import OptionsTypeFiles from "../../components/options_type_files";
+import FileList from "../../components/file_list";
 import { customAlphabet } from "nanoid";
 import JSZip from "jszip";
 import Timer from 'easytimer.js';
@@ -20,6 +20,7 @@ import Timer from 'easytimer.js';
 export default function FileController() {
   const [isLinked, setIsLinked] = useState<boolean>(false);
   const [file, setFile ] =  useState<File[]>([]);
+  const [fileList, setFileList] = useState<string[]>([]);
   let urlResponse:string = '';
   const [typeFile, setTypeFile] = useState<string>('');
   const [btnDownload, setBtnDownload] = useState<boolean>(false);
@@ -77,8 +78,6 @@ export default function FileController() {
 
     
   }
-
-
 
   function changeType(value:any){
     setTypeFile(value);

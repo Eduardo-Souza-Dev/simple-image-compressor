@@ -7,7 +7,7 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import * as fs from 'node:fs';
 import { FileUploadMQInterface } from "@/configs/Interfaces";
-import { Request, Response } from 'express';
+import crypto from 'crypto';
 import AdmZip from 'adm-zip';
 
 
@@ -47,9 +47,40 @@ app.get('/download/:id_user',upload.array('files'), async(req, res) =>{
     }
    
 })
+
+app.delete('/files/delete/:id_user', async(req, res) =>{
+    const buffer_hash = crypto.createHash('sha256').update(req.body.buffer_hash).digest('hex');
+    const id_user = req.body.id_user;
+
+    const zipFilePath = path.join(__dirname, `src/temp_zip_files/${id_user}.zip`);
+
+    if (fs.existsSync(zipFilePath)) {
+        try {
+            const zip = new AdmZip(zipFilePath);
+            const zipEntries = zip.getEntries();
+
+            // Filtra as entradas do ZIP para encontrar a que corresponde ao buffer_hash
+            const entryToDelete = zipEntries.find(entry => crypto.createHash('sha256').update(entry.entryName).digest('hex') === buffer_hash);
+
+            if (entryToDelete) {
+                zip.deleteFile(entryToDelete.entryName);
+                zip.writeZip(zipFilePath);
+                res.status(200).send('Arquivo deletado com sucesso');
+            } else {
+                res.status(404).send('Arquivo não encontrado no ZIP');
+            }
+        } catch (error) {
+            console.error('Erro ao manipular o ZIP:', error);
+            res.status(500).send('Erro ao manipular o arquivo ZIP.');
+        }
+    } else {
+        console.warn('Arquivo ZIP do usuário não existe.');
+        res.status(404).send('Arquivo do usuário não existe.');
+    }
+})
  
-app.get('/files/:id_user', async(req, res) =>{
-const { id_user } = req.params;
+app.get('/files/list/:id_user', async(req, res) =>{
+  const id_user  = req.params.id_user;
   const zipFilePath = path.join(__dirname, `src/temp_zip_files/${id_user}.zip`);
 
   if (fs.existsSync(zipFilePath)) {
@@ -59,7 +90,11 @@ const { id_user } = req.params;
 
       const fileNames = zipEntries
         .filter(entry => !entry.isDirectory) // Ignora pastas
-        .map(entry => entry.entryName); // Pega nomes dos arquivos
+        .map(entry => ({
+            name: entry.entryName,
+            data: entry.getCompressedData().toString('base64')
+        }));
+
 
       res.status(200).json(fileNames);
     } catch (error) {
