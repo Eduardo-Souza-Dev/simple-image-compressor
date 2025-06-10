@@ -49,8 +49,10 @@ app.get('/download/:id_user',upload.array('files'), async(req, res) =>{
 })
 
 app.delete('/files/delete/:id_user', async(req, res) =>{
-    const buffer_hash = crypto.createHash('sha256').update(req.body.buffer_hash).digest('hex');
-    const id_user = req.body.id_user;
+    const { buffer } = req.body;
+    const buffer_hash = crypto.createHash('sha256').update(buffer).digest('hex');
+    const id_user = req.params.id_user;
+    console.log(buffer)
 
     const zipFilePath = path.join(__dirname, `src/temp_zip_files/${id_user}.zip`);
 
@@ -60,7 +62,53 @@ app.delete('/files/delete/:id_user', async(req, res) =>{
             const zipEntries = zip.getEntries();
 
             // Filtra as entradas do ZIP para encontrar a que corresponde ao buffer_hash
-            const entryToDelete = zipEntries.find(entry => crypto.createHash('sha256').update(entry.entryName).digest('hex') === buffer_hash);
+            const entryToDownload = zipEntries.find(entry => {
+                const fileBuffer = Buffer.from(entry.getData()).toString('base64');
+                const fileHash = crypto.createHash('sha256').update(fileBuffer).digest('hex');
+                console.log(fileBuffer);
+
+                return fileHash === buffer_hash;
+            });
+
+            if (entryToDownload) {
+                res.download(Buffer.from(entryToDownload.getData()).toString('base64'), entryToDownload.entryName, (err) => {
+
+                })
+                res.status(200).send('Arquivo deletado com sucesso');
+            } else {
+                res.status(404).send('Arquivo não encontrado no ZIP');
+            }
+        } catch (error) {
+            console.error('Erro ao manipular o ZIP:', error);
+            res.status(500).send('Erro ao manipular o arquivo ZIP.');
+        }
+    } else {
+        console.warn('Arquivo ZIP do usuário não existe.');
+        res.status(404).send('Arquivo do usuário não existe.');
+    }
+})
+
+app.delete('/files/download/:id_user', async(req, res) =>{
+    const { buffer } = req.body;
+    const buffer_hash = crypto.createHash('sha256').update(buffer).digest('hex');
+    const id_user = req.params.id_user;
+    console.log(buffer)
+
+    const zipFilePath = path.join(__dirname, `src/temp_zip_files/${id_user}.zip`);
+
+    if (fs.existsSync(zipFilePath)) {
+        try {
+            const zip = new AdmZip(zipFilePath);
+            const zipEntries = zip.getEntries();
+
+            // Filtra as entradas do ZIP para encontrar a que corresponde ao buffer_hash
+            const entryToDelete = zipEntries.find(entry => {
+                const fileBuffer = Buffer.from(entry.getData()).toString('base64');
+                const fileHash = crypto.createHash('sha256').update(fileBuffer).digest('hex');
+                console.log(fileBuffer);
+
+                return fileHash === buffer_hash;
+            });
 
             if (entryToDelete) {
                 zip.deleteFile(entryToDelete.entryName);
