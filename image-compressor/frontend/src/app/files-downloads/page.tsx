@@ -7,6 +7,7 @@ export default function FilesDownloads() {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const UUID = GenerateUUID();
+  let urlResponse='';
 
   async function fetchFiles() {
     try {
@@ -54,10 +55,18 @@ export default function FilesDownloads() {
     })
   }
 
-  function downloadFileFromZip(fileData: string) {
-    console.log('Downloading file:', fileData);
+  function downloadFileFromZip(buffer: string, imagemName: string) {
 
- 
+    const teste = new Blob([buffer])
+    const url = URL.createObjectURL(teste);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = imagemName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url); 
+
   }
 
   if (loading) {
@@ -72,7 +81,7 @@ export default function FilesDownloads() {
           <li>
             <p>{file.name}</p>
             <button onClick={() => deleteFileFromZip(file.data)}> Deletar arquivo</button>
-            <button onClick={() => downloadFileFromZip(file.data)}> Baixar arquivo</button>
+            <button onClick={() => downloadFileFromZip(file.data, file.name)}> Baixar arquivo</button>
           </li>
         ))}
       </ul>

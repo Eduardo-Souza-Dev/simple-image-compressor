@@ -68,7 +68,7 @@ export default function FileController() {
 
     timer.addEventListener('targetAchieved', (e) => {
       let rende_timer = document.getElementById('rende_timer');
-      DeleteZipUser(200);
+      // DeleteZipUser(200);
       if(rende_timer){
         rende_timer.style.display = 'none'; 
       } 
@@ -264,7 +264,7 @@ export default function FileController() {
               xmlHTTP.onloadend = async () => {
                   if(xmlHTTP.status == 200){
                     // Deleta o arquivo zipado do servidor
-                    DeleteZipUser(xmlHTTP.status);
+                    // DeleteZipUser(xmlHTTP.status);
                   }
               }
               xmlHTTP.send();
